@@ -21,6 +21,8 @@ const boatMats = {
 const buoyMat = new THREE.MeshStandardMaterial({ emissive: '#ffffff', emissiveIntensity: 0.5, roughness: 0.25 });
 const flagMat = new THREE.MeshStandardMaterial({ roughness: 0.6, side: THREE.DoubleSide });
 const pickMat = new THREE.MeshBasicMaterial({ visible: false });
+const lanternGeo = new THREE.OctahedronGeometry(1.5, 0);
+const lanternMat = new THREE.MeshBasicMaterial({ toneMapped: false });
 const lavaMat = new THREE.MeshStandardMaterial({ color: '#ff5a1f', emissive: '#ff3d00', emissiveIntensity: 2.2 });
 const smokeMat = new THREE.MeshStandardMaterial({ color: '#e9e6ef', transparent: true, opacity: 0.78, roughness: 1 });
 const mistTex = (() => {
@@ -45,6 +47,8 @@ interface Props {
   homeWorldId: string | null;
   focusWorldId: string | null;
   goldRouteUntil: number;
+  /** 0..1 share of each stage's levels cleared — drives the stage lanterns. */
+  stageLight: ReadonlyMap<string, number>;
   onPickIsland: (worldId: string) => void;
   onPickStage: (worldId: string, stageId: string) => void;
 }
@@ -56,6 +60,7 @@ export function WorldMapScene({
   homeWorldId,
   focusWorldId,
   goldRouteUntil,
+  stageLight,
   onPickIsland,
   onPickStage,
 }: Props) {
@@ -123,6 +128,29 @@ export function WorldMapScene({
     return isl ? isl.stageSpots.map((s) => ({ ...s, y: sampleHeight(terrain, s.x, s.z) })) : [];
   }, [terrain, focusWorldId, layout]);
 
+  // One floating lantern gem per stage of every open island; it brightens as the stage's levels are cleared.
+  const lanterns = useMemo(() => {
+    if (!terrain) return [];
+    const dark = new THREE.Color('#a9bcd3');
+    const lit = new THREE.Color('#ffd34d');
+    const out: Instance[] = [];
+    for (const isl of layout.islands) {
+      if (isl.spec.locked) continue;
+      for (const sp of isl.stageSpots) {
+        const v = stageLight.get(sp.stageId) ?? 0;
+        const c = dark.clone().lerp(lit, v === 0 ? 0 : 0.35 + 0.65 * v);
+        out.push({
+          x: sp.x,
+          y: sampleHeight(terrain, sp.x, sp.z) + 11,
+          z: sp.z,
+          s: v ? 1.8 + 1.2 * v : 1.3,
+          color: `#${c.getHexString()}`,
+        });
+      }
+    }
+    return out;
+  }, [terrain, layout, stageLight]);
+
   const volcanoes = useMemo(
     () =>
       terrain
@@ -165,6 +193,7 @@ export function WorldMapScene({
         />
       ))}
       <Batch geometry={P.buoy} material={buoyMat} items={route.buoys} castShadow={false} />
+      <Batch geometry={lanternGeo} material={lanternMat} items={lanterns} castShadow={false} receiveShadow={false} />
       <Batch
         geometry={P.boatHull}
         material={boatMats.hull}

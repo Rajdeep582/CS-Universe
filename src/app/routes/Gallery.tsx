@@ -15,6 +15,9 @@ import {
 } from '@/ui/components';
 import type { ReactNode } from 'react';
 import { SimulationFrame } from '@/play/mdx';
+import { BigCelebration, type BigTier } from '@/ui/celebrate/BigCelebration';
+import { RankBadge } from '@/ui/celebrate/RankBadge';
+import { StarStamp } from '@/ui/celebrate/StarStamp';
 import '@/play/play.css';
 
 function Section({ title, children }: { title: string; children: ReactNode }) {
@@ -162,9 +165,52 @@ export function Gallery() {
           </div>
         </Section>
       </div>
+      <CelebrationPreview />
       <Section title="SIMULATIONS">
         <SimulationFrame id="page-replacement" />
       </Section>
     </div>
+  );
+}
+
+const PREVIEW: Record<BigTier, { kicker: string; title: string; text: string }> = {
+  rank: { kicker: 'RANK UP', title: 'Byte', text: 'Rank 3 of 16. 700 XP to Word.' },
+  stage: {
+    kicker: 'STAGE CLEAR · CASTLE BEATEN',
+    title: 'Information & Bits',
+    text: 'Every level and the boss of this stage are done.',
+  },
+  world: {
+    kicker: 'WORLD COMPLETE',
+    title: 'Sunny Shores',
+    text: 'The whole island is yours. The sea route to the next world turns gold.',
+  },
+};
+
+/** Preview of the celebration hierarchy (micro < level < rank < stage < world). Stage and world fire from boss clears. */
+function CelebrationPreview() {
+  const [open, setOpen] = useState<BigTier | null>(null);
+  return (
+    <Section title="CELEBRATIONS">
+      <div className="flex flex-wrap items-center gap-4">
+        <span className="xp-chip">+5 XP</span>
+        <span className="glass flex items-center gap-3 rounded-full px-4 py-2">
+          <StarStamp stars={2} size={24} /> level clear
+        </span>
+        {(Object.keys(PREVIEW) as BigTier[]).map((t) => (
+          <button key={t} type="button" className="gem gem-glass gem-sm" onClick={() => setOpen(t)}>
+            Preview {t}
+          </button>
+        ))}
+      </div>
+      {open ? (
+        <BigCelebration
+          tier={open}
+          {...PREVIEW[open]}
+          badge={<RankBadge name="Byte" size={open === 'rank' ? 170 : open === 'stage' ? 210 : 250} />}
+          onClose={() => setOpen(null)}
+        />
+      ) : null}
+    </Section>
   );
 }

@@ -102,5 +102,5 @@ test('Without WebGL 2 the app falls back to the 2D Atlas', async ({ page }) => {
   });
   await page.goto('/');
   await expect(page).toHaveURL(/\/atlas\?notice=webgl$/);
-  await expect(page.getByRole('status')).toContainText('WebGL 2 is unavailable');
+  await expect(page.getByRole('status').filter({ hasText: 'WebGL' })).toContainText('WebGL 2 is unavailable');
 });

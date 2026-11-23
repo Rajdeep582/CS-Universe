@@ -1,11 +1,11 @@
 import { Link } from '@tanstack/react-router';
-import { Lock, PenLine, Play } from 'lucide-react';
+import { Lock, PenLine, Play, Repeat } from 'lucide-react';
 import { clsx } from 'clsx';
 import type { Level } from '@/engine/content';
-import { useLearner } from '@/engine/progress/learner';
 import { hasLesson } from '@/play/lessons';
+import { useProgress } from './useProgress';
 
-/** Entry to the lesson chamber. Honest states: locked, lesson not yet written, play / replay. */
+/** Entry to the lesson chamber. Honest states: locked, lesson not yet written, play / continue / replay, review due. */
 export function PlayButton({
   level,
   locked,
@@ -17,7 +17,8 @@ export function PlayButton({
   size?: 'sm' | 'lg';
   className?: string;
 }) {
-  const stars = useLearner((s) => s.stars.get(level.id) ?? 0);
+  const { info } = useProgress();
+  const li = info(level);
   const cls = clsx('gem', `gem-${size === 'lg' ? 'lg' : 'md'}`, className);
   if (locked)
     return (
@@ -35,9 +36,21 @@ export function PlayButton({
         <PenLine size={18} /> Lesson in production
       </span>
     );
+  if (li.due)
+    return (
+      <Link
+        to="/play/$levelId"
+        params={{ levelId: level.id }}
+        search={{ review: true }}
+        className={clsx(cls, 'gem-sky')}
+      >
+        <Repeat size={20} /> Review now
+      </Link>
+    );
   return (
     <Link to="/play/$levelId" params={{ levelId: level.id }} className={clsx(cls, 'gem-go')}>
-      <Play size={20} fill="currentColor" strokeWidth={0} /> {stars ? 'Replay level' : 'Play level'}
+      <Play size={20} fill="currentColor" strokeWidth={0} />{' '}
+      {li.stars ? 'Replay level' : li.progress > 0 ? 'Continue lesson' : 'Play level'}
     </Link>
   );
 }

@@ -60,3 +60,14 @@ describe('availability', () => {
     expect(tally(c.levels, new Set(['a']))).toEqual({ levels: 3, cleared: 1, available: 1 });
   });
 });
+
+describe('newlyAvailable', () => {
+  it('clearing the root level opens exactly its dependants that have no other blocker', async () => {
+    const { curriculum } = await import('../content');
+    const { newlyAvailable } = await import('./availability');
+    const root = curriculum.levels.find((l) => l.corePathPosition === 1)!;
+    const opened = newlyAvailable(curriculum.levels, new Set(), new Set([root.id]));
+    expect(opened.length).toBeGreaterThan(0);
+    for (const l of opened) expect(l.requires).toEqual([root.id]);
+  });
+});

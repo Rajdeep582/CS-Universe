@@ -29,7 +29,7 @@ export function WorldLayout() {
   const tier = useQuality((s) => s.tier);
   const decline = useQuality((s) => s.decline);
   const toggleOverlay = useQuality((s) => s.toggleOverlay);
-  const { medal, starsOf, next, cleared } = useProgress();
+  const { medal, starsOf, next, cleared, info } = useProgress();
   const wl = useWorldLayout();
   const stage = params.stageId ? stageById.get(params.stageId) : undefined;
   const world = params.worldId ? worldById.get(params.worldId) : undefined;
@@ -114,6 +114,23 @@ export function WorldLayout() {
     [stage, cleared],
   );
   const homeWorldId = next?.worldId ?? null;
+  // World lit by progress: each stage's lantern glows with the share of its levels cleared.
+  const stageLight = useMemo(() => {
+    const m = new Map<string, number>();
+    for (const isl of wl.islands)
+      for (const sp of isl.stageSpots) {
+        const ls = levelsOfStage(sp.stageId);
+        m.set(sp.stageId, ls.length ? ls.filter((l) => cleared.has(l.id)).length / ls.length : 0);
+      }
+    return m;
+  }, [wl, cleared]);
+  const haloOf = useCallback(
+    (id: string): 'mastered' | 'due' | 'cleared' | null => {
+      const i = info(levelById.get(id)!);
+      return i.due ? 'due' : i.mastered ? 'mastered' : i.medal === 'cleared' ? 'cleared' : null;
+    },
+    [info],
+  );
   const goldRouteUntil = useMemo(
     () => wl.islands.reduce((m, i, k) => (worldStatus(i.world, cleared).cleared > 0 ? k : m), 0),
     [wl, cleared],
@@ -145,6 +162,7 @@ export function WorldLayout() {
               tier={tier}
               medal={medalOf}
               stars={starsOf}
+              halo={haloOf}
               bossOpen={bossOpen}
               onPickLevel={onPickLevel}
             />
@@ -155,6 +173,7 @@ export function WorldLayout() {
               homeWorldId={homeWorldId}
               focusWorldId={world?.id ?? null}
               goldRouteUntil={Math.max(0, goldRouteUntil)}
+              stageLight={stageLight}
               onPickIsland={onPickIsland}
               onPickStage={onPickStage}
             />

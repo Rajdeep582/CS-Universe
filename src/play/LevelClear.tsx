@@ -6,7 +6,10 @@ import type { Level } from '@/engine/content';
 import { stageById, worldById } from '@/engine/content';
 import type { StepMeta } from '@/engine/lesson/schema';
 import { PASS, type TestResult } from '@/engine/lesson/testEngine';
-import { GemButton, LevelMedallion, StarRating } from '@/ui/components';
+import { GemButton, LevelMedallion } from '@/ui/components';
+import { Confetti } from '@/ui/celebrate/Confetti';
+import { CountUp } from '@/ui/celebrate/CountUp';
+import { StarStamp } from '@/ui/celebrate/StarStamp';
 import { hasLesson } from './lessons';
 
 interface Props {
@@ -44,7 +47,8 @@ export function LevelClear({ level, result, xp, bestStars, opened, next, steps, 
   const pct = Math.round(result.score * 100);
   const st = stageById.get(level.stageId)!;
   return (
-    <div className="space-y-6 text-center">
+    <div className="relative space-y-6 text-center">
+      {result.passed ? <Confetti count={result.stars === 2 ? 120 : 80} duration={2.6} origin={[0.5, 0.18]} /> : null}
       <motion.div
         initial={reduce ? false : { scale: 0.6, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
@@ -69,14 +73,14 @@ export function LevelClear({ level, result, xp, bestStars, opened, next, steps, 
         </p>
       </div>
       <div className="mx-auto flex w-fit flex-wrap items-center justify-center gap-3">
-        <span className="glass flex items-center gap-2 rounded-full px-4 py-2">
-          <StarRating stars={result.stars as 0 | 1 | 2} size={22} />
+        <span className="glass flex items-center gap-3 rounded-full px-5 py-2">
+          <StarStamp stars={result.stars} size={30} />
           <span className="text-[13px] font-bold text-muted">
             this attempt{bestStars > result.stars ? ` · best ${bestStars}★` : ''}
           </span>
         </span>
         <span className="glass flex items-center gap-2 rounded-full px-4 py-2 font-display text-[15px] font-bold text-gold-4">
-          <Sparkles size={17} aria-hidden /> +{xp} XP
+          <Sparkles size={17} aria-hidden /> +<CountUp value={xp} delay={600} /> XP
         </span>
       </div>
       {result.passed && result.stars < 2 ? (

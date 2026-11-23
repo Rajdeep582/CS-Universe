@@ -2,9 +2,9 @@
 
 A free, browser-based 3D island-adventure game for learning the foundations of computer science. Every topic is a level on a winding road across 12 island worlds: study it, pass its level test to clear it, earn up to 3 stars, beat each stage's castle boss.
 
-| Status | Phase 3 — Lesson Experience & Level Test (awaiting approval) |
+| Status | Phase 4 — Progression & Rewards (awaiting approval) |
 |---|---|
-| Phase reports | [Phase 0](docs/blueprint/README.md) · [Phase 1](docs/phases/phase-1.md) · [Phase 2](docs/phases/phase-2.md) · [Phase 3](docs/phases/phase-3.md) |
+| Phase reports | [Phase 0](docs/blueprint/README.md) · [Phase 1](docs/phases/phase-1.md) · [Phase 2](docs/phases/phase-2.md) · [Phase 3](docs/phases/phase-3.md) · [Phase 4](docs/phases/phase-4.md) |
 | Curriculum | [docs/blueprint/02-curriculum.md](docs/blueprint/02-curriculum.md) · source: [content/](content/) (one folder per world, one per stage) |
 | World concept + renders | [docs/blueprint/01-world-and-experience.md](docs/blueprint/01-world-and-experience.md) |
 | Credits & licenses | [CREDITS.md](CREDITS.md) |

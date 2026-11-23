@@ -10,6 +10,7 @@ import { MotionConfig } from 'motion/react';
 import { TopBar } from '@/ui/hud/TopBar';
 import { ContinueBar } from '@/ui/hud/ContinueBar';
 import { CommandPalette } from '@/ui/hud/CommandPalette';
+import { RewardHost } from '@/ui/celebrate/RewardHost';
 import { TooltipProvider } from '@/ui/components';
 import { AtlasHome } from './routes/AtlasHome';
 import { WorldPage } from './routes/WorldPage';
@@ -24,6 +25,7 @@ function Shell() {
         <TopBar />
         <Outlet />
         <CommandPalette />
+        <RewardHost />
       </TooltipProvider>
     </MotionConfig>
   );
@@ -84,6 +86,11 @@ const atlasLevel = createRoute({
   path: 'atlas/$worldId/$stageId/$levelId',
   component: LevelPage,
 });
+const journey = createRoute({
+  getParentRoute: () => atlas,
+  path: 'journey',
+  component: lazyRouteComponent(() => import('./routes/JourneyPage'), 'JourneyPage'),
+});
 const gallery = createRoute({
   getParentRoute: () => atlas,
   path: 'gallery',
@@ -95,13 +102,15 @@ const play = createRoute({ getParentRoute: () => root, id: '_play', component: (
 const playLevel = createRoute({
   getParentRoute: () => play,
   path: 'play/$levelId',
+  validateSearch: (s: Record<string, unknown>): { review?: boolean } =>
+    s.review === true || s.review === 'true' || s.review === 1 || s.review === '1' ? { review: true } : {},
   component: lazyRouteComponent(() => import('@/play/LessonChamber'), 'LessonChamber'),
 });
 
 export const routeTree = root.addChildren([
   world.addChildren([worldMap, island, stage]),
   play.addChildren([playLevel]),
-  atlas.addChildren([atlasHome, atlasWorld, atlasStage, atlasLevel, gallery]),
+  atlas.addChildren([atlasHome, atlasWorld, atlasStage, atlasLevel, journey, gallery]),
 ]);
 export const router = createRouter({ routeTree, defaultPreload: 'intent', scrollRestoration: true });
 

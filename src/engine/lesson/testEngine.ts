@@ -30,6 +30,8 @@ export interface Presented {
 }
 
 export const TEST_SIZE = 10;
+/** Review tests are short (03 §4: 3–5 items). */
+export const REVIEW_SIZE = 5;
 export const PASS = 0.7;
 export const TWO_STARS = 0.9;
 
@@ -37,7 +39,12 @@ export const TWO_STARS = 0.9;
  * Draws up to TEST_SIZE items: first one item for every tested section that has items (so the test
  * always covers the whole lesson), then fills the rest at random. Items are then presented in lesson order.
  */
-export function drawTest(pool: readonly Item[], steps: readonly StepMeta[], seed: number): Presented[] {
+export function drawTest(
+  pool: readonly Item[],
+  steps: readonly StepMeta[],
+  seed: number,
+  size = TEST_SIZE,
+): Presented[] {
   const r = rng(seed);
   const sectionOf = new Map(steps.map((s) => [s.id, s.section]));
   const stepIndex = new Map(steps.map((s, i) => [s.id, i]));
@@ -47,10 +54,12 @@ export function drawTest(pool: readonly Item[], steps: readonly StepMeta[], seed
     if (candidates.length) picked.add(candidates[Math.floor(r() * candidates.length)]!);
   }
   for (const i of shuffle(pool, r)) {
-    if (picked.size >= TEST_SIZE) break;
+    if (picked.size >= size) break;
     picked.add(i);
   }
-  const ordered = [...picked].sort(
+  // Short draws (reviews) keep a random subset of the section picks.
+  const chosen = picked.size > size ? shuffle([...picked], r).slice(0, size) : [...picked];
+  const ordered = chosen.sort(
     (a, b) => stepIndex.get(a.teaches)! - stepIndex.get(b.teaches)! || pool.indexOf(a) - pool.indexOf(b),
   );
   return ordered.map((item) => ({ item, order: presentOrder(item, r) }));

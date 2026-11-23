@@ -65,6 +65,14 @@ async function answer(page: Page, right: boolean) {
   await expect(page.getByRole('status').filter({ hasText: right ? 'Correct' : 'Not quite' })).toBeVisible();
 }
 
+/** Rank-ups show a full-screen celebration; continue past it. */
+async function dismissRankUp(page: Page) {
+  const dlg = page.getByRole('dialog', { name: /./ }).filter({ hasText: 'RANK UP' });
+  await expect(dlg).toBeVisible();
+  await dlg.getByRole('button', { name: 'Continue' }).click();
+  await expect(dlg).toBeHidden();
+}
+
 async function runTest(page: Page, right: (i: number) => boolean) {
   for (let i = 0; ; i++) {
     await answer(page, right(i));
@@ -77,8 +85,8 @@ async function runTest(page: Page, right: (i: number) => boolean) {
 
 test('lesson chamber: steps, maths, code, simulation goal, ← → keys', async ({ page }) => {
   await page.goto(`/play/${LEVEL}`);
-  await expect(page.getByRole('navigation', { name: 'Lesson steps' }).getByRole('button')).toHaveCount(13); // 12 steps + test
-  await expect(page.getByRole('button', { name: /Level test/ })).toBeDisabled();
+  await expect(page.getByRole('navigation', { name: 'Lesson steps' }).getByRole('button')).toHaveCount(13); // 12 steps + Prove it
+  await expect(page.getByRole('button', { name: /Prove it/ })).toBeVisible(); // test opens after studying, or via Prove it
   await page.keyboard.press('ArrowRight');
   await expect(page.getByRole('heading', { level: 1, name: 'Input, processing, output — and memory' })).toBeVisible();
   await page.keyboard.press('ArrowLeft');
@@ -107,6 +115,10 @@ test('level test: perfect score clears the level with ★★ and opens new level
   await expect(page.getByText('LEVEL TEST · ATTEMPT 1')).toBeVisible();
   await shot(page, '03-test-question');
   await runTest(page, () => true);
+  await expect(page.getByRole('dialog').filter({ hasText: 'Nibble' })).toBeVisible();
+  await page.waitForTimeout(400);
+  await shot(page, '06-rank-up');
+  await dismissRankUp(page);
   await expect(page.getByText('LEVEL CLEARED', { exact: true })).toBeVisible();
   await expect(page.getByText('10 of 10 correct · 100 %')).toBeVisible();
   await expect(page.getByText('+175 XP')).toBeVisible(); // 10×10 + 50 clear + 25 second star
@@ -121,6 +133,7 @@ test('level test: failing lists the steps to revisit and does not clear', async 
   await studyAll(page);
   await page.getByRole('button', { name: 'Take the level test' }).click();
   await runTest(page, (i) => i < 6);
+  await dismissRankUp(page);
   await expect(page.getByText('NOT CLEARED YET', { exact: true })).toBeVisible();
   await expect(page.getByText(/6 of 10 correct · 60 %/)).toBeVisible();
   const review = page.getByRole('heading', { name: 'REVISIT THESE STEPS' }).locator('..');

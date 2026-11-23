@@ -84,6 +84,15 @@ const beamTex = (() => {
   return new THREE.CanvasTexture(cv);
 })();
 
+const HALO = new THREE.RingGeometry(4.0, 4.9, 40);
+const HALO_MAT = new THREE.MeshBasicMaterial({
+  toneMapped: false,
+  transparent: true,
+  opacity: 0.85,
+  side: THREE.DoubleSide,
+  depthWrite: false,
+});
+
 const TOP: Record<MedalState, string> = {
   cleared: '#ffcf3a',
   available: '#5cc8f5',
@@ -103,12 +112,14 @@ interface Props {
   tier: Tier;
   medal: (levelId: string) => MedalState;
   stars: (levelId: string) => number;
+  /** Progress halo under a pedestal: gold (cleared), bright gold (mastered), blue (review due). */
+  halo: (levelId: string) => 'mastered' | 'due' | 'cleared' | null;
   bossOpen: boolean;
   onPickLevel: (levelId: string) => void;
 }
 
 /** One stage = one island: the numbered road, pedestals, bonus chests, unit signposts and the boss castle. */
-export function StageScene({ stageId, layout, tier, medal, stars, bossOpen, onPickLevel }: Props) {
+export function StageScene({ stageId, layout, tier, medal, stars, halo, bossOpen, onPickLevel }: Props) {
   const q = TIERS[tier];
   const P = pieces();
   const spec: TerrainSpec = useMemo(
@@ -170,6 +181,22 @@ export function StageScene({ stageId, layout, tier, medal, stars, bossOpen, onPi
     }
     return { gold, dim };
   }, [ped, stars]);
+  const halos = useMemo(() => {
+    const out: Instance[] = [];
+    for (const p of ped) {
+      const h0 = halo(p.levelId);
+      if (!h0) continue;
+      out.push({
+        x: p.x,
+        y: p.y + 0.25,
+        z: p.z,
+        s: h0 === 'mastered' ? 1.25 : 1,
+        rx: -Math.PI / 2,
+        color: h0 === 'due' ? '#5fd0ff' : h0 === 'mastered' ? '#fff1a0' : '#ffc23a',
+      });
+    }
+    return out;
+  }, [ped, halo]);
   const chests = useMemo(
     () => layout.chests.map((c) => ({ ...c, y: h(c.x, c.z), open: medal(c.levelId) !== 'locked' })),
     [layout.chests, h, medal],
@@ -247,6 +274,7 @@ export function StageScene({ stageId, layout, tier, medal, stars, bossOpen, onPi
               .map((p) => ({ x: p.x, y: p.y, z: p.z, color: TOP[p.state] }))}
             castShadow={false}
           />
+          <Batch geometry={HALO} material={HALO_MAT} items={halos} castShadow={false} receiveShadow={false} />
           <Batch geometry={P.star} material={M.gold} items={starItems.gold} castShadow={shadow} />
           <Batch geometry={P.star} material={M.dim} items={starItems.dim} castShadow={shadow} />
           <Batch

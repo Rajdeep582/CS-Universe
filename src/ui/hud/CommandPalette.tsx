@@ -10,7 +10,7 @@ import { Kbd, LevelMedallion, Modal } from '../components';
 export function CommandPalette() {
   const { paletteOpen, setPaletteOpen } = useUi();
   const navigate = useNavigate();
-  const { medal } = useProgress();
+  const { medalProps } = useProgress();
   const inAtlas = useRouterState({ select: (s) => s.location.pathname.startsWith('/atlas') });
 
   useEffect(() => {
@@ -115,7 +115,7 @@ export function CommandPalette() {
                     )
                   }
                 >
-                  <LevelMedallion state={medal(l)} number={l.number} size={32} />
+                  <LevelMedallion {...medalProps(l)} size={32} />
                   <span className="font-semibold">{l.title}</span>
                   <span className="ml-auto text-sm text-muted">{s.title}</span>
                 </Command.Item>

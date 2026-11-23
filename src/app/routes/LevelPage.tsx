@@ -6,9 +6,10 @@ import { useProgress } from '../useProgress';
 import { Breadcrumbs, GlassPanel, LevelMedallion, StarRating, Tag } from '@/ui/components';
 import { NotFound } from './NotFound';
 import { PlayButton } from '../PlayButton';
+import { ReviewNote } from '../ReviewNote';
 
 function LevelLink({ id }: { id: string }) {
-  const { medal } = useProgress();
+  const { medalProps } = useProgress();
   const l = levelById.get(id)!;
   const s = stageById.get(l.stageId)!;
   return (
@@ -18,7 +19,7 @@ function LevelLink({ id }: { id: string }) {
         params={{ worldId: l.worldId, stageId: l.stageId, levelId: l.id }}
         className="flex items-center gap-3 rounded-[16px] px-2 py-2 hover:bg-white/60"
       >
-        <LevelMedallion state={medal(l)} number={l.number} size={36} />
+        <LevelMedallion {...medalProps(l)} size={36} />
         <span className="min-w-0 flex-1">
           <span className="block font-semibold">{l.title}</span>
           <span className="block text-[12px] font-semibold text-muted">
@@ -55,7 +56,7 @@ const STEPS = [
 export function LevelPage() {
   const { worldId, stageId, levelId } = useParams({ from: '/_atlas/atlas/$worldId/$stageId/$levelId' });
   const l = levelById.get(levelId);
-  const { cleared, medal, starsOf } = useProgress();
+  const { cleared, medal, medalProps, starsOf, info } = useProgress();
   if (!l || l.stageId !== stageId || l.worldId !== worldId) return <NotFound />;
   const s = stageById.get(l.stageId)!;
   const w = worldById.get(l.worldId)!;
@@ -74,7 +75,7 @@ export function LevelPage() {
         ]}
       />
       <GlassPanel className="rise flex items-center gap-6 rounded-[28px] p-7">
-        <LevelMedallion state={m} number={l.number} size={96} />
+        <LevelMedallion {...medalProps(l)} size={96} />
         <div className="min-w-0 flex-1">
           <p className="font-display text-xs font-extrabold tracking-[.16em] text-gold-4">
             {l.number === null ? 'BONUS LEVEL' : `LEVEL ${l.number}`} · STAGE {w.order}-{s.order}{' '}
@@ -110,7 +111,10 @@ export function LevelPage() {
             <StarRating stars={starsOf(l.id) as 0 | 1 | 2 | 3} size={18} />
           </div>
         </div>
-        <PlayButton level={l} locked={m === 'locked'} size="lg" className="flex-none" />
+        <div className="flex flex-none flex-col items-end gap-2">
+          <PlayButton level={l} locked={m === 'locked'} size="lg" />
+          <ReviewNote info={info(l)} className="max-w-[260px]" />
+        </div>
       </GlassPanel>
 
       <div className="grid gap-5 lg:grid-cols-[1fr_380px]">

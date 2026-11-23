@@ -1,91 +1,120 @@
 import { create } from 'zustand';
-import type { TestResult } from '../lesson/testEngine';
-import { STEP_XP, STUDIED_XP, testXp } from '../lesson/testEngine';
+import lessonsJson from '@/generated/lessons.json';
+import type { LessonMeta } from '../lesson/schema';
+import { SAVE_VERSION, SaveFileSchema, stamp, type EventInput, type LearnerEvent, type SaveFile } from './events';
+import {
+  EMPTY_STATE,
+  reduce,
+  replay,
+  type JournalEntry,
+  type LearnerState,
+  type ReplayContext,
+  type Stars,
+} from './replay';
+import { memoryStore, type EventStore } from './storage';
+import { DEFAULT_PREFS, usePrefs, type Prefs } from './settings';
 
-export type Stars = 0 | 1 | 2 | 3;
+export type { Stars } from './replay';
 
-/** XP for reaching a simulation goal (docs/blueprint/03). */
-export const SIM_GOAL_XP = 20;
+const lessons = lessonsJson as unknown as Record<string, LessonMeta>;
+const stepsOf = (levelId: string) => lessons[levelId]?.steps.map((s) => s.id) ?? [];
+const contextFor = (p: Pick<Prefs, 'retention' | 'dailyGoals'>): ReplayContext => ({
+  retention: p.retention,
+  dailyGoals: p.dailyGoals,
+  stepsOf,
+});
 
-/**
- * Learner progress, held in memory. Phase 4 adds the event log, FSRS review scheduling
- * and IndexedDB persistence; the reducers below are pure so that layer can replay them.
- */
-export interface LearnerData {
+/** Something the learner just earned, for the celebration layer. */
+export interface Reward {
+  id: number;
+  event: LearnerEvent;
   xp: number;
-  /** Stars per level id; ≥ 1 means the level test was passed (Cleared). */
-  stars: ReadonlyMap<string, Stars>;
-  /** Lesson steps seen, per level. */
-  seen: ReadonlyMap<string, ReadonlySet<string>>;
-  /** Level-test attempts started, per level. */
-  attempts: ReadonlyMap<string, number>;
-  /** Simulation goals reached, as `${levelId}:${simId}`. */
-  simGoals: ReadonlySet<string>;
-  streakDays: number;
-  freezes: number;
+  entries: JournalEntry[];
 }
 
-export const EMPTY_LEARNER: LearnerData = {
-  xp: 0,
-  stars: new Map(),
-  seen: new Map(),
-  attempts: new Map(),
-  simGoals: new Set(),
-  streakDays: 0,
-  freezes: 0,
-};
-
-/** First view of a step: +5 XP; seeing the last unseen step of a lesson: +25 XP (studied). */
-export function viewStep(d: LearnerData, levelId: string, stepId: string, allStepIds: readonly string[]): LearnerData {
-  const prev = d.seen.get(levelId) ?? new Set<string>();
-  if (prev.has(stepId)) return d;
-  const next = new Set(prev).add(stepId);
-  const studied = allStepIds.every((s) => next.has(s));
-  return { ...d, xp: d.xp + STEP_XP + (studied ? STUDIED_XP : 0), seen: new Map(d.seen).set(levelId, next) };
+interface Store extends LearnerState {
+  events: readonly LearnerEvent[];
+  ready: boolean;
+  persistent: boolean;
+  saveError: boolean;
+  /** Rewards not yet shown by the celebration layer. */
+  rewards: readonly Reward[];
+  init(store: EventStore): Promise<void>;
+  /** Appends one event, updates every derived number, and queues rewards. Returns the XP it earned. */
+  record(e: EventInput): number;
+  /** Replays the log after a preference that affects derivation changed (retention, daily goals). */
+  rebuild(): void;
+  consumeReward(id: number): void;
+  exportSave(): SaveFile;
+  importSave(raw: unknown): Promise<{ ok: true; count: number } | { ok: false; error: string }>;
+  reset(): Promise<void>;
 }
 
-export function reachSimGoal(d: LearnerData, levelId: string, simId: string): LearnerData {
-  const key = `${levelId}:${simId}`;
-  if (d.simGoals.has(key)) return d;
-  return { ...d, xp: d.xp + SIM_GOAL_XP, simGoals: new Set(d.simGoals).add(key) };
-}
+let backend: EventStore = memoryStore();
+let rewardId = 0;
+const ctxNow = () => contextFor(typeof window === 'undefined' ? DEFAULT_PREFS : usePrefs.getState());
 
-export function startAttempt(d: LearnerData, levelId: string): LearnerData {
-  return { ...d, attempts: new Map(d.attempts).set(levelId, (d.attempts.get(levelId) ?? 0) + 1) };
-}
-
-/** Records a graded test: stars never go down; XP per testXp. Returns the new data and the XP gained. */
-export function recordTest(d: LearnerData, levelId: string, result: TestResult): { data: LearnerData; xp: number } {
-  const before = d.stars.get(levelId) ?? 0;
-  const xp = testXp(result, d.attempts.get(levelId) ?? 1, before);
-  const stars = Math.max(before, result.stars) as Stars;
-  return {
-    data: { ...d, xp: d.xp + xp, stars: stars === before ? d.stars : new Map(d.stars).set(levelId, stars) },
-    xp,
-  };
-}
-
-interface Actions {
-  viewStep(levelId: string, stepId: string, all: readonly string[]): void;
-  reachSimGoal(levelId: string, simId: string): void;
-  startAttempt(levelId: string): number;
-  recordTest(levelId: string, result: TestResult): number;
-}
-
-export const useLearner = create<LearnerData & Actions>((set, get) => ({
-  ...EMPTY_LEARNER,
-  viewStep: (l, s, all) => set((d) => viewStep(d, l, s, all)),
-  reachSimGoal: (l, s) => set((d) => reachSimGoal(d, l, s)),
-  startAttempt: (l) => {
-    set((d) => startAttempt(d, l));
-    return get().attempts.get(l)!;
+export const useLearner = create<Store>((set, get) => ({
+  ...EMPTY_STATE,
+  events: [],
+  ready: false,
+  persistent: false,
+  saveError: false,
+  rewards: [],
+  async init(store) {
+    backend = store;
+    let events: LearnerEvent[] = [];
+    try {
+      events = await store.load();
+    } catch {
+      set({ saveError: true });
+    }
+    set({ ...replay(events, ctxNow()), events, ready: true, persistent: store.persistent });
   },
-  recordTest: (l, r) => {
-    const { data, xp } = recordTest(get(), l, r);
-    set(data);
+  record(input) {
+    const e = stamp(input);
+    const before = get();
+    const { state, added } = reduce(before, e, ctxNow());
+    const xp = state.xp - before.xp;
+    const rewards =
+      xp || added.length ? [...before.rewards, { id: ++rewardId, event: e, xp, entries: added }] : before.rewards;
+    set({ ...state, events: [...before.events, e], rewards });
+    backend.append(e).catch(() => set({ saveError: true }));
     return xp;
   },
+  rebuild() {
+    set({ ...replay(get().events, ctxNow()) });
+  },
+  consumeReward(id) {
+    set({ rewards: get().rewards.filter((r) => r.id !== id) });
+  },
+  exportSave() {
+    return {
+      app: 'cs-universe',
+      version: SAVE_VERSION,
+      exportedAt: new Date().toISOString(),
+      events: [...get().events],
+    };
+  },
+  async importSave(raw) {
+    const r = SaveFileSchema.safeParse(raw);
+    if (!r.success) return { ok: false, error: 'This file is not a CS Universe progress file.' };
+    const events = [...r.data.events].sort((a, b) => a.at - b.at);
+    await backend.replace(events);
+    set({ ...replay(events, ctxNow()), events, rewards: [] });
+    return { ok: true, count: events.length };
+  },
+  async reset() {
+    await backend.replace([]);
+    set({ ...EMPTY_STATE, events: [], rewards: [] });
+  },
 }));
+
+// Retention and daily goals change how the log is interpreted, so replay when they change.
+if (typeof window !== 'undefined')
+  usePrefs.subscribe((p, prev) => {
+    if (p.retention !== prev.retention || p.dailyGoals !== prev.dailyGoals) useLearner.getState().rebuild();
+  });
 
 export const clearedSet = (stars: ReadonlyMap<string, Stars>): Set<string> => {
   const s = new Set<string>();

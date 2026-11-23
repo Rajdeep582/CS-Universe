@@ -20,9 +20,10 @@ Every third-party library, font, icon set or asset used by CS Universe, with its
 | @react-three/postprocessing | 3.2.2 | MIT | Bloom (High tier) |
 | postprocessing | 6.39.6 | **Zlib** (approved D1) | Effect passes |
 | @fontsource-variable/outfit, /inter, /jetbrains-mono | 5.3.0 | OFL-1.1 | Self-hosted fonts |
+| ts-fsrs | 5.4.2 | MIT | FSRS spaced-review scheduler (no dependencies) |
 | katex | 0.19.1 | MIT | Maths stylesheet and KaTeX fonts (MIT) for lessons; formulas are rendered at build time (pulls in commander — MIT) |
 
-Transitive production packages: 126 in total, all checked by the script.
+Transitive production packages: 127 in total, all checked by the script.
 
 ## Build & test tooling (not shipped)
 

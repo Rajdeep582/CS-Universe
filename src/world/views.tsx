@@ -29,6 +29,7 @@ import { stageStatus, worldStatus } from '@/app/derive';
 import { LevelMedallion, ProgressBar, StarRating, Tag } from '@/ui/components';
 import { NotFound } from '@/app/routes/NotFound';
 import { PlayButton } from '@/app/PlayButton';
+import { ReviewNote } from '@/app/ReviewNote';
 import { Label } from './labels';
 import { useStageLayout, useWorldLayout } from './useWorldData';
 import { useViewStore } from './viewStore';
@@ -331,7 +332,7 @@ export function StageView() {
   const L = useStageLayout(s?.id);
   const sampler = useViewStore((st) => (st.samplerKey === `stage:${stageId}` ? st.sampler : null));
   const hovered = useViewStore((st) => st.hovered);
-  const { medal, cleared, starsOf } = useProgress();
+  const { medal, medalProps, cleared, starsOf } = useProgress();
   if (!s || !L || s.worldId !== worldId) return <NotFound />;
   const w = worldById.get(s.worldId)!;
   const st = stageStatus(s, cleared);
@@ -383,7 +384,7 @@ export function StageView() {
                   )}
                   aria-label={`Level ${l.number}: ${l.title}, ${m === 'current' ? 'up next' : m}`}
                 >
-                  <LevelMedallion state={m} number={l.number} size={m === 'current' ? 58 : 48} />
+                  <LevelMedallion {...medalProps(l)} size={m === 'current' ? 58 : 48} />
                 </Link>
               </Label>
             );
@@ -489,7 +490,7 @@ export function StageView() {
 
 function LevelPanel({ stageId, levelId }: { stageId: string; levelId: string }) {
   const navigate = useNavigate();
-  const { medal, cleared, starsOf } = useProgress();
+  const { medal, medalProps, cleared, starsOf, info } = useProgress();
   const s = stageById.get(stageId)!;
   const w = worldById.get(s.worldId)!;
   const close = () =>
@@ -545,7 +546,7 @@ function LevelPanel({ stageId, levelId }: { stageId: string; levelId: string }) 
   return shell(
     <>
       <div className="flex items-center gap-4">
-        <LevelMedallion state={m} number={l.number} size={64} />
+        <LevelMedallion {...medalProps(l)} size={64} />
         <div>
           <p className="pr-8 font-display text-[10.5px] font-extrabold tracking-[.16em] text-gold-4">
             {l.number === null ? 'BONUS LEVEL' : `LEVEL ${l.number}`} · UNIT {unit.title.toUpperCase()}
@@ -592,7 +593,7 @@ function LevelPanel({ stageId, levelId }: { stageId: string; levelId: string }) 
                 search={{ level: r.id }}
                 className="flex items-center gap-2.5 rounded-xl px-1.5 py-1.5 hover:bg-white/60"
               >
-                <LevelMedallion state={medal(r)} number={r.number} size={30} />
+                <LevelMedallion {...medalProps(r)} size={30} />
                 <span>
                   <span className="block text-[13.5px] font-semibold">{r.title}</span>
                   <span className="block text-[11.5px] font-semibold text-muted">
@@ -608,6 +609,7 @@ function LevelPanel({ stageId, levelId }: { stageId: string; levelId: string }) 
       <p className="mt-3 text-[12.5px] font-semibold text-muted">
         Clearing it opens {l.unlocks.length} level{l.unlocks.length === 1 ? '' : 's'}.
       </p>
+      <ReviewNote info={info(l)} className="mt-3" />
       <PlayButton level={l} locked={m === 'locked'} className="mt-4 w-full" />
       <Link
         to="/atlas/$worldId/$stageId/$levelId"

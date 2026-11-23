@@ -59,8 +59,10 @@ export function SimulationFrame({ id, goal, onGoal }: { id: SimulationId; goal?:
 
 function Simulation({ id, goal }: { id: SimulationId; goal?: string }) {
   const { levelId } = useContext(LessonCtx);
-  const reach = useLearner((s) => s.reachSimGoal);
-  const onGoal = useCallback(() => reach(levelId, id), [reach, levelId, id]);
+  const record = useLearner((s) => s.record);
+  const onGoal = useCallback(() => {
+    if (!useLearner.getState().simGoals.has(`${levelId}:${id}`)) record({ t: 'sim', level: levelId, sim: id });
+  }, [record, levelId, id]);
   return <SimulationFrame id={id} {...(goal ? { goal, onGoal } : {})} />;
 }
 
