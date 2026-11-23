@@ -6,15 +6,15 @@
 
 | State | Rule | Visual |
 |---|---|---|
-| Locked | ≥ 1 prerequisite not yet Explored | Dim mote, no ring; peek shows missing prereqs with fly-to |
-| Available | All prerequisites ≥ Explored | Glowing outline ring, gentle breathing |
-| In progress | Lesson started, not finished | Ring fills clockwise with step progress |
-| **Explored** | All lesson steps completed | Solid core, small halo |
-| **Practiced** | Challenge passed (≥ 80 %, all coding tests green) | Brighter core, edges to it fill with light |
-| **Mastered** | Practiced + a spaced review passed ≥ 3 days later | Full halo, slow orbiting glint, constellation line drawn |
-| Review due | FSRS says the card is due | Soft flicker (disabled in reduced motion; icon instead) |
+| Locked | ≥ 1 prerequisite not yet Explored | Grey medallion + padlock; card lists missing prereqs with fly-to |
+| Available | All prerequisites ≥ Explored | Gold rim glows, gentle breathing |
+| In progress | Lesson started, not finished | Medallion ring fills clockwise with step progress |
+| **Explored** | All lesson steps completed | ★ 1 star |
+| **Practiced** | Challenge passed (≥ 80 %, all coding tests green) | ★★ 2 stars, road tile ahead brightens |
+| **Mastered** | Practiced + a spaced review passed ≥ 3 days later | ★★★ 3 stars, pedestal turns gold |
+| Review due | FSRS says the card is due | Small repeat badge on the medallion; counted in Today's goals |
 
-Failing a review never deletes progress: the star dims back to *Practiced* glow until the next successful review. The Mastered date stays in the journey log.
+Failing a review never deletes progress: the third star dims to outline until the next successful review. The Mastered date stays in the journey log.
 
 ## 2. XP economy
 
@@ -82,16 +82,16 @@ Early ranks come fast (habit forming); later ones track real breadth. Each rank-
 
 | Level | Trigger | Visual | Sound | Duration | Camera |
 |---|---|---|---|---|---|
-| **Micro** | Step done, correct answer | Rail tick + 6-particle spark, XP chip flies to HUD | Soft tick | 0.4 s | None |
-| **Node** | Topic Explored / Practiced / Mastered | Star ignites, edges fill with flowing light, newly Available stars bloom one by one | Rising 3-note chime | 1.5–2.5 s | Short pull-back to show unlocked neighbours |
-| **Subject** | Boss cleared | Constellation outline draws, branch segment saturates, XP cascade, rank check | Layered chord + shimmer | 4–6 s, skippable | Pull back to Domain level, slow orbit |
-| **Domain** | All subjects in domain complete | Nebula blooms, trunk brightens to that altitude, a new star appears in the night sky of the Universe view, achievement card | Full motif | 8–10 s, skippable | Pull back to Universe, sweep along the branch |
+| **Micro** | Step done, correct answer | Rail tick + spark, XP chip flies to HUD | Soft tick | 0.4 s | None |
+| **Level** | Topic Explored / Practiced / Mastered | LEVEL CLEAR! modal: stars stamp in one by one, XP rows count up, unlocked level + bonus chest cards, confetti (see 01 render) | Rising 3-note chime per star | 2–3 s | Glide to next pedestal after closing |
+| **Stage** | Boss cleared | Castle gate opens, flag rises, fireworks over the castle, road glows end to end, XP cascade, rank check | Layered chord + fanfare | 4–6 s, skippable | Pull back to the whole island |
+| **World** | All stages of an island complete | Island fully blooms, giant banner unfurls, sea-route to the next island turns gold, world trophy card | Full motif | 8–10 s, skippable | Rise to World Map, sweep along the route |
 
 Reduced motion: same information as static overlays + sound (if enabled); no camera moves.
 
 ## 7. Bosses
 
-One capstone per subject (41 listed in 02). Format = a scenario combining the subject's topics: simulation goals, multi-step challenges, and coding where the subject has a runtime. Unlocks when ≥ 70 % of the subject's core topics are Practiced. Retry is unlimited; partial progress is kept. Clearing it completes the subject's constellation in the world.
+One capstone per subject (41 listed in 02). Format = a scenario combining the subject's topics: simulation goals, multi-step challenges, and coding where the subject has a runtime. Unlocks when ≥ 70 % of the subject's core topics are Practiced. Retry is unlimited; partial progress is kept. Clearing it raises the castle flag and completes the stage.
 
 ## 8. Achievements (sample of the full set, ≈ 60 at launch)
 
@@ -115,7 +115,7 @@ One capstone per subject (41 listed in 02). Format = a scenario combining the su
 | Deep Diver | Master 10 off-path topics | |
 | Spaced Out | Pass 100 reviews | |
 
-## 9. Recommendation (the Next beacon)
+## 9. Recommendation (the CONTINUE level)
 
 | Signal | Weight (initial) |
 |---|---|
@@ -125,13 +125,17 @@ One capstone per subject (41 listed in 02). Format = a scenario combining the su
 | Near-complete subject (finish what you started) | medium |
 | Proximity to current camera focus | low |
 
-Exactly **one** beacon at a time. A small "other suggestions" list (max 3) sits in the peek card. Weights tuned in Phase 4 from simulated learner traces.
+Exactly **one** CONTINUE target at a time. A small "other suggestions" list (max 3) sits in the level card. Weights tuned in Phase 4 from simulated learner traces.
 
-## 10. Journey log & share card
+## 10. Today's goals (optional)
 
-Timeline of Explored/Practiced/Mastered events, bosses and ranks, grouped by week. Share card = a PNG rendered client-side of *your* lit Stellar Arbor with rank and counts (no personal data beyond what the user chooses to show).
+Three small daily goals (e.g. clear 3 levels, review 5 due levels, reach a simulation goal), +50–60 XP each. Missing them costs nothing; they reset at local midnight; no streak or rank depends on them.
 
-## 11. Ethics rules (non-negotiable)
+## 11. Journey log & share card
+
+Timeline of Explored/Practiced/Mastered events, bosses and ranks, grouped by week. Share card = a PNG rendered client-side of *your* World Map with rank, stars and counts (no personal data beyond what the user chooses to show).
+
+## 12. Ethics rules (non-negotiable)
 
 | Never | Instead |
 |---|---|

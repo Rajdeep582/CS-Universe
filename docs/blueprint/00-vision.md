@@ -4,14 +4,14 @@
 
 ## One line
 
-**CS Universe** is a free, browser-based 3D universe where computer science is a place: every topic is a star you fly to, learn inside, and light up. The world visibly grows brighter as you understand it.
+**CS Universe** is a free, browser-based 3D island-adventure game where computer science is a place: 12 island worlds, each subject a stage with a winding road of levels, each level a topic you play, master for up to 3 stars, and use to unlock the next. Islands come out of the mist and bloom with colour as you understand them.
 
 ## Product pillars
 
 | # | Pillar | What it means in practice | Anti-goal |
 |---|---|---|---|
 | 1 | **Explore, don't enrol** | Entry is a world, not a syllabus. Any unlocked star can be visited at any time. | Chapter lists, "Module 3 of 12" framing |
-| 2 | **Always oriented** | One primary focus on screen; breadcrumb, minimap and a single "Next" beacon answer *where am I* and *what now* in < 2 s. | Getting lost in empty space |
+| 2 | **Always oriented** | One primary focus on screen; stage header, Atlas card and a single "Continue" level answer *where am I* and *what now* in < 2 s. | Getting lost on the map |
 | 3 | **Textbook-grade truth** | Every claim traceable to a canonical source; every simulation backed by a unit-tested algorithm module. | Pop-science simplifications that are wrong |
 | 4 | **Learn by manipulating** | The interactive simulation is the heart of every lesson; text supports it. | Walls of text, video lectures |
 | 5 | **Earned delight** | Rewards escalate (step → topic → subject → domain) and always change the world itself. | Loss-framed guilt, fake urgency, slot-machine loops |
@@ -37,18 +37,18 @@ Every feature in later phases is accepted or rejected against this sentence.
 
 | Step | Learner action | System response | Felt as |
 |---|---|---|---|
-| 1 | Sees the glowing Next beacon / chooses any available star | Smooth fly-through, world dims, lesson chamber opens | Curiosity |
+| 1 | Taps CONTINUE / picks any open level or bonus chest | Camera glides to the pedestal, world blurs, level opens | Curiosity |
 | 2 | Moves through 6–12 small lesson steps | Tick + spark per step, XP flies to HUD | Momentum |
 | 3 | Plays the simulation, reaches its goal | Goal chime, state inspector confirms | Insight |
-| 4 | Passes the challenge | Node ignites, edges fill with light, new stars bloom | Achievement |
-| 5 | Returns days later for a spaced review | Mastery tier rises, node gains its full halo | Ownership |
-| 6 | Clears a subject's boss | Camera pulls back, whole constellation lights up | Triumph |
+| 4 | Passes the challenge | LEVEL CLEAR! — stars stamp in, XP counts up, next level and bonus chest unlock | Achievement |
+| 5 | Returns days later for a spaced review | Third star earned (Mastered) | Ownership |
+| 6 | Beats a stage's castle boss | Flag rises on the castle, road glows, camera pulls back over the island | Triumph |
 
 ## Scope of the whole product (for orientation only — phases detail it)
 
 | Area | Included |
 |---|---|
-| World | Stellar Arbor universe (see 01), 4 zoom levels + lesson chamber, 2D Atlas mode |
+| World | Isles of Computing (see 01): World Map → Island → Stage → Level → Level play, plus 2D Atlas mode |
 | Content | 12 domains, 41 subjects, 581 topics designed (see 02); authored in batches from Phase 5 |
 | Lessons | 10-section lesson model, MDX + KaTeX + Shiki, simulation framework, 5+ challenge formats |
 | Game layer | XP, 16 ranks, 3 mastery tiers, FSRS reviews, streak with freezes, achievements, 41 bosses, journey log |
@@ -74,4 +74,5 @@ Every feature in later phases is accepted or rejected against this sentence.
 | 2 | No accounts until Phase 9; all progress local with export/import | Low |
 | 3 | Primary code-task language **Python** for beginners, JS/SQL/C where the subject needs it | Medium — affects Phase 6 effort |
 | 4 | Assembly lessons use **RISC-V** (open ISA, matches Patterson & Hennessy RISC-V ed.) | Low |
-| 5 | Vertical slice (Phase 5) = **Tier 0 + Operating Systems** | Medium — swap to Data Structures if you prefer (decision D5) |
+| 5 | Vertical slice (Phase 5) = **Tier 0 + Operating Systems** |
+| 6 | World theme = **3D islands** instead of the master prompt's space world (owner direction, 2026-11-23) | — decided | Medium — swap to Data Structures if you prefer (decision D5) |

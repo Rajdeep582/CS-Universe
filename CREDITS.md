@@ -10,7 +10,16 @@ None installed yet (Phase 0 is documentation only). Candidate libraries and thei
 
 | Asset | Used for | License |
 |---|---|---|
-| Inter (Rasmus Andersson) | Text rendered into the Phase 0 sketch PNGs | SIL OFL 1.1 |
+| Outfit (Rodrigo Fuenzalida) | Display type in Phase 0 renders | SIL OFL 1.1 |
+| Inter (Rasmus Andersson) | Text type in Phase 0 renders | SIL OFL 1.1 |
+
+## Design tooling (Phase 0 renders, not shipped)
+
+| Package | Version | License |
+|---|---|---|
+| three | 0.187.0 | MIT |
+| lucide-static (icons) | 1.78.0 | ISC |
+| @fontsource-variable/outfit, @fontsource-variable/inter | 5.3.0 | OFL-1.1 |
 
 ## Approved license exceptions
 
