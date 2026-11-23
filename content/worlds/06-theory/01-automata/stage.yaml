@@ -1,0 +1,82 @@
+# World 6 · Stage 1 — Automata & Formal Languages
+id: automata
+order: 1
+title: "Automata & Formal Languages"
+tier: 3
+refs:
+  - "Sipser — Introduction to the Theory of Computation 3e, ch. 0–2"
+  - "Hopcroft, Motwani & Ullman — Introduction to Automata Theory 3e"
+boss:
+  title: Language Lab
+  description: Build automata and grammars for five languages and prove one of them non-regular.
+units:
+  - id: regular-languages
+    title: Regular Languages
+    levels:
+      - id: alphabets-languages
+        title: "Alphabets, Strings & Languages"
+        core: true
+        requires: [sequences-sums]
+      - id: dfa
+        title: Deterministic Finite Automata
+        core: true
+        requires: [alphabets-languages]
+      - id: nfa
+        title: Nondeterministic Finite Automata
+        core: true
+        requires: [dfa]
+      - id: subset-construction
+        title: "NFA → DFA: The Subset Construction"
+        core: true
+        requires: [nfa]
+      - id: regular-expressions
+        title: Regular Expressions
+        core: true
+        requires: [nfa]
+      - id: regex-to-nfa
+        title: "Regex → NFA: Thompson's Construction"
+        core: false
+        requires: [regular-expressions]
+      - id: dfa-minimization
+        title: DFA Minimization
+        core: false
+        requires: [subset-construction, equivalence-relations]
+      - id: closure-properties
+        title: Closure Properties of Regular Languages
+        core: false
+        requires: [subset-construction]
+      - id: pumping-lemma-regular
+        title: The Pumping Lemma for Regular Languages
+        core: true
+        requires: [dfa, proof-contradiction, pigeonhole]
+  - id: context-free-languages
+    title: Context-Free Languages
+    levels:
+      - id: cfg
+        title: Context-Free Grammars
+        core: true
+        requires: [regular-expressions, recursive-definitions]
+      - id: derivations-parse-trees
+        title: "Derivations, Parse Trees & Ambiguity"
+        core: true
+        requires: [cfg]
+      - id: chomsky-normal-form
+        title: Chomsky Normal Form
+        core: false
+        requires: [derivations-parse-trees]
+      - id: pda
+        title: Pushdown Automata
+        core: true
+        requires: [cfg, stacks]
+      - id: cfg-pda-equivalence
+        title: CFG ⇔ PDA Equivalence
+        core: false
+        requires: [pda]
+      - id: pumping-lemma-cf
+        title: The Pumping Lemma for Context-Free Languages
+        core: false
+        requires: [pda, pumping-lemma-regular]
+      - id: cyk
+        title: CYK Parsing
+        core: false
+        requires: [chomsky-normal-form, memo-tabulation]

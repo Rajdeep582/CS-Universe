@@ -1,0 +1,62 @@
+# World 10 · Stage 1 — Distributed Systems Foundations
+id: distributed-foundations
+order: 1
+title: Distributed Systems Foundations
+tier: 4
+refs:
+  - "van Steen & Tanenbaum — Distributed Systems 4e (free)"
+  - "Lamport (1978) — Time, Clocks, and the Ordering of Events"
+  - "Fischer, Lynch & Paterson (1985) — Impossibility of Distributed Consensus"
+boss:
+  title: Clockwork
+  description: Order events from logs across four nodes with vector clocks and flag every concurrent pair.
+units:
+  - id: models
+    title: Models
+    levels:
+      - id: why-distributed
+        title: "Why Distribute? Goals & Fallacies"
+        core: true
+        requires: [network-intro, processes]
+      - id: system-models
+        title: "System Models: Synchronous, Asynchronous & Partial"
+        core: true
+        requires: [why-distributed]
+      - id: failure-models
+        title: "Failure Models: Crash, Omission & Byzantine"
+        core: true
+        requires: [system-models]
+      - id: rpc
+        title: "Remote Procedure Calls & Idempotency"
+        core: true
+        requires: [why-distributed, tcp-connection]
+      - id: impossibility
+        title: "Two Generals & FLP Impossibility"
+        core: true
+        requires: [failure-models, proof-contradiction]
+  - id: time
+    title: Time
+    levels:
+      - id: physical-clocks
+        title: "Physical Clocks & Clock Synchronization"
+        core: true
+        requires: [system-models]
+      - id: lamport-clocks
+        title: Lamport Logical Clocks
+        core: true
+        requires: [physical-clocks, partial-orders]
+      - id: vector-clocks
+        title: Vector Clocks
+        core: true
+        requires: [lamport-clocks]
+  - id: failure-handling
+    title: Failure Handling
+    levels:
+      - id: failure-detectors
+        title: "Failure Detection & Heartbeats"
+        core: false
+        requires: [failure-models]
+      - id: fault-tolerance-patterns
+        title: "Timeouts, Retries, Backoff & Circuit Breakers"
+        core: true
+        requires: [rpc, failure-models]

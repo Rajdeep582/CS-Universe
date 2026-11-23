@@ -1,0 +1,89 @@
+# World 12 · Stage 2 — Machine Learning
+id: machine-learning
+order: 2
+title: Machine Learning
+tier: 5
+refs:
+  - "James, Witten, Hastie & Tibshirani — An Introduction to Statistical Learning 2e (free)"
+  - Bishop — Pattern Recognition and Machine Learning
+  - "Sutton & Barto — Reinforcement Learning 2e (free)"
+boss:
+  title: Honest Model
+  description: "Build, regularize and evaluate a classifier on a held-out set and beat the baseline without leakage."
+units:
+  - id: learning-from-data
+    title: Learning from Data
+    levels:
+      - id: what-is-ml
+        title: What Is Learning from Data?
+        core: true
+        requires: [what-is-ai, random-variables]
+      - id: mle
+        title: "Likelihood & Maximum Likelihood"
+        core: true
+        requires: [what-is-ml, distributions]
+      - id: linear-regression
+        title: Linear Regression
+        core: true
+        requires: [what-is-ml, matrices, derivatives]
+      - id: loss-functions
+        title: Loss Functions
+        core: true
+        requires: [linear-regression]
+      - id: gradient-descent
+        title: Gradient Descent
+        core: true
+        requires: [loss-functions, partial-derivatives]
+      - id: logistic-regression
+        title: "Logistic Regression & Classification"
+        core: true
+        requires: [gradient-descent, log-exp, mle]
+  - id: generalization
+    title: Generalization
+    levels:
+      - id: generalization
+        title: "Overfitting, Bias–Variance & Regularization"
+        core: true
+        requires: [logistic-regression]
+      - id: evaluation
+        title: "Train/Validation/Test Splits & Metrics"
+        core: true
+        requires: [generalization]
+      - id: cross-validation
+        title: Cross-Validation
+        core: false
+        requires: [evaluation]
+  - id: model-families
+    title: Model Families
+    levels:
+      - id: knn
+        title: k-Nearest Neighbors
+        core: false
+        requires: [what-is-ml, dot-product]
+      - id: naive-bayes
+        title: Naive Bayes
+        core: false
+        requires: [bayes, what-is-ml]
+      - id: decision-trees
+        title: "Decision Trees & Ensembles"
+        core: false
+        requires: [evaluation, info-entropy-intro]
+      - id: svm
+        title: Support Vector Machines (intuition)
+        core: false
+        requires: [logistic-regression, dot-product]
+  - id: beyond-supervised
+    title: Beyond Supervised
+    levels:
+      - id: clustering
+        title: k-Means Clustering
+        core: true
+        requires: [what-is-ml, dot-product]
+      - id: pca
+        title: Principal Component Analysis
+        core: false
+        requires: [eigen, clustering]
+      - id: rl-intro
+        title: "Reinforcement Learning: MDPs & Q-Learning"
+        core: false
+        requires: [what-is-ml, memo-tabulation]

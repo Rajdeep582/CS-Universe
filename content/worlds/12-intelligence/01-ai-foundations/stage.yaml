@@ -1,0 +1,53 @@
+# World 12 · Stage 1 — AI Foundations
+id: ai-foundations
+order: 1
+title: AI Foundations
+tier: 5
+refs:
+  - "Russell & Norvig — Artificial Intelligence: A Modern Approach 4e, ch. 2–6, 13"
+boss:
+  title: Game Mind
+  description: Write an alpha–beta agent that beats the baseline bot.
+units:
+  - id: search
+    title: Search
+    levels:
+      - id: what-is-ai
+        title: "What Is AI? Agents & Environments"
+        core: true
+        requires: [what-is-algorithm]
+      - id: state-space-search
+        title: Problem Solving as State-Space Search
+        core: true
+        requires: [what-is-ai, bfs, dfs]
+      - id: uniform-cost
+        title: Uniform-Cost Search
+        core: false
+        requires: [state-space-search, dijkstra]
+      - id: heuristic-search
+        title: "Informed Search & A* Heuristics"
+        core: true
+        requires: [state-space-search, dijkstra]
+      - id: local-search
+        title: "Local Search: Hill Climbing & Simulated Annealing"
+        core: false
+        requires: [state-space-search]
+      - id: adversarial-search
+        title: "Minimax & Alpha–Beta Pruning"
+        core: true
+        requires: [state-space-search]
+      - id: csp
+        title: Constraint Satisfaction Problems
+        core: false
+        requires: [backtracking]
+  - id: reasoning
+    title: Reasoning
+    levels:
+      - id: knowledge-representation
+        title: Logic-Based Knowledge Representation
+        core: false
+        requires: [predicate-logic, what-is-ai]
+      - id: bayesian-networks
+        title: Bayesian Networks
+        core: false
+        requires: [bayes, dags-toposort-math]

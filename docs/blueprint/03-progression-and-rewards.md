@@ -2,19 +2,33 @@
 
 > Persona: **Game Systems Designer** (lead), Learning Scientist (spaced repetition, ethics).
 
-## 1. Node states
+## 1. Level states (a level is cleared only by passing its test)
 
 | State | Rule | Visual |
 |---|---|---|
-| Locked | ≥ 1 prerequisite not yet Explored | Grey medallion + padlock; card lists missing prereqs with fly-to |
-| Available | All prerequisites ≥ Explored | Gold rim glows, gentle breathing |
+| Locked | ≥ 1 prerequisite level not yet **Cleared** | Grey medallion + padlock; card lists missing prerequisites with links |
+| Available | Every prerequisite level is Cleared | Gold rim glows, gentle breathing |
 | In progress | Lesson started, not finished | Medallion ring fills clockwise with step progress |
-| **Explored** | All lesson steps completed | ★ 1 star |
-| **Practiced** | Challenge passed (≥ 80 %, all coding tests green) | ★★ 2 stars, road tile ahead brightens |
-| **Mastered** | Practiced + a spaced review passed ≥ 3 days later | ★★★ 3 stars, pedestal turns gold |
-| Review due | FSRS says the card is due | Small repeat badge on the medallion; counted in Today's goals |
+| Studied | All lesson steps done; **level test now open** | Full ring, "Take the test" on the level card. No star yet |
+| **★ Cleared** | Level test passed with **≥ 70 %** | 1 star; LEVEL CLEAR! plays; dependants unlock |
+| **★★ Excellent** | Best level-test score **≥ 90 %** | 2 stars |
+| **★★★ Mastered** | Cleared + a spaced-review test passed **≥ 3 days** later | 3 stars, pedestal turns gold |
+| Review due | FSRS says the review is due | Repeat badge on the medallion; counted in Today's goals |
 
-Failing a review never deletes progress: the third star dims to outline until the next successful review. The Mastered date stays in the journey log.
+Level test rules:
+
+| Rule | Decision |
+|---|---|
+| Source | Every item is tied to a specific step of *that* level's lesson (`teaches` link); the validator rejects items that test content the level did not teach |
+| Coverage | Every teaching section of the lesson has ≥ 1 item |
+| Size | 5–10 items, mixed formats (predict-output, order-steps, spot-the-bug, match, numeric, multiple choice, code where the stage has a runtime) |
+| Pass mark | 70 % to clear; 90 % for the second star |
+| Retakes | Unlimited; items re-drawn/shuffled from a larger pool; the failed items link back to the exact step to re-study |
+| Skipping | "Prove it" lets a learner take the test without studying; passing clears the level normally |
+| Stage boss | A stage test covering all its levels; unlocks when every core level of the stage is Cleared; clearing it completes the stage |
+| World | A world completes when all its stage bosses are beaten |
+
+Failing a review never deletes progress: the third star dims to outline until the next successful review.
 
 ## 2. XP economy
 
@@ -22,17 +36,18 @@ Failing a review never deletes progress: the third star dims to outline until th
 |---|---|---|
 | Lesson step completed | 5 | ~10 steps per lesson |
 | Simulation goal reached | 20 | 1–2 per lesson |
-| Challenge item correct (first try / after retry) | 10 / 5 | No XP for revealing the answer |
-| Topic → Explored | +25 | |
-| Topic → Practiced | +50 | |
-| Topic → Mastered | +75 | |
+| Test item correct (first try / after retry) | 10 / 5 | No XP for revealing the answer |
+| Level studied (all steps) | +25 | |
+| Level Cleared (test ≥ 70 %) | +50 | |
+| Second star (test ≥ 90 %) | +25 | |
+| Level Mastered (review test) | +75 | |
 | Review passed | +10 | Keeps reviews worthwhile |
 | Boss cleared | +400 | One per subject |
-| Subject complete (all topics Practiced + boss) | +250 | |
-| Domain complete | +1,000 | |
-| "Prove it" placement pass | 0 for skipped topics | Unlocks, but XP must be earned |
+| Stage complete (boss beaten) | +250 | |
+| World complete | +1,000 | |
+| "Prove it" test passed without studying | Cleared + item XP; no study XP | |
 
-Estimate: ≈ 280 XP per fully mastered topic → ≈ 163k from topics + 16.4k bosses + 10.3k subjects + 12k domains ≈ **201k XP** for the full current graph. No XP decay, no XP purchase, no XP for idle time.
+Estimate: ≈ 305 XP per fully mastered level → ≈ 177k from levels + 16.4k bosses + 10.3k stages + 12k worlds ≈ **216k XP** for the full current graph. No XP decay, no XP purchase, no XP for idle time.
 
 ## 3. Ranks (16, themed bottom-up through the machine)
 
@@ -62,7 +77,7 @@ Early ranks come fast (habit forming); later ones track real breadth. Each rank-
 | Item | Decision |
 |---|---|
 | Library | `ts-fsrs` (MIT) |
-| Card | One per topic once Practiced; review = 3–5 items drawn from that topic's challenge pool (varied formats) |
+| Card | One per level once Cleared; review = 3–5 items drawn from that level's test pool (varied formats) |
 | Target retention | 0.90 (user-adjustable 0.80–0.95) |
 | Grade mapping | All correct first try → Good/Easy (by time); any retry → Hard; failed → Again |
 | Daily load | Due reviews capped (default 15/day); overflow rolls over without penalty |
@@ -83,7 +98,7 @@ Early ranks come fast (habit forming); later ones track real breadth. Each rank-
 | Level | Trigger | Visual | Sound | Duration | Camera |
 |---|---|---|---|---|---|
 | **Micro** | Step done, correct answer | Rail tick + spark, XP chip flies to HUD | Soft tick | 0.4 s | None |
-| **Level** | Topic Explored / Practiced / Mastered | LEVEL CLEAR! modal: stars stamp in one by one, XP rows count up, unlocked level + bonus chest cards, confetti (see 01 render) | Rising 3-note chime per star | 2–3 s | Glide to next pedestal after closing |
+| **Level** | Level test passed (new star earned) | LEVEL CLEAR! modal: stars stamp in one by one, XP rows count up, unlocked level + bonus chest cards, confetti (see 01 render) | Rising 3-note chime per star | 2–3 s | Glide to next pedestal after closing |
 | **Stage** | Boss cleared | Castle gate opens, flag rises, fireworks over the castle, road glows end to end, XP cascade, rank check | Layered chord + fanfare | 4–6 s, skippable | Pull back to the whole island |
 | **World** | All stages of an island complete | Island fully blooms, giant banner unfurls, sea-route to the next island turns gold, world trophy card | Full motif | 8–10 s, skippable | Rise to World Map, sweep along the route |
 
@@ -91,7 +106,7 @@ Reduced motion: same information as static overlays + sound (if enabled); no cam
 
 ## 7. Bosses
 
-One capstone per subject (41 listed in 02). Format = a scenario combining the subject's topics: simulation goals, multi-step challenges, and coding where the subject has a runtime. Unlocks when ≥ 70 % of the subject's core topics are Practiced. Retry is unlimited; partial progress is kept. Clearing it raises the castle flag and completes the stage.
+One capstone per subject (41 listed in 02). Format = a scenario combining the subject's topics: simulation goals, multi-step challenges, and coding where the subject has a runtime. Unlocks when every core level of the stage is Cleared (a stage test drawing on all its levels). Retry is unlimited; partial progress is kept. Clearing it raises the castle flag and completes the stage.
 
 ## 8. Achievements (sample of the full set, ≈ 60 at launch)
 
@@ -133,7 +148,7 @@ Three small daily goals (e.g. clear 3 levels, review 5 due levels, reach a simul
 
 ## 11. Journey log & share card
 
-Timeline of Explored/Practiced/Mastered events, bosses and ranks, grouped by week. Share card = a PNG rendered client-side of *your* World Map with rank, stars and counts (no personal data beyond what the user chooses to show).
+Timeline of Cleared/Excellent/Mastered events, bosses and ranks, grouped by week. Share card = a PNG rendered client-side of *your* World Map with rank, stars and counts (no personal data beyond what the user chooses to show).
 
 ## 12. Ethics rules (non-negotiable)
 

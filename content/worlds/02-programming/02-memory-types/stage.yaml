@@ -1,0 +1,70 @@
+# World 2 · Stage 2 — Memory, Types & Data
+id: memory-types
+order: 2
+title: "Memory, Types & Data"
+tier: 1
+refs:
+  - "Bryant & O'Hallaron — CS:APP 3e, ch. 3, 9"
+  - "Kernighan & Ritchie — The C Programming Language 2e, ch. 5–6"
+boss:
+  title: Memory Detective
+  description: "Trace a program's stack/heap diagram and find the aliasing and dangling-pointer bugs."
+units:
+  - id: memory
+    title: Memory
+    levels:
+      - id: memory-model
+        title: "The Memory Model: Addresses & Cells"
+        core: true
+        requires: [variables, bytes-words]
+      - id: stack-heap
+        title: Stack vs Heap
+        core: true
+        requires: [memory-model, functions-prog]
+      - id: call-stack
+        title: "The Call Stack & Stack Frames"
+        core: true
+        requires: [stack-heap, recursion]
+      - id: references-pointers
+        title: "References & Pointers"
+        core: true
+        requires: [stack-heap]
+      - id: pointer-arithmetic
+        title: "Pointer Arithmetic & Arrays in Memory"
+        core: false
+        requires: [references-pointers, arrays-lists]
+      - id: value-vs-reference
+        title: "Value vs Reference Semantics & Aliasing"
+        core: false
+        requires: [references-pointers]
+      - id: mutability
+        title: "Mutability & Immutability"
+        core: false
+        requires: [value-vs-reference]
+      - id: manual-memory
+        title: "Manual Memory Management: malloc & free"
+        core: true
+        requires: [references-pointers]
+      - id: memory-bugs
+        title: "Memory Bugs: Leaks, Dangling Pointers, Overflows"
+        core: true
+        requires: [manual-memory]
+  - id: types
+    title: Types
+    levels:
+      - id: static-dynamic-types
+        title: Static vs Dynamic Typing
+        core: true
+        requires: [values-types-basic]
+      - id: type-conversion
+        title: "Type Conversion & Coercion"
+        core: false
+        requires: [static-dynamic-types]
+      - id: composite-types
+        title: "Structs, Records & Enums"
+        core: true
+        requires: [static-dynamic-types]
+      - id: generics-intro
+        title: "Generics & Parametric Types"
+        core: false
+        requires: [composite-types]

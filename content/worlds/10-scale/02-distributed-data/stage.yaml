@@ -1,0 +1,81 @@
+# World 10 · Stage 2 — Distributed Data
+id: distributed-data
+order: 2
+title: Distributed Data
+tier: 4
+refs:
+  - "Kleppmann — Designing Data-Intensive Applications, ch. 5–9"
+  - DeCandia et al. (2007) — Dynamo
+  - Shapiro et al. (2011) — CRDTs
+boss:
+  title: Global Store
+  description: "Configure replication, quorums and partitioning for a geo-distributed store under injected failures."
+units:
+  - id: replication
+    title: Replication
+    levels:
+      - id: replication-intro
+        title: "Replication: Why & How"
+        core: true
+        requires: [why-distributed, logging-recovery]
+      - id: leader-replication
+        title: Single-Leader Replication
+        core: true
+        requires: [replication-intro]
+      - id: multi-leader
+        title: "Multi-Leader Replication & Conflicts"
+        core: false
+        requires: [leader-replication, vector-clocks]
+      - id: leaderless
+        title: "Leaderless Replication & Quorums"
+        core: false
+        requires: [leader-replication]
+      - id: crdts
+        title: CRDTs
+        core: false
+        requires: [multi-leader]
+  - id: consistency
+    title: Consistency
+    levels:
+      - id: consistency-models
+        title: "Consistency Models: Linearizability to Eventual"
+        core: true
+        requires: [leader-replication, schedules-serializability]
+      - id: causal-consistency
+        title: Causal Consistency
+        core: false
+        requires: [consistency-models, vector-clocks]
+      - id: cap-pacelc
+        title: "CAP & PACELC"
+        core: true
+        requires: [consistency-models]
+  - id: partitioning
+    title: Partitioning
+    levels:
+      - id: partitioning
+        title: "Partitioning by Key Range & Hash"
+        core: true
+        requires: [replication-intro, hash-functions]
+      - id: consistent-hashing
+        title: Consistent Hashing
+        core: false
+        requires: [partitioning]
+      - id: rebalancing
+        title: "Rebalancing & Request Routing"
+        core: false
+        requires: [consistent-hashing]
+  - id: transactions-processing
+    title: "Transactions & Processing"
+    levels:
+      - id: two-phase-commit
+        title: "Distributed Transactions: Two-Phase Commit"
+        core: true
+        requires: [transactions-acid, failure-models]
+      - id: sagas
+        title: "Sagas & Compensation"
+        core: false
+        requires: [two-phase-commit]
+      - id: batch-stream
+        title: "Batch (MapReduce) & Stream Processing"
+        core: false
+        requires: [partitioning]

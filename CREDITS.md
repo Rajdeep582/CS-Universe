@@ -1,26 +1,41 @@
 # Credits & Licenses
 
-Every third-party library, font, sound or other asset used by CS Universe is recorded here with its license. Allowed licenses: MIT, Apache-2.0, BSD, ISC, OFL, CC0, CC-BY (plus any exception you explicitly approve).
+Every third-party library, font, icon set or asset used by CS Universe, with its license. Allowed: MIT, Apache-2.0, BSD, ISC, OFL, CC0, CC-BY, public-domain dedications (Unlicense), plus owner-approved exceptions: **Zlib** (D1) and **MPL-2.0 for Pyodide only** (D2). Enforced by `npm run check:licenses`.
 
-## Libraries
+## Shipped libraries (production dependencies)
 
-None installed yet (Phase 0 is documentation only). Candidate libraries and their checked licenses are listed in [docs/blueprint/04-architecture.md](docs/blueprint/04-architecture.md#2-technology-choices-versions-and-licenses-checked-on-npm-2026-11-23).
+| Package | Version | License | Use |
+|---|---|---|---|
+| react, react-dom | 19.3.1 | MIT | UI |
+| @tanstack/react-router | 1.170.46 | MIT | Routing (pulls in isbot — Unlicense) |
+| zustand | 5.1.0 | MIT | State |
+| motion | 14.14.0 | MIT | UI springs |
+| @radix-ui/react-dialog, @radix-ui/react-tooltip | 1.3.1, 1.4.1 | MIT | Accessible dialog/tooltip primitives |
+| cmdk | 1.1.1 | MIT | Command palette |
+| lucide-react | 1.78.0 | ISC | Icons |
+| clsx | 2.1.1 | MIT | Class names |
+| @fontsource-variable/outfit, /inter, /jetbrains-mono | 5.3.0 | OFL-1.1 | Self-hosted fonts |
+
+Transitive production packages: 60 in total, all checked by the script.
+
+## Build & test tooling (not shipped)
+
+Vite (MIT), @vitejs/plugin-react (MIT), TypeScript (Apache-2.0), Tailwind CSS + @tailwindcss/vite (MIT), Zod (MIT), yaml (ISC), tsx (MIT), Vitest (MIT), jsdom (MIT), Testing Library (MIT), ESLint + typescript-eslint + eslint-plugin-react-hooks + eslint-plugin-jsx-a11y (MIT), globals (MIT), Prettier (MIT), Playwright (Apache-2.0).
 
 ## Fonts
 
-| Asset | Used for | License |
+| Font | Author | License |
 |---|---|---|
-| Outfit (Rodrigo Fuenzalida) | Display type in Phase 0 renders | SIL OFL 1.1 |
-| Inter (Rasmus Andersson) | Text type in Phase 0 renders | SIL OFL 1.1 |
+| Outfit | Rodrigo Fuenzalida | SIL OFL 1.1 |
+| Inter | Rasmus Andersson | SIL OFL 1.1 |
+| JetBrains Mono | JetBrains | SIL OFL 1.1 |
+
+## Images
+
+| Asset | Source | License |
+|---|---|---|
+| `public/islands/*.webp`, `public/bg/archipelago.webp`, `docs/blueprint/renders/*` | Rendered by this project (`design/prototype/`, three.js) | Project's own |
 
 ## Design tooling (Phase 0 renders, not shipped)
 
-| Package | Version | License |
-|---|---|---|
-| three | 0.187.0 | MIT |
-| lucide-static (icons) | 1.78.0 | ISC |
-| @fontsource-variable/outfit, @fontsource-variable/inter | 5.3.0 | OFL-1.1 |
-
-## Approved license exceptions
-
-None yet. Pending: Zlib (`postprocessing`), MPL-2.0 (`pyodide`) — see decisions D1, D2.
+three 0.187.0 (MIT), lucide-static 1.78.0 (ISC), @fontsource-variable/outfit & inter 5.3.0 (OFL-1.1).

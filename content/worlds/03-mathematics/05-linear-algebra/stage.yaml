@@ -1,0 +1,62 @@
+# World 3 · Stage 5 — Linear Algebra Essentials
+id: linear-algebra
+order: 5
+title: Linear Algebra Essentials
+tier: 1
+refs:
+  - Strang — Introduction to Linear Algebra 6e
+  - Axler — Linear Algebra Done Right 4e (open access)
+boss:
+  title: Transform Lab
+  description: Find matrices that map a 2D/3D shape onto a target shape.
+units:
+  - id: vectors-matrices
+    title: "Vectors & Matrices"
+    levels:
+      - id: vectors
+        title: "Vectors & Vector Operations"
+        core: true
+        requires: [functions]
+      - id: dot-product
+        title: "Dot Product, Norms & Angles"
+        core: true
+        requires: [vectors]
+      - id: matrices
+        title: "Matrices & Matrix Multiplication"
+        core: true
+        requires: [vectors]
+      - id: linear-transformations
+        title: Matrices as Linear Transformations
+        core: true
+        requires: [matrices]
+  - id: structure
+    title: Structure
+    levels:
+      - id: linear-systems
+        title: "Linear Systems & Gaussian Elimination"
+        core: false
+        requires: [matrices]
+      - id: span-basis
+        title: "Span, Independence, Basis & Rank"
+        core: false
+        requires: [linear-systems]
+      - id: determinants
+        title: Determinants
+        core: false
+        requires: [linear-transformations]
+      - id: inverse-matrices
+        title: Matrix Inverses
+        core: false
+        requires: [determinants, linear-systems]
+      - id: eigen
+        title: "Eigenvalues & Eigenvectors"
+        core: false
+        requires: [determinants, span-basis]
+      - id: projections
+        title: "Orthogonality & Projections"
+        core: false
+        requires: [dot-product, span-basis]
+      - id: svd-intro
+        title: Singular Value Decomposition (intuition)
+        core: false
+        requires: [eigen, projections]

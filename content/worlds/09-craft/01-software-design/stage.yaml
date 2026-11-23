@@ -1,0 +1,55 @@
+# World 9 · Stage 1 — Software Design
+id: software-design
+order: 1
+title: Software Design
+tier: 4
+refs:
+  - Ousterhout — A Philosophy of Software Design 2e
+  - "Gamma, Helm, Johnson & Vlissides — Design Patterns"
+  - Fowler — Refactoring 2e
+boss:
+  title: Refactor Rescue
+  description: Untangle a messy module with the right patterns without breaking a single test.
+units:
+  - id: principles
+    title: Principles
+    levels:
+      - id: complexity-in-software
+        title: "Managing Complexity: Modularity & Abstraction"
+        core: true
+        requires: [encapsulation]
+      - id: coupling-cohesion
+        title: "Coupling & Cohesion"
+        core: true
+        requires: [complexity-in-software]
+      - id: solid
+        title: The SOLID Principles
+        core: true
+        requires: [coupling-cohesion, polymorphism]
+      - id: dry-kiss-yagni
+        title: "DRY, KISS, YAGNI & Their Limits"
+        core: false
+        requires: [coupling-cohesion]
+      - id: api-design
+        title: API Design
+        core: false
+        requires: [coupling-cohesion]
+  - id: patterns
+    title: Patterns
+    levels:
+      - id: patterns-creational
+        title: Creational Patterns
+        core: true
+        requires: [solid]
+      - id: patterns-structural
+        title: Structural Patterns
+        core: true
+        requires: [solid]
+      - id: patterns-behavioral
+        title: Behavioral Patterns
+        core: true
+        requires: [solid, first-class-functions]
+      - id: refactoring
+        title: "Refactoring & Code Smells"
+        core: false
+        requires: [coupling-cohesion]

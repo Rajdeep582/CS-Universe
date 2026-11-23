@@ -1,0 +1,39 @@
+# World 11 · Stage 1 — Security Foundations
+id: security-foundations
+order: 1
+title: Security Foundations
+tier: 4
+refs:
+  - Anderson — Security Engineering 3e (free chapters)
+  - "Saltzer & Schroeder (1975) — The Protection of Information in Computer Systems"
+boss:
+  title: Threat Map
+  description: Threat-model a small app and assign a mitigation to every attack path.
+units:
+  - id: thinking-securely
+    title: Thinking Securely
+    levels:
+      - id: security-goals
+        title: "The CIA Triad & Security Goals"
+        core: true
+        requires: [abstraction-layers]
+      - id: threat-models
+        title: "Threat Modeling & Attack Surfaces"
+        core: true
+        requires: [security-goals]
+      - id: principles-secure-design
+        title: "Saltzer & Schroeder's Design Principles"
+        core: true
+        requires: [threat-models]
+      - id: access-control
+        title: "Access Control: DAC, MAC & RBAC"
+        core: false
+        requires: [principles-secure-design]
+      - id: authentication-concepts
+        title: Authentication Factors
+        core: true
+        requires: [security-goals]
+      - id: human-factors
+        title: "Human Factors & Social Engineering"
+        core: false
+        requires: [threat-models]

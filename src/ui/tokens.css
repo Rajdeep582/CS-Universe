@@ -1,0 +1,72 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/outfit';
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/jetbrains-mono';
+
+/* Design tokens — Isles of Computing (docs/blueprint/01 §5). Single source for colour, type, radius, depth. */
+@theme {
+  --font-display: 'Outfit Variable', system-ui, sans-serif;
+  --font-sans: 'Inter Variable', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, monospace;
+
+  --color-ink: #0b2447;
+  --color-ink-2: #2b4a75;
+  --color-muted: #5d7598;
+  --color-line: rgb(11 36 71 / 0.12);
+
+  --color-gold-1: #fff3a8;
+  --color-gold-2: #ffcf3a;
+  --color-gold-3: #f59e0b;
+  --color-gold-4: #b45309;
+  --color-mint-1: #6effc1;
+  --color-mint-2: #16d27f;
+  --color-mint-3: #0a9b5c;
+  --color-rose-1: #ff8cc0;
+  --color-rose-2: #f43f8e;
+  --color-rose-3: #b3125f;
+  --color-sky-1: #7fe3ff;
+  --color-sky-2: #22b6f2;
+  --color-sky-3: #0b6fc0;
+  --color-sea-deep: #0b5fa5;
+  --color-lock: #8494ad;
+
+  --radius-chip: 22px;
+  --radius-card: 24px;
+  --radius-panel: 28px;
+}
+
+:root {
+  --glass: linear-gradient(180deg, rgb(255 255 255 / 0.8), rgb(255 255 255 / 0.58));
+  --glass-dark: linear-gradient(180deg, rgb(14 34 72 / 0.74), rgb(8 22 52 / 0.64));
+  --glass-stroke: rgb(255 255 255 / 0.78);
+  --shadow-glass:
+    0 1px 0 rgb(255 255 255 / 0.9) inset, 0 -1px 0 rgb(11 36 71 / 0.06) inset, 0 18px 40px -12px rgb(6 40 90 / 0.45),
+    0 4px 10px rgb(6 40 90 / 0.18);
+  --focus-ring: 0 0 0 3px #fff, 0 0 0 6px rgb(34 182 242 / 0.9);
+  color-scheme: light;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+  background: #0b6fc0;
+}
+:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}

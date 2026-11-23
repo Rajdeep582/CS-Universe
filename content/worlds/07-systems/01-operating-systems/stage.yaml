@@ -1,0 +1,220 @@
+# World 7 · Stage 1 — Operating Systems
+id: operating-systems
+order: 1
+title: Operating Systems
+tier: 3
+refs:
+  - "Silberschatz, Galvin & Gagne — Operating System Concepts 10e"
+  - "Arpaci-Dusseau & Arpaci-Dusseau — Operating Systems: Three Easy Pieces (free)"
+  - "Tanenbaum & Bos — Modern Operating Systems"
+boss:
+  title: Kernel Day
+  description: "Keep a simulated OS alive: choose a scheduler, break a deadlock and pick a page-replacement policy under load."
+units:
+  - id: foundations
+    title: Foundations
+    levels:
+      - id: os-role
+        title: What an Operating System Does
+        core: true
+        requires: [abstraction-layers, von-neumann]
+      - id: dual-mode
+        title: Kernel Mode vs User Mode
+        core: true
+        requires: [os-role, interrupts-hw]
+      - id: system-calls
+        title: System Calls
+        core: true
+        requires: [dual-mode, procedures-assembly]
+      - id: os-structures
+        title: "OS Structures: Monolithic, Micro & Hybrid Kernels"
+        core: false
+        requires: [system-calls]
+  - id: processes-threads
+    title: "Processes & Threads"
+    levels:
+      - id: processes
+        title: The Process Abstraction
+        core: true
+        requires: [system-calls, loading]
+      - id: process-states
+        title: "Process States & the PCB"
+        core: true
+        requires: [processes]
+      - id: context-switch
+        title: Context Switching
+        core: true
+        requires: [process-states]
+      - id: process-creation
+        title: "Process Creation: fork, exec, wait"
+        core: true
+        requires: [processes]
+      - id: ipc
+        title: Inter-Process Communication
+        core: true
+        requires: [process-creation]
+      - id: threads
+        title: "Threads & Threading Models"
+        core: true
+        requires: [processes]
+  - id: cpu-scheduling
+    title: CPU Scheduling
+    levels:
+      - id: scheduling-basics
+        title: Scheduling Criteria
+        core: true
+        requires: [context-switch]
+      - id: fcfs-sjf
+        title: "FCFS, SJF & SRTF"
+        core: true
+        requires: [scheduling-basics]
+      - id: round-robin
+        title: Round Robin
+        core: true
+        requires: [fcfs-sjf]
+      - id: priority-scheduling
+        title: "Priority Scheduling & Aging"
+        core: false
+        requires: [fcfs-sjf]
+      - id: mlfq
+        title: Multilevel Feedback Queues
+        core: false
+        requires: [round-robin, priority-scheduling]
+      - id: multiprocessor-scheduling
+        title: "Multiprocessor & Real-Time Scheduling"
+        core: false
+        requires: [mlfq, multicore]
+  - id: synchronization
+    title: Synchronization
+    levels:
+      - id: race-conditions
+        title: "Race Conditions & Critical Sections"
+        core: true
+        requires: [threads]
+      - id: peterson
+        title: "Peterson's Solution"
+        core: false
+        requires: [race-conditions]
+      - id: locks-hardware
+        title: "Atomic Instructions & Spinlocks"
+        core: true
+        requires: [race-conditions]
+      - id: mutex-semaphores
+        title: "Mutexes & Semaphores"
+        core: true
+        requires: [locks-hardware]
+      - id: monitors-condvars
+        title: "Monitors & Condition Variables"
+        core: false
+        requires: [mutex-semaphores]
+      - id: classic-sync-problems
+        title: "Bounded Buffer, Readers–Writers & Dining Philosophers"
+        core: true
+        requires: [mutex-semaphores]
+  - id: deadlocks
+    title: Deadlocks
+    levels:
+      - id: deadlock-conditions
+        title: "Deadlock & Its Four Conditions"
+        core: true
+        requires: [classic-sync-problems, paths-connectivity]
+      - id: deadlock-prevention
+        title: Deadlock Prevention
+        core: false
+        requires: [deadlock-conditions]
+      - id: bankers-algorithm
+        title: "Deadlock Avoidance: The Banker's Algorithm"
+        core: true
+        requires: [deadlock-conditions]
+      - id: deadlock-detection
+        title: "Deadlock Detection & Recovery"
+        core: false
+        requires: [deadlock-conditions, cycle-detection]
+  - id: memory-management
+    title: Memory Management
+    levels:
+      - id: address-binding
+        title: "Address Spaces & Binding"
+        core: true
+        requires: [loading]
+      - id: contiguous-allocation
+        title: "Contiguous Allocation & Fragmentation"
+        core: false
+        requires: [address-binding]
+      - id: segmentation
+        title: Segmentation
+        core: false
+        requires: [contiguous-allocation]
+      - id: paging
+        title: Paging
+        core: true
+        requires: [address-binding, virtual-memory-hw]
+      - id: page-table-structures
+        title: "Multi-Level & Inverted Page Tables"
+        core: false
+        requires: [paging]
+  - id: virtual-memory
+    title: Virtual Memory
+    levels:
+      - id: demand-paging
+        title: "Demand Paging & Page Faults"
+        core: true
+        requires: [paging]
+      - id: page-replacement
+        title: "Page Replacement: FIFO, OPT & LRU"
+        core: true
+        requires: [demand-paging]
+      - id: lru-approximation
+        title: "Clock & LRU Approximations"
+        core: false
+        requires: [page-replacement]
+      - id: frame-allocation
+        title: "Frame Allocation & Thrashing"
+        core: false
+        requires: [page-replacement]
+      - id: copy-on-write
+        title: "Copy-on-Write & Memory-Mapped Files"
+        core: false
+        requires: [demand-paging, process-creation]
+  - id: storage
+    title: Storage
+    levels:
+      - id: file-concept
+        title: "Files, Directories & the File API"
+        core: true
+        requires: [system-calls]
+      - id: fs-implementation
+        title: "File-System Implementation: Allocation & Inodes"
+        core: true
+        requires: [file-concept, linked-lists]
+      - id: free-space
+        title: Free-Space Management
+        core: false
+        requires: [fs-implementation]
+      - id: journaling
+        title: "Crash Consistency & Journaling"
+        core: false
+        requires: [fs-implementation]
+      - id: io-systems
+        title: "I/O: Polling, Interrupts & DMA"
+        core: true
+        requires: [system-calls]
+      - id: disk-scheduling
+        title: HDD Scheduling
+        core: false
+        requires: [io-systems]
+      - id: ssd-raid
+        title: "SSDs & RAID"
+        core: false
+        requires: [io-systems]
+  - id: virtualization
+    title: Virtualization
+    levels:
+      - id: virtualization
+        title: "Virtual Machines & Hypervisors"
+        core: false
+        requires: [dual-mode, paging]
+      - id: containers
+        title: "Containers & Namespaces"
+        core: false
+        requires: [virtualization, processes]

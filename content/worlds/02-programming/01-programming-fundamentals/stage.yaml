@@ -1,0 +1,84 @@
+# World 2 · Stage 1 — Programming Fundamentals
+id: programming-fundamentals
+order: 1
+title: Programming Fundamentals
+tier: 1
+refs:
+  - "Abelson & Sussman — SICP 2e, ch. 1"
+  - Downey — Think Python 3e (open access)
+boss:
+  title: Text Adventure Engine
+  description: Implement a tiny command interpreter that passes hidden tests.
+units:
+  - id: first-programs
+    title: First Programs
+    levels:
+      - id: what-is-program
+        title: "Programs, Instructions & Execution"
+        core: true
+        requires: [abstraction-layers]
+      - id: values-types-basic
+        title: "Values, Expressions & Basic Types"
+        core: true
+        requires: [what-is-program, binary-numbers]
+      - id: variables
+        title: "Variables & Assignment"
+        core: true
+        requires: [values-types-basic]
+  - id: control
+    title: Control
+    levels:
+      - id: conditionals
+        title: Conditionals
+        core: true
+        requires: [variables, truth-values]
+      - id: loops
+        title: "Loops & Iteration"
+        core: true
+        requires: [conditionals]
+      - id: functions-prog
+        title: "Functions, Parameters & Return Values"
+        core: true
+        requires: [loops]
+      - id: scope
+        title: "Scope & Lifetime"
+        core: true
+        requires: [functions-prog]
+      - id: recursion
+        title: Recursion
+        core: true
+        requires: [functions-prog]
+      - id: recursion-vs-iteration
+        title: "Recursion vs Iteration & Tail Calls"
+        core: false
+        requires: [recursion]
+  - id: data
+    title: Data
+    levels:
+      - id: strings
+        title: "Strings & Text Processing"
+        core: true
+        requires: [loops, char-encoding]
+      - id: arrays-lists
+        title: "Arrays & Lists"
+        core: true
+        requires: [loops]
+      - id: maps-sets-prog
+        title: "Maps, Dictionaries & Sets"
+        core: true
+        requires: [arrays-lists]
+      - id: io-basics
+        title: "Input, Output & Files"
+        core: false
+        requires: [strings]
+  - id: when-things-break
+    title: When Things Break
+    levels:
+      - id: errors-exceptions
+        title: "Errors & Exceptions"
+        core: true
+        requires: [functions-prog]
+      - id: debugging
+        title: "Debugging: Reading Errors & Tracing"
+        core: true
+        requires: [errors-exceptions]

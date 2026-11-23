@@ -302,6 +302,7 @@ function hudCommon() {
 
 // ───────────────────────── WORLD VIEW ─────────────────────────
 async function worldView() {
+  const THUMB = new URLSearchParams(location.search).get('island');
   const xs = [-114, -38, 38, 114], zs = [-70, 0, 70];
   ISL = WORLDS.map((w, i) => {
     const row = Math.floor(i / 4); let c = i % 4; if (row === 1) c = 3 - c;
@@ -309,10 +310,11 @@ async function worldView() {
     const R = i === 2 ? 25 : 22.5, rx = R * 1.2, rz = R * .82;
     const B = BIOME[w.kind];
     const peak = B.peak ? { x: x + (i % 2 ? 4 : -5), z: z - 3, h: B.peak } : null;
-    return { ...w, i, x, z, R, rx, rz, peak, neon: w.id === 'intelligence', density: 1 };
+    return { ...w, i, x, z, R, rx, rz, peak, neon: w.id === 'intelligence', density: 1, locked: THUMB !== null ? false : w.locked };
   });
   BOUNDS = { x0: -250, x1: 250, z0: -140, z1: 150 };
   camera.position.set(0, 232, 178); camera.lookAt(0, 0, -2); camera.updateMatrixWorld();
+  if (THUMB !== null) { const t = ISL[+THUMB]; camera.fov = 30; camera.aspect = W / H; camera.updateProjectionMatrix(); camera.position.set(t.x + 6, 58, t.z + 62); camera.lookAt(t.x, 1.5, t.z + 2); camera.updateMatrixWorld(); }
   buildTerrain(560, 330); buildWater();
   DSCALE = 1.1; for (const s of ISL) decorate(s); DSCALE = 1;
   // route (buoys)
@@ -326,6 +328,7 @@ async function worldView() {
   cloudsAt([{ x: -178, y: 34, z: -100, s: 2.3 }, { x: 182, y: 30, z: 30, s: 2.1 }, { x: 70, y: 46, z: -125, s: 1.7 }, { x: -190, y: 30, z: 60, s: 1.6 }]);
   for (const s of ISL.filter(s => s.locked)) { mist(s.x - 8, 6, s.z + 2, 30); }
   renderer.render(scene, camera);
+  if (THUMB !== null) { document.getElementById('fx').style.display = 'none'; return; }
   // labels
   await loadIcons(['star', 'flame', 'snowflake', 'search', 'trophy', 'book-open', 'settings', 'lock', 'check', 'play', 'map', 'target', 'repeat', 'zap', 'sparkles', 'chevron-left', 'clock', 'sword']);
   const lab = document.getElementById('labels');
@@ -349,7 +352,7 @@ async function worldView() {
     <div class="q"><div class="ring" style="--p:100;--c:#f59e0b">${ic('zap')}</div><div><div class="t">Reach a simulation goal</div><div class="s">Complete</div></div><div class="r">${ic('check')}</div></div></div>`));
   const seg = WORLDS.map(w => `<i style="background:${w.locked ? '#d3dbe7' : `linear-gradient(180deg,${w.accent === '#FFFFFF' ? '#9fb0ff' : w.accent},${w.grassDark})`};opacity:${w.locked ? 1 : .35 + .65 * (w.got / w.tot)}"></i>`).join('');
   hud.append(el(`<div class="summary glass"><div class="h">ATLAS <span>13.1% explored · 6 / 12 worlds open</span></div><div class="meter">${seg}</div>
-    <div class="legend"><span><b style="background:#ffc61a"></b>1★ Explored</span><span><b style="background:#f59e0b"></b>2★ Practiced</span><span><b style="background:#b45309"></b>3★ Mastered</span></div></div>`));
+    <div class="legend"><span><b style="background:#ffc61a"></b>1★ Cleared</span><span><b style="background:#f59e0b"></b>2★ Excellent</span><span><b style="background:#b45309"></b>3★ Mastered</span></div></div>`));
   hud.append(el(`<div class="cta glass"><div class="next"><div class="thumb">3·4</div><div><div class="a">Next on your path · World 3</div><div class="b">Graphs, Vertices, Edges & Degree</div></div></div><div class="play">${ic('play')}CONTINUE</div></div>`));
 }
 
@@ -478,7 +481,7 @@ async function stageView(clear = false) {
     if (l.state === 'cur') {
       const q = project(new THREE.Vector3(l.x, y + 21, l.z));
       lab.append(el(`<div class="callout glass" style="left:${q.x}px;top:${q.y - 14}px"><div class="k">LEVEL ${l.n} · UP NEXT</div><div class="n">${l.title}</div>
-        <div class="m"><span>${ic('clock')} ~12 min</span><span>${ic('zap')} 1 simulation</span><span>${ic('sparkles')} +185 XP</span></div></div>`));
+        <div class="m"><span>${ic('clock')} ~12 min</span><span>${ic('zap')} 1 simulation</span><span>${ic('target')} 10-item test</span></div></div>`));
     }
   }
   const bp = project(new THREE.Vector3(castle.x + 14, 14, castle.z));
@@ -522,17 +525,17 @@ function levelClear() {
     <div class="bigstars">${starSvg(true, 'a')}${starSvg(true, 'b')}${starSvg(false, 'c')}</div>
     <div class="lt">Level 6 · Sign-Magnitude, One's & Two's Complement</div>
     <div class="ls">Number Systems & Arithmetic · World 1 Sunny Shores</div>
-    <div class="tier"><span class="on">${ic('star')} Explored</span><span class="on">${ic('star')} Practiced</span><span>${ic('repeat')} Mastered — review in 3 days</span></div>
+    <div class="tier"><span class="on">${ic('star')} Cleared · 70%+</span><span class="on">${ic('star')} Excellent · 90%+</span><span>${ic('repeat')} Mastered — review test in 3 days</span></div>
     <div class="rew">
       <div class="row"><div class="ri" style="background:linear-gradient(160deg,#a5f3fc,#22b6f2)">${ic('book-open')}</div>Lesson steps · 10 of 10<b>+50</b></div>
       <div class="row"><div class="ri" style="background:linear-gradient(160deg,#ddd6fe,#8b5cf6)">${ic('zap')}</div>Simulation goal reached<b>+20</b></div>
-      <div class="row"><div class="ri" style="background:linear-gradient(160deg,#fde68a,#f59e0b)">${ic('target')}</div>Challenge · 4 of 5 first try<b>+40</b></div>
-      <div class="row"><div class="ri" style="background:linear-gradient(160deg,#bbf7d0,#16d27f)">${ic('sparkles')}</div>Explored + Practiced bonus<b>+75</b></div>
-      <div class="tot">TOTAL<b>+185 XP</b></div></div>
+      <div class="row"><div class="ri" style="background:linear-gradient(160deg,#fde68a,#f59e0b)">${ic('target')}</div>Level test · 9 of 10 (90%)<b>+90</b></div>
+      <div class="row"><div class="ri" style="background:linear-gradient(160deg,#bbf7d0,#16d27f)">${ic('sparkles')}</div>Studied + Cleared + 2nd star<b>+100</b></div>
+      <div class="tot">TOTAL<b>+260 XP</b></div></div>
     <div class="unl"><div class="u"><div class="thumb" style="background:linear-gradient(160deg,#ffc2dd,#f43f8e 45%,#b3125f)">7</div><div><div class="a">UNLOCKED</div><div class="b">Level 7 · Fixed Width & Overflow</div></div></div>
       <div class="u"><div class="thumb" style="background:linear-gradient(160deg,#fff3a8,#ffcf3a 45%,#f59e0b)">${ic('gift')}</div><div><div class="a">BONUS OPENED</div><div class="b">Logical & Arithmetic Shifts</div></div></div></div>
     <div class="btns"><div class="btn2 glass">${ic('map')} MAP</div><div class="play">NEXT LEVEL ${ic('arrow-right')}</div></div></div>`));
-  hud.append(el(`<div class="xpfly">+185 XP</div>`));
+  hud.append(el(`<div class="xpfly">+260 XP</div>`));
 }
 
 (async () => {

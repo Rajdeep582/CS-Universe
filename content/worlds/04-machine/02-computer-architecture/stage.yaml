@@ -1,0 +1,120 @@
+# World 4 · Stage 2 — Computer Architecture
+id: computer-architecture
+order: 2
+title: Computer Architecture
+tier: 2
+refs:
+  - "Patterson & Hennessy — Computer Organization and Design, RISC-V ed. 2e"
+  - "Hennessy & Patterson — Computer Architecture: A Quantitative Approach 6e"
+  - RISC-V ISA Specification (Unprivileged)
+boss:
+  title: Cycle Hunter
+  description: "Predict stalls and cache hits for a program, then tune it to reach a target CPI."
+units:
+  - id: organization
+    title: Organization
+    levels:
+      - id: von-neumann
+        title: The Von Neumann Architecture
+        core: true
+        requires: [registers, alu]
+      - id: instruction-cycle
+        title: Fetch–Decode–Execute
+        core: true
+        requires: [von-neumann]
+      - id: interrupts-hw
+        title: "Interrupts & Exceptions in Hardware"
+        core: true
+        requires: [instruction-cycle]
+      - id: performance-metrics
+        title: "Performance: CPI, Clock Rate & Amdahl's Law"
+        core: true
+        requires: [instruction-cycle]
+  - id: instruction-set
+    title: Instruction Set
+    levels:
+      - id: isa-concepts
+        title: Instruction Set Architecture
+        core: true
+        requires: [instruction-cycle]
+      - id: risc-cisc
+        title: RISC vs CISC
+        core: false
+        requires: [isa-concepts]
+      - id: riscv-assembly
+        title: RISC-V Assembly Basics
+        core: true
+        requires: [isa-concepts, hex-octal]
+      - id: addressing-modes
+        title: Addressing Modes
+        core: false
+        requires: [riscv-assembly]
+      - id: procedures-assembly
+        title: "Procedure Calls & Calling Conventions"
+        core: true
+        requires: [riscv-assembly, call-stack]
+      - id: instruction-encoding
+        title: Instruction Encoding
+        core: true
+        requires: [riscv-assembly]
+  - id: pipeline
+    title: Pipeline
+    levels:
+      - id: single-cycle-datapath
+        title: The Single-Cycle Datapath
+        core: true
+        requires: [instruction-cycle, fsm-hardware]
+      - id: pipelining
+        title: Pipelining
+        core: true
+        requires: [single-cycle-datapath]
+      - id: hazards
+        title: "Data & Control Hazards"
+        core: true
+        requires: [pipelining]
+      - id: forwarding-stalls
+        title: "Forwarding & Stalls"
+        core: false
+        requires: [hazards]
+      - id: branch-prediction
+        title: Branch Prediction
+        core: false
+        requires: [hazards]
+  - id: memory-hierarchy
+    title: Memory Hierarchy
+    levels:
+      - id: memory-hierarchy
+        title: "The Memory Hierarchy & Locality"
+        core: true
+        requires: [memory-cells, performance-metrics]
+      - id: cache-basics
+        title: "Caches: Direct-Mapped"
+        core: true
+        requires: [memory-hierarchy]
+      - id: cache-associativity
+        title: "Set-Associative Caches & Replacement"
+        core: false
+        requires: [cache-basics]
+      - id: cache-writes
+        title: Write-Through vs Write-Back
+        core: false
+        requires: [cache-basics]
+      - id: cache-performance
+        title: "AMAT & Cache-Friendly Code"
+        core: false
+        requires: [cache-associativity]
+      - id: virtual-memory-hw
+        title: "Address Translation Hardware: TLB & Page Tables"
+        core: true
+        requires: [cache-basics]
+  - id: parallel-hardware
+    title: Parallel Hardware
+    levels:
+      - id: multicore
+        title: "Multicore & Cache Coherence"
+        core: false
+        requires: [cache-writes]
+      - id: simd-gpu
+        title: "SIMD & GPUs (overview)"
+        core: false
+        requires: [multicore]

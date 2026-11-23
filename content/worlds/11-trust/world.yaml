@@ -1,0 +1,8 @@
+# World 11 — Security & Cryptography
+id: trust
+order: 11
+title: "Security & Cryptography"
+tagline: Building systems worth trusting
+biome: Shield Fortress
+biomeKind: wall
+color: "#6FD67A"

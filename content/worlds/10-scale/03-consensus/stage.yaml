@@ -1,0 +1,55 @@
+# World 10 · Stage 3 — Consensus & Coordination
+id: consensus
+order: 3
+title: "Consensus & Coordination"
+tier: 4
+refs:
+  - "Ongaro & Ousterhout (2014) — In Search of an Understandable Consensus Algorithm (Raft)"
+  - Lamport (2001) — Paxos Made Simple
+  - "Castro & Liskov (1999) — Practical Byzantine Fault Tolerance"
+boss:
+  title: Split Brain
+  description: Keep the replicated log safe through a network partition in the Raft simulator.
+units:
+  - id: agreement
+    title: Agreement
+    levels:
+      - id: consensus-problem
+        title: The Consensus Problem
+        core: true
+        requires: [impossibility]
+      - id: leader-election
+        title: Leader Election
+        core: true
+        requires: [consensus-problem]
+      - id: raft
+        title: "Raft: Leader Election & Log Replication"
+        core: true
+        requires: [leader-election, leader-replication]
+      - id: raft-safety
+        title: "Raft Safety & Membership Changes"
+        core: false
+        requires: [raft]
+      - id: paxos
+        title: Paxos
+        core: false
+        requires: [consensus-problem]
+      - id: multi-paxos
+        title: Multi-Paxos
+        core: false
+        requires: [paxos]
+      - id: byzantine-ft
+        title: "Byzantine Fault Tolerance: PBFT (overview)"
+        core: false
+        requires: [paxos]
+  - id: coordination
+    title: Coordination
+    levels:
+      - id: coordination-services
+        title: "Coordination Services: ZooKeeper & etcd"
+        core: false
+        requires: [raft]
+      - id: distributed-locks
+        title: "Distributed Locks & Fencing Tokens"
+        core: false
+        requires: [coordination-services]

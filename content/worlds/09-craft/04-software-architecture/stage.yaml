@@ -1,0 +1,43 @@
+# World 9 · Stage 4 — Software Architecture
+id: software-architecture
+order: 4
+title: Software Architecture
+tier: 4
+refs:
+  - "Bass, Clements & Kazman — Software Architecture in Practice 4e"
+  - "Richards & Ford — Fundamentals of Software Architecture"
+boss:
+  title: Scale the Startup
+  description: Choose how an architecture evolves under growing load and defend every trade-off.
+units:
+  - id: structures
+    title: Structures
+    levels:
+      - id: architecture-intro
+        title: What Is Software Architecture? Quality Attributes
+        core: true
+        requires: [coupling-cohesion]
+      - id: layered-architecture
+        title: "Layered & Hexagonal Architecture"
+        core: true
+        requires: [architecture-intro]
+      - id: client-server
+        title: "Client–Server & Request/Response"
+        core: true
+        requires: [architecture-intro, http]
+      - id: monolith-microservices
+        title: Monoliths vs Microservices
+        core: true
+        requires: [layered-architecture, client-server]
+      - id: event-driven
+        title: "Event-Driven Architecture & Message Queues"
+        core: false
+        requires: [monolith-microservices, queues]
+      - id: caching-strategies
+        title: Caching Strategies
+        core: false
+        requires: [client-server, cache-basics]
+      - id: rest-rpc
+        title: REST vs RPC vs GraphQL
+        core: false
+        requires: [client-server, api-design]

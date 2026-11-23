@@ -1,0 +1,54 @@
+# World 3 · Stage 1 — Logic & Proof
+id: logic-proof
+order: 1
+title: "Logic & Proof"
+tier: 1
+refs:
+  - "Rosen — Discrete Mathematics and Its Applications 8e, ch. 1, 5"
+  - "Lehman, Leighton & Meyer — Mathematics for Computer Science, ch. 1–5"
+boss:
+  title: Proof Forge
+  description: Assemble an induction proof from shuffled steps and find the flaw in a bogus one.
+units:
+  - id: logic
+    title: Logic
+    levels:
+      - id: propositional-logic
+        title: Propositional Logic
+        core: true
+        requires: [boolean-algebra]
+      - id: logical-equivalence
+        title: "Logical Equivalence & Implication"
+        core: true
+        requires: [propositional-logic]
+      - id: predicate-logic
+        title: "Predicates & Quantifiers"
+        core: true
+        requires: [logical-equivalence]
+      - id: nested-quantifiers
+        title: Nested Quantifiers
+        core: false
+        requires: [predicate-logic]
+      - id: inference-rules
+        title: Rules of Inference
+        core: false
+        requires: [predicate-logic]
+  - id: proof
+    title: Proof
+    levels:
+      - id: proof-direct
+        title: Direct Proof
+        core: true
+        requires: [logical-equivalence]
+      - id: proof-contradiction
+        title: "Contradiction & Contrapositive"
+        core: true
+        requires: [proof-direct]
+      - id: induction
+        title: Mathematical Induction
+        core: true
+        requires: [proof-direct]
+      - id: strong-induction
+        title: "Strong Induction & Well-Ordering"
+        core: false
+        requires: [induction]

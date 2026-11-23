@@ -1,0 +1,340 @@
+/* Component styles that need layered gradients/shadows beyond utility classes. */
+
+/* ── scene backdrop ── */
+.app-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background:
+    url('/bg/archipelago.webp') center / cover no-repeat,
+    #0b6fc0;
+  transform: scale(1.04);
+}
+.app-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(120% 90% at 50% 40%, rgb(255 255 255 / 0.1), rgb(4 30 70 / 0.35) 100%),
+    linear-gradient(180deg, rgb(10 60 120 / 0.15), rgb(4 30 70 / 0.35));
+}
+
+/* ── glass ── */
+.glass {
+  background: var(--glass);
+  backdrop-filter: blur(18px) saturate(170%);
+  -webkit-backdrop-filter: blur(18px) saturate(170%);
+  border: 1px solid var(--glass-stroke);
+  box-shadow: var(--shadow-glass);
+}
+.glass-dark {
+  background: var(--glass-dark);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  border: 1px solid rgb(255 255 255 / 0.16);
+  box-shadow:
+    0 1px 0 rgb(255 255 255 / 0.18) inset,
+    0 18px 40px -12px rgb(0 10 40 / 0.6);
+  color: #fff;
+}
+.glass-interactive {
+  transition:
+    transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 0.25s;
+}
+.glass-interactive:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    var(--shadow-glass),
+    0 24px 44px -14px rgb(6 40 90 / 0.5);
+}
+
+/* ── gem buttons ── */
+.gem {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6em;
+  border: 0;
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: #fff;
+  border-radius: 22px;
+  isolation: isolate;
+}
+.gem::before {
+  content: '';
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  top: 5px;
+  height: 40%;
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgb(255 255 255 / 0.55), rgb(255 255 255 / 0));
+  pointer-events: none;
+  z-index: -1;
+}
+.gem:disabled {
+  cursor: not-allowed;
+  filter: grayscale(0.85) brightness(1.05);
+  opacity: 0.7;
+}
+.gem-sm {
+  height: 44px;
+  padding: 0 18px;
+  font-size: 15px;
+  border-radius: 16px;
+}
+.gem-md {
+  height: 56px;
+  padding: 0 26px;
+  font-size: 19px;
+}
+.gem-lg {
+  height: 72px;
+  padding: 0 34px;
+  font-size: 26px;
+  border-radius: 24px;
+}
+.gem-go {
+  background: linear-gradient(180deg, #7dffb8 0%, #22d985 38%, #0fb56a 62%, #0a8f55 100%);
+  box-shadow:
+    inset 0 2px 0 rgb(255 255 255 / 0.75),
+    inset 0 -5px 0 rgb(0 70 40 / 0.35),
+    0 6px 0 #077345,
+    0 18px 30px -8px rgb(10 143 85 / 0.75);
+  text-shadow: 0 2px 0 rgb(0 80 45 / 0.45);
+}
+.gem-rose {
+  background: linear-gradient(180deg, #ff9ccb 0%, #f43f8e 50%, #c2185b 100%);
+  box-shadow:
+    inset 0 2px 0 rgb(255 255 255 / 0.6),
+    inset 0 -5px 0 rgb(120 0 50 / 0.3),
+    0 6px 0 #8f0f46,
+    0 18px 30px -8px rgb(194 24 91 / 0.7);
+  text-shadow: 0 2px 0 rgb(120 0 50 / 0.45);
+}
+.gem-gold {
+  background: linear-gradient(180deg, #fff3a8 0%, #ffcf3a 40%, #f59e0b 75%, #d97706 100%);
+  box-shadow:
+    inset 0 2px 0 rgb(255 255 255 / 0.8),
+    inset 0 -5px 0 rgb(140 60 0 / 0.3),
+    0 6px 0 #a85a06,
+    0 18px 30px -8px rgb(217 119 6 / 0.7);
+  color: #5a2a00;
+  text-shadow: 0 1px 0 rgb(255 255 255 / 0.6);
+}
+.gem-sky {
+  background: linear-gradient(180deg, #a5f3fc 0%, #22b6f2 45%, #0b6fc0 100%);
+  box-shadow:
+    inset 0 2px 0 rgb(255 255 255 / 0.7),
+    inset 0 -5px 0 rgb(0 40 90 / 0.3),
+    0 6px 0 #08508c,
+    0 18px 30px -8px rgb(11 111 192 / 0.7);
+  text-shadow: 0 2px 0 rgb(0 50 100 / 0.45);
+}
+.gem-glass {
+  background: var(--glass);
+  border: 1px solid var(--glass-stroke);
+  box-shadow: var(--shadow-glass);
+  color: var(--color-ink);
+  backdrop-filter: blur(18px);
+}
+.gem-glass::before {
+  opacity: 0.4;
+}
+
+/* ── icon tiles ── */
+.tile {
+  display: grid;
+  place-items: center;
+  color: #fff;
+  border-radius: 15px;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.6),
+    inset 0 -3px 0 rgb(0 0 0 / 0.15);
+}
+.tile-gold {
+  background: linear-gradient(160deg, var(--color-gold-1), var(--color-gold-2) 45%, var(--color-gold-3));
+}
+.tile-fire {
+  background: linear-gradient(160deg, #ffd166, #ff7a1a 50%, #e8410c);
+}
+.tile-ice {
+  background: linear-gradient(160deg, #c8f6ff, #38c6f4 50%, #1678d6);
+}
+.tile-mint {
+  background: linear-gradient(160deg, #bbf7d0, #16d27f 55%, #0a9b5c);
+}
+.tile-rose {
+  background: linear-gradient(160deg, #ffc2dd, #f43f8e 45%, #b3125f);
+}
+.tile-violet {
+  background: linear-gradient(160deg, #ddd6fe, #8b5cf6 55%, #6d28d9);
+}
+.tile-sky {
+  background: linear-gradient(160deg, #a5f3fc, #22b6f2 45%, #0b6fc0);
+}
+.tile-lock {
+  background: linear-gradient(160deg, #f3f6fb, #b7c3d6 55%, #8494ad);
+}
+
+/* ── progress ── */
+.bar {
+  position: relative;
+  border-radius: 999px;
+  background: rgb(11 36 71 / 0.12);
+  box-shadow: inset 0 2px 3px rgb(11 36 71 / 0.18);
+  overflow: hidden;
+}
+.bar > i {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: 999px;
+  transition: width 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.bar > i::after {
+  content: '';
+  position: absolute;
+  inset: 2px 4px auto 4px;
+  height: 35%;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.6);
+}
+.bar-xp > i {
+  background: linear-gradient(90deg, #22d3ee, #6366f1 70%, #a855f7);
+  box-shadow: 0 0 12px rgb(99 102 241 / 0.7);
+}
+.bar-gold > i {
+  background: linear-gradient(90deg, var(--color-gold-2), var(--color-gold-3));
+}
+.bar-mint > i {
+  background: linear-gradient(90deg, var(--color-mint-1), var(--color-mint-2));
+}
+.ring {
+  position: relative;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+}
+.ring::after {
+  content: '';
+  position: absolute;
+  inset: 5px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: inset 0 1px 3px rgb(0 0 0 / 0.12);
+}
+.ring > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── level medallion ── */
+.medal {
+  position: relative;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  font-family: var(--font-display);
+  font-weight: 800;
+  color: #fff;
+  text-shadow: 0 2px 0 rgb(0 0 0 / 0.25);
+  flex: none;
+}
+.medal-cleared {
+  background: radial-gradient(
+    circle at 35% 28%,
+    #fff6c4 0,
+    var(--color-gold-2) 40%,
+    var(--color-gold-3) 80%,
+    var(--color-gold-4)
+  );
+  box-shadow:
+    0 8px 16px -4px rgb(180 83 9 / 0.6),
+    inset 0 -4px 0 rgb(0 0 0 / 0.12);
+}
+.medal-available {
+  background: radial-gradient(circle at 35% 28%, #e0f9ff 0, var(--color-sky-2) 45%, var(--color-sky-3));
+  box-shadow:
+    0 0 0 4px rgb(255 207 58 / 0.85),
+    0 8px 18px -4px rgb(11 111 192 / 0.6);
+}
+.medal-current {
+  background: radial-gradient(circle at 35% 28%, #ffd1e6 0, var(--color-rose-2) 45%, var(--color-rose-3));
+  box-shadow:
+    0 0 0 5px rgb(244 63 142 / 0.35),
+    0 0 30px rgb(244 63 142 / 0.75);
+}
+.medal-locked {
+  background: radial-gradient(circle at 35% 28%, #f3f6fb 0, #b7c3d6 55%, #8494ad);
+  box-shadow: inset 0 -4px 0 rgb(0 0 0 / 0.08);
+}
+.medal-bonus {
+  border-radius: 30%;
+}
+
+/* ── world swatch ── */
+.swatch {
+  border-radius: 18px;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.6),
+    inset 0 -4px 0 rgb(0 0 0 / 0.15),
+    0 8px 16px -6px rgb(0 0 0 / 0.35);
+}
+
+/* ── command palette ── */
+[cmdk-input] {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  font: 600 18px var(--font-sans);
+  color: var(--color-ink);
+  outline: none;
+}
+[cmdk-group-heading] {
+  font: 800 11px var(--font-display);
+  letter-spacing: 0.14em;
+  color: var(--color-muted);
+  padding: 12px 12px 6px;
+  text-transform: uppercase;
+}
+[cmdk-item] {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  cursor: pointer;
+}
+[cmdk-item][data-selected='true'] {
+  background: linear-gradient(180deg, rgb(34 182 242 / 0.16), rgb(34 182 242 / 0.08));
+  box-shadow: inset 0 0 0 1px rgb(34 182 242 / 0.35);
+}
+[cmdk-empty] {
+  padding: 24px;
+  text-align: center;
+  color: var(--color-muted);
+  font-weight: 600;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.rise {
+  animation: rise 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+[cmdk-input]:focus-visible {
+  box-shadow: none;
+}

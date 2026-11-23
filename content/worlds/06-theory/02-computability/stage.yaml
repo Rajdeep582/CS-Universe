@@ -1,0 +1,54 @@
+# World 6 · Stage 2 — Computability
+id: computability
+order: 2
+title: Computability
+tier: 3
+refs:
+  - "Sipser — Introduction to the Theory of Computation 3e, ch. 3–5"
+  - Turing (1936) — On Computable Numbers
+boss:
+  title: The Undecidable
+  description: Build a reduction chain that proves a new problem undecidable.
+units:
+  - id: machines
+    title: Machines
+    levels:
+      - id: turing-machines
+        title: Turing Machines
+        core: true
+        requires: [pda]
+      - id: tm-variants
+        title: "TM Variants: Multi-Tape & Nondeterministic"
+        core: false
+        requires: [turing-machines]
+      - id: church-turing
+        title: The Church–Turing Thesis
+        core: true
+        requires: [turing-machines]
+      - id: lambda-calculus-comp
+        title: Lambda Calculus as a Model of Computation
+        core: false
+        requires: [church-turing, first-class-functions]
+  - id: limits
+    title: Limits
+    levels:
+      - id: decidability
+        title: "Decidable & Recognizable Languages"
+        core: true
+        requires: [church-turing]
+      - id: diagonalization
+        title: Diagonalization
+        core: true
+        requires: [cardinality, decidability]
+      - id: halting-problem
+        title: The Halting Problem
+        core: true
+        requires: [diagonalization]
+      - id: reductions-computability
+        title: "Reductions & Undecidability"
+        core: true
+        requires: [halting-problem]
+      - id: rice-theorem
+        title: "Rice's Theorem"
+        core: false
+        requires: [reductions-computability]

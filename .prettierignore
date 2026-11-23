@@ -1,0 +1,8 @@
+dist
+node_modules
+src/generated
+design/prototype
+docs
+content
+package-lock.json
+*.md

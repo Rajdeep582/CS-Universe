@@ -1,0 +1,62 @@
+# World 5 · Stage 1 — Algorithm Analysis
+id: algorithm-analysis
+order: 1
+title: Algorithm Analysis
+tier: 2
+refs:
+  - "Cormen, Leiserson, Rivest & Stein — Introduction to Algorithms 4e (CLRS), ch. 1–4, 16"
+  - "Sedgewick & Wayne — Algorithms 4e, ch. 1.4"
+boss:
+  title: Complexity Court
+  description: Rank and justify the complexity of ten code snippets and solve their recurrences.
+units:
+  - id: measuring
+    title: Measuring
+    levels:
+      - id: what-is-algorithm
+        title: "What Is an Algorithm? Correctness & Efficiency"
+        core: true
+        requires: [functions-prog]
+      - id: counting-steps
+        title: "Counting Operations & Cost Models"
+        core: true
+        requires: [what-is-algorithm]
+      - id: asymptotic
+        title: "Asymptotic Notation: O, Ω, Θ"
+        core: true
+        requires: [counting-steps, log-exp]
+      - id: growth-rates
+        title: Comparing Growth Rates
+        core: false
+        requires: [asymptotic]
+      - id: best-worst-average
+        title: "Best, Worst & Average Case"
+        core: false
+        requires: [asymptotic, random-variables]
+      - id: space-complexity
+        title: Space Complexity
+        core: false
+        requires: [asymptotic]
+  - id: reasoning
+    title: Reasoning
+    levels:
+      - id: loop-invariants
+        title: "Loop Invariants & Correctness"
+        core: true
+        requires: [what-is-algorithm, induction]
+      - id: recurrences-analysis
+        title: Recurrences for Recursive Algorithms
+        core: true
+        requires: [asymptotic, recursion]
+      - id: master-theorem
+        title: The Master Theorem
+        core: false
+        requires: [recurrences-analysis]
+      - id: recursion-trees
+        title: The Recursion-Tree Method
+        core: false
+        requires: [recurrences-analysis]
+      - id: amortized
+        title: Amortized Analysis
+        core: false
+        requires: [asymptotic]

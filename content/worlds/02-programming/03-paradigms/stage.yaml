@@ -1,0 +1,69 @@
+# World 2 · Stage 3 — Programming Paradigms
+id: paradigms
+order: 3
+title: Programming Paradigms
+tier: 1
+refs:
+  - "Abelson & Sussman — SICP 2e, ch. 2–3"
+  - "Van Roy & Haridi — Concepts, Techniques, and Models of Computer Programming"
+boss:
+  title: Paradigm Shift
+  description: Rewrite one imperative program in OO and functional styles that pass the same tests.
+units:
+  - id: objects
+    title: Objects
+    levels:
+      - id: oop-objects
+        title: "Objects & Classes"
+        core: true
+        requires: [composite-types, functions-prog]
+      - id: encapsulation
+        title: "Encapsulation & Interfaces"
+        core: true
+        requires: [oop-objects]
+      - id: inheritance
+        title: "Inheritance & Its Costs"
+        core: true
+        requires: [encapsulation]
+      - id: polymorphism
+        title: "Polymorphism & Dynamic Dispatch"
+        core: true
+        requires: [inheritance]
+      - id: composition
+        title: Composition over Inheritance
+        core: false
+        requires: [polymorphism]
+  - id: functions
+    title: Functions
+    levels:
+      - id: first-class-functions
+        title: "First-Class & Higher-Order Functions"
+        core: true
+        requires: [functions-prog]
+      - id: closures
+        title: Closures
+        core: true
+        requires: [first-class-functions, scope]
+      - id: map-filter-reduce
+        title: "Map, Filter & Reduce"
+        core: false
+        requires: [first-class-functions, arrays-lists]
+      - id: pure-functions
+        title: "Purity & Side Effects"
+        core: false
+        requires: [mutability, first-class-functions]
+      - id: immutable-data
+        title: Persistent Data Structures (idea)
+        core: false
+        requires: [pure-functions]
+      - id: declarative
+        title: Declarative vs Imperative
+        core: false
+        requires: [map-filter-reduce]
+  - id: concurrency-preview
+    title: Concurrency Preview
+    levels:
+      - id: concurrency-intro
+        title: Concurrency vs Parallelism
+        core: false
+        requires: [functions-prog]

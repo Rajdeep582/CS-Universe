@@ -1,0 +1,51 @@
+# World 1 · Stage 4 — Encoding Text & Media
+id: data-representation
+order: 4
+title: "Encoding Text & Media"
+tier: 0
+refs:
+  - "The Unicode Standard (current version), ch. 2–3"
+  - RFC 3629 — UTF-8
+  - "Bryant & O'Hallaron — CS:APP 3e, ch. 2"
+boss:
+  title: Babel Packet
+  description: "Decode a byte dump holding UTF-8 text, a little-endian integer and a parity-checked header."
+units:
+  - id: text
+    title: Text
+    levels:
+      - id: char-encoding
+        title: "Characters as Numbers: ASCII"
+        core: true
+        requires: [binary-numbers, bytes-words]
+      - id: unicode
+        title: Unicode Code Points
+        core: true
+        requires: [char-encoding]
+      - id: utf8
+        title: "UTF-8, UTF-16 & Byte Order"
+        core: true
+        requires: [unicode, hex-octal]
+      - id: endianness
+        title: Endianness
+        core: true
+        requires: [bytes-words, hex-octal]
+  - id: media-integrity
+    title: "Media & Integrity"
+    levels:
+      - id: images-pixels
+        title: "Images: Pixels & Color Models"
+        core: true
+        requires: [bytes-words]
+      - id: sound-sampling
+        title: "Sound: Sampling & Quantization"
+        core: false
+        requires: [bytes-words]
+      - id: compression-intro
+        title: "Compression Basics: RLE & the Huffman Idea"
+        core: false
+        requires: [info-entropy-intro]
+      - id: error-detection-intro
+        title: "Parity & Checksums"
+        core: true
+        requires: [bits]

@@ -1,0 +1,74 @@
+# World 3 · Stage 3 — Counting & Probability
+id: combinatorics-probability
+order: 3
+title: "Counting & Probability"
+tier: 1
+refs:
+  - "Rosen — Discrete Mathematics and Its Applications 8e, ch. 6–8"
+  - "Blitzstein & Hwang — Introduction to Probability 2e"
+boss:
+  title: Monte Carlo Casino
+  description: "Predict outcomes analytically, then confirm them with your own simulation."
+units:
+  - id: counting
+    title: Counting
+    levels:
+      - id: counting-rules
+        title: "Sum & Product Rules"
+        core: true
+        requires: [sets]
+      - id: permutations-combinations
+        title: "Permutations & Combinations"
+        core: true
+        requires: [counting-rules]
+      - id: pigeonhole
+        title: The Pigeonhole Principle
+        core: true
+        requires: [counting-rules]
+      - id: binomial-theorem
+        title: "Binomial Theorem & Pascal's Triangle"
+        core: false
+        requires: [permutations-combinations]
+      - id: inclusion-exclusion
+        title: Inclusion–Exclusion
+        core: false
+        requires: [permutations-combinations]
+      - id: recurrence-relations
+        title: Solving Linear Recurrences
+        core: false
+        requires: [recursive-definitions]
+  - id: probability
+    title: Probability
+    levels:
+      - id: probability-basics
+        title: "Sample Spaces & Events"
+        core: true
+        requires: [permutations-combinations]
+      - id: conditional-probability
+        title: "Conditional Probability & Independence"
+        core: true
+        requires: [probability-basics]
+      - id: bayes
+        title: "Bayes' Theorem"
+        core: true
+        requires: [conditional-probability]
+      - id: random-variables
+        title: "Random Variables & Expectation"
+        core: true
+        requires: [probability-basics]
+      - id: linearity-expectation
+        title: Linearity of Expectation
+        core: false
+        requires: [random-variables]
+      - id: variance
+        title: "Variance & Standard Deviation"
+        core: true
+        requires: [random-variables]
+      - id: distributions
+        title: Common Distributions
+        core: true
+        requires: [variance]
+      - id: tail-bounds
+        title: "Markov & Chebyshev Bounds"
+        core: false
+        requires: [variance]

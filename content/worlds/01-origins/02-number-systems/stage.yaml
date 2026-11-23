@@ -1,0 +1,69 @@
+# World 1 · Stage 2 — Number Systems & Arithmetic
+id: number-systems
+order: 2
+title: "Number Systems & Arithmetic"
+tier: 0
+refs:
+  - "Bryant & O'Hallaron — CS:APP 3e, ch. 2"
+  - "Patterson & Hennessy — COD RISC-V 2e, ch. 3"
+boss:
+  title: The Calculator Core
+  description: "Predict results and overflow flags for a mixed run of two's-complement and IEEE 754 operations."
+units:
+  - id: positional-systems
+    title: Positional Systems
+    levels:
+      - id: positional-notation
+        title: Positional Number Systems
+        core: true
+        requires: [bits]
+      - id: binary-numbers
+        title: Binary Numbers
+        core: true
+        requires: [positional-notation]
+      - id: base-conversion
+        title: Converting Between Bases
+        core: true
+        requires: [binary-numbers]
+      - id: hex-octal
+        title: "Hexadecimal & Octal"
+        core: true
+        requires: [base-conversion]
+  - id: integer-arithmetic
+    title: Integer Arithmetic
+    levels:
+      - id: binary-addition
+        title: "Binary Addition & Carries"
+        core: true
+        requires: [binary-numbers]
+      - id: signed-numbers
+        title: "Sign-Magnitude, One's & Two's Complement"
+        core: true
+        requires: [binary-addition]
+      - id: overflow
+        title: "Fixed Width & Overflow"
+        core: true
+        requires: [signed-numbers]
+      - id: binary-mult-div
+        title: "Binary Multiplication & Division"
+        core: false
+        requires: [binary-addition]
+      - id: shifts
+        title: "Logical & Arithmetic Shifts"
+        core: false
+        requires: [signed-numbers]
+  - id: real-numbers
+    title: Real Numbers
+    levels:
+      - id: fixed-point
+        title: Fixed-Point Numbers
+        core: true
+        requires: [signed-numbers]
+      - id: floating-point
+        title: IEEE 754 Floating Point
+        core: true
+        requires: [fixed-point, overflow]
+      - id: float-pitfalls
+        title: "Floating-Point Pitfalls: Rounding, NaN, Epsilon"
+        core: false
+        requires: [floating-point]

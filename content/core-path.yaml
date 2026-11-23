@@ -1,0 +1,45 @@
+# Core Path — the recommended route for a complete beginner.
+# Stages (subjects) in the order a learner meets them. Interleaves worlds so no area is studied too long.
+# Every stage must appear exactly once. Checked by `npm run content`.
+stages:
+  - information-bits
+  - number-systems
+  - boolean-logic
+  - data-representation
+  - programming-fundamentals
+  - logic-proof
+  - discrete-structures
+  - memory-types
+  - combinatorics-probability
+  - graph-theory
+  - paradigms
+  - digital-logic
+  - computer-architecture
+  - source-to-process
+  - algorithm-analysis
+  - data-structures
+  - algorithm-design
+  - graph-algorithms
+  - automata
+  - computability
+  - complexity-theory
+  - operating-systems
+  - computer-networks
+  - database-systems
+  - compilers
+  - pl-theory
+  - software-design
+  - version-control
+  - testing-quality
+  - software-architecture
+  - distributed-foundations
+  - distributed-data
+  - consensus
+  - security-foundations
+  - cryptography
+  - applied-security
+  - linear-algebra
+  - calculus-computing
+  - ai-foundations
+  - machine-learning
+  - deep-learning

@@ -33,7 +33,7 @@ flowchart LR
 | Layer | Choice | Version seen | License | Status |
 |---|---|---|---|---|
 | Build | Vite | 8.3.x | MIT | ✓ |
-| Language | TypeScript (strict) | 7.0.x | Apache-2.0 | ✓ — TS 7 is the native-compiler release; Phase 1 confirms ESLint/tooling support, falls back to latest 6.x/5.x if not |
+| Language | TypeScript (strict) | 6.0.x | Apache-2.0 | ✓ — Phase 1 chose 6.0: typescript-eslint supports < 6.1, not 7.0 yet |
 | UI | React / React DOM | 19.3.x | MIT | ✓ |
 | 3D | three | 0.187.x | MIT | ✓ |
 | 3D | @react-three/fiber · drei | 9.8 · 10.7 | MIT | ✓ |
@@ -61,7 +61,7 @@ flowchart LR
 | Audio | Web Audio API (+ howler 2.2, MIT, only if files are used) | — | — | ✓ |
 | PWA | vite-plugin-pwa | 2.0.x | MIT | ✓ |
 | Tests | Vitest · Playwright | 5.1 · 1.65 | MIT · Apache-2.0 | ✓ |
-| Lint/format | ESLint · Prettier | 10.x · 3.10 | MIT | ✓ |
+| Lint/format | ESLint · Prettier | 9.39 · 3.10 | MIT | ✓ — ESLint 9 because eslint-plugin-jsx-a11y does not support 10 yet |
 | Fonts | Outfit · Inter · JetBrains Mono (Fontsource) | 5.3.x | OFL-1.1 | ✓ |
 | Icons | lucide-static / lucide-react | 1.78.x | ISC | ✓ |
 | Hosting | Cloudflare Pages (or GitHub Pages) | — | free, no card | ✓ |
@@ -72,8 +72,8 @@ Exact versions are pinned in Phase 1 from what is current then; every dependency
 
 | Path | Owns | Must not |
 |---|---|---|
-| `content/graph/` | Domains, subjects, units, topics, edges, Core Path order, bosses | Contain code |
-| `content/lessons/<topic-id>/` | `lesson.mdx`, `sim.config.ts`, `challenge.yaml`, `review.md` (checklist), `refs.yaml` | Import engine internals |
+| `content/` | `core-path.yaml` + `worlds/NN-world/world.yaml` + `worlds/NN-world/NN-stage/stage.yaml` (units, levels, prerequisites, boss, sources) | Contain code |
+| `content/worlds/…/NN-stage/levels/<level-id>/` (Phase 3+) | `lesson.mdx`, `sim.config.ts`, `test.yaml` (level test, every item linked to the lesson step it checks), `review.md` | Import engine internals |
 | `src/engine/world/` | Scene, camera rig, layout loading, instanced stars/edges, LOD, picking, labels, transitions, quality tiers | Know about XP rules |
 | `src/engine/sim/` | Simulation framework (stepper, timeline, inspector) + `algorithms/` pure modules (LRU, Banker's, Dijkstra, TCP FSM, B+-tree…) with tests | Touch DOM/three in `algorithms/` |
 | `src/engine/progress/` | XP, ranks, node states, FSRS, streaks, achievements, recommendation, persistence (Dexie), export/import | Render anything |
@@ -98,15 +98,15 @@ Exact versions are pinned in Phase 1 from what is current then; every dependency
 
 ## 5. Routing (deep links)
 
-| URL | View |
-|---|---|
-| `/` | Universe |
-| `/u/systems` | Domain |
-| `/u/systems/operating-systems` | Subject |
-| `/u/systems/operating-systems/page-replacement` | Topic focus |
-| `/u/systems/operating-systems/page-replacement/learn?step=4` | Lesson chamber |
-| `/atlas`, `/atlas/systems/...` | 2D Atlas equivalents |
-| `/journey`, `/settings` | Overlays |
+| URL | View | Since |
+|---|---|---|
+| `/` | Atlas home (Phase 2: 3D World Map; Atlas stays at `/atlas`) | 1 |
+| `/atlas/<world>` | World: its stages in order | 1 |
+| `/atlas/<world>/<stage>` | Stage: units → levels, boss, sources | 1 |
+| `/atlas/<world>/<stage>/<level>` | Level card: state, prerequisites, what it unlocks | 1 |
+| `/gallery` | UI kit gallery (design review) | 1 |
+| `/play/<level>?step=N` | Level play: lesson then level test | 3 |
+| `/journey`, `/settings` | Overlays | 4 |
 
 ## 6. Persistence (IndexedDB via Dexie)
 

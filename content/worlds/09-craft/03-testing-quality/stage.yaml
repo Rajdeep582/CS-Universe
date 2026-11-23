@@ -1,0 +1,54 @@
+# World 9 · Stage 3 — Testing & Quality
+id: testing-quality
+order: 3
+title: "Testing & Quality"
+tier: 4
+refs:
+  - "Ammann & Offutt — Introduction to Software Testing 2e"
+  - "Beck — Test-Driven Development: By Example"
+boss:
+  title: Bug Bounty
+  description: Write tests that kill every mutant in the mutation-testing arena.
+units:
+  - id: tests
+    title: Tests
+    levels:
+      - id: why-test
+        title: Why Test? Verification vs Validation
+        core: true
+        requires: [debugging]
+      - id: unit-tests
+        title: Unit Testing
+        core: true
+        requires: [why-test]
+      - id: test-doubles
+        title: "Test Doubles: Mocks, Stubs & Fakes"
+        core: false
+        requires: [unit-tests, encapsulation]
+      - id: integration-e2e
+        title: "Integration & End-to-End Tests"
+        core: true
+        requires: [unit-tests]
+      - id: coverage
+        title: "Coverage & Its Limits"
+        core: true
+        requires: [unit-tests]
+      - id: property-testing
+        title: Property-Based Testing
+        core: false
+        requires: [unit-tests, predicate-logic]
+      - id: tdd
+        title: Test-Driven Development
+        core: false
+        requires: [unit-tests]
+  - id: quality-systems
+    title: Quality Systems
+    levels:
+      - id: static-analysis
+        title: "Static Analysis & Linting"
+        core: false
+        requires: [unit-tests]
+      - id: ci
+        title: Continuous Integration
+        core: false
+        requires: [integration-e2e, distributed-workflows]

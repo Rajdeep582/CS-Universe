@@ -1,0 +1,50 @@
+# World 9 · Stage 2 — Version Control & Git Internals
+id: version-control
+order: 2
+title: "Version Control & Git Internals"
+tier: 4
+refs:
+  - "Chacon & Straub — Pro Git 2e (free), ch. 2–3, 10"
+  - "Git documentation — gitglossary, git-merge"
+boss:
+  title: Time Travel
+  description: Repair a broken repository history by predicting its object graph step by step.
+units:
+  - id: model
+    title: Model
+    levels:
+      - id: vcs-concepts
+        title: Why Version Control
+        core: true
+        requires: [file-concept]
+      - id: git-objects
+        title: "Git Objects: Blobs, Trees & Commits"
+        core: true
+        requires: [vcs-concepts, hash-functions]
+      - id: git-index
+        title: The Index (Staging Area)
+        core: false
+        requires: [git-objects]
+      - id: git-dag
+        title: "The Commit DAG & Refs"
+        core: true
+        requires: [git-objects, graph-types]
+      - id: packfiles
+        title: "Packfiles & Delta Compression"
+        core: false
+        requires: [git-objects, compression-intro]
+  - id: collaboration
+    title: Collaboration
+    levels:
+      - id: branching-merging
+        title: "Branching & Three-Way Merge"
+        core: true
+        requires: [git-dag]
+      - id: rebase
+        title: Rebase vs Merge
+        core: false
+        requires: [branching-merging]
+      - id: distributed-workflows
+        title: "Remotes, Fetch, Push & Workflows"
+        core: false
+        requires: [branching-merging]

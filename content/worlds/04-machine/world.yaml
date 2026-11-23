@@ -1,0 +1,8 @@
+# World 4 — The Machine
+id: machine
+order: 4
+title: The Machine
+tagline: From transistors to running programs
+biome: Forge Volcano
+biomeKind: volcano
+color: "#FF8A65"

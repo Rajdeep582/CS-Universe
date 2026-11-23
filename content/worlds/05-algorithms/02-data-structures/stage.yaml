@@ -1,0 +1,115 @@
+# World 5 · Stage 2 — Data Structures
+id: data-structures
+order: 2
+title: Data Structures
+tier: 2
+refs:
+  - "CLRS 4e, ch. 10–14, 17–19"
+  - "Sedgewick & Wayne — Algorithms 4e, ch. 1.3, 2.4, 3"
+boss:
+  title: Structure Architect
+  description: Pick and implement the right structure for five workloads under time limits.
+units:
+  - id: linear
+    title: Linear
+    levels:
+      - id: adt-concept
+        title: Abstract Data Types
+        core: true
+        requires: [asymptotic]
+      - id: dynamic-arrays
+        title: Dynamic Arrays
+        core: true
+        requires: [adt-concept, arrays-lists]
+      - id: linked-lists
+        title: Linked Lists
+        core: true
+        requires: [adt-concept, references-pointers]
+      - id: stacks
+        title: Stacks
+        core: true
+        requires: [adt-concept]
+      - id: queues
+        title: "Queues & Deques"
+        core: true
+        requires: [linked-lists]
+      - id: circular-buffers
+        title: Circular Buffers
+        core: false
+        requires: [queues]
+      - id: skip-lists
+        title: Skip Lists
+        core: false
+        requires: [linked-lists, random-variables]
+  - id: trees
+    title: Trees
+    levels:
+      - id: trees-ds
+        title: "Trees & Tree Traversals"
+        core: true
+        requires: [linked-lists, recursion, trees-math]
+      - id: bst
+        title: Binary Search Trees
+        core: true
+        requires: [trees-ds]
+      - id: avl-trees
+        title: "AVL Trees & Rotations"
+        core: false
+        requires: [bst]
+      - id: red-black-trees
+        title: Red-Black Trees
+        core: false
+        requires: [avl-trees]
+      - id: b-trees
+        title: B-Trees
+        core: false
+        requires: [bst]
+      - id: tries
+        title: Tries
+        core: false
+        requires: [trees-ds, strings]
+      - id: segment-trees
+        title: "Segment & Fenwick Trees"
+        core: false
+        requires: [trees-ds]
+  - id: heaps
+    title: Heaps
+    levels:
+      - id: heaps
+        title: Binary Heaps
+        core: true
+        requires: [trees-ds, dynamic-arrays]
+      - id: priority-queues
+        title: Priority Queues
+        core: true
+        requires: [heaps]
+  - id: hashing
+    title: Hashing
+    levels:
+      - id: hash-functions
+        title: Hash Functions
+        core: true
+        requires: [adt-concept, modular-arithmetic]
+      - id: hash-collisions
+        title: "Collision Resolution: Chaining & Open Addressing"
+        core: true
+        requires: [hash-functions, linked-lists]
+      - id: load-factor
+        title: "Load Factor & Rehashing"
+        core: false
+        requires: [hash-collisions, amortized]
+      - id: bloom-filters
+        title: Bloom Filters
+        core: false
+        requires: [hash-functions, probability-basics]
+  - id: graphs-sets
+    title: "Graphs & Sets"
+    levels:
+      - id: graph-representations
+        title: Graph Representations
+        core: true
+        requires: [graph-types, dynamic-arrays, linked-lists]
+      - id: union-find
+        title: "Disjoint Sets: Union–Find"
+        core: false
+        requires: [trees-ds, amortized]

@@ -40,7 +40,7 @@ Every feature in later phases is accepted or rejected against this sentence.
 | 1 | Taps CONTINUE / picks any open level or bonus chest | Camera glides to the pedestal, world blurs, level opens | Curiosity |
 | 2 | Moves through 6–12 small lesson steps | Tick + spark per step, XP flies to HUD | Momentum |
 | 3 | Plays the simulation, reaches its goal | Goal chime, state inspector confirms | Insight |
-| 4 | Passes the challenge | LEVEL CLEAR! — stars stamp in, XP counts up, next level and bonus chest unlock | Achievement |
+| 4 | Passes the level test (≥ 70 %, built only from that level's lesson) | LEVEL CLEAR! — stars stamp in, XP counts up, next level and bonus chest unlock | Achievement |
 | 5 | Returns days later for a spaced review | Third star earned (Mastered) | Ownership |
 | 6 | Beats a stage's castle boss | Flag rises on the castle, road glows, camera pulls back over the island | Triumph |
 

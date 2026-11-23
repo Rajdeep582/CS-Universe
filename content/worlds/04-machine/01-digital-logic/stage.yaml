@@ -1,0 +1,66 @@
+# World 4 · Stage 1 — Digital Logic
+id: digital-logic
+order: 1
+title: Digital Logic
+tier: 2
+refs:
+  - "Harris & Harris — Digital Design and Computer Architecture, RISC-V ed., ch. 1–5"
+  - "Nisan & Schocken — The Elements of Computing Systems 2e, ch. 1–3"
+boss:
+  title: Build an ALU
+  description: Wire a 4-bit ALU in the circuit sandbox that meets its truth specification.
+units:
+  - id: combinational
+    title: Combinational
+    levels:
+      - id: logic-gates
+        title: "Logic Gates & Transistors (CMOS idea)"
+        core: true
+        requires: [universal-gates]
+      - id: combinational-circuits
+        title: Combinational Circuits
+        core: true
+        requires: [logic-gates, karnaugh-maps]
+      - id: multiplexers-decoders
+        title: "Multiplexers, Decoders & Encoders"
+        core: true
+        requires: [combinational-circuits]
+      - id: adders
+        title: "Half Adders, Full Adders & Ripple Carry"
+        core: true
+        requires: [combinational-circuits, binary-addition]
+      - id: carry-lookahead
+        title: Carry-Lookahead Adders
+        core: false
+        requires: [adders]
+      - id: alu
+        title: The Arithmetic Logic Unit
+        core: true
+        requires: [adders, multiplexers-decoders, signed-numbers]
+  - id: sequential
+    title: Sequential
+    levels:
+      - id: latches-flipflops
+        title: "Latches & Flip-Flops"
+        core: true
+        requires: [combinational-circuits]
+      - id: clocks-timing
+        title: "Clocks & Timing"
+        core: true
+        requires: [latches-flipflops]
+      - id: registers
+        title: "Registers & Register Files"
+        core: true
+        requires: [latches-flipflops, multiplexers-decoders]
+      - id: counters
+        title: "Counters & Shift Registers"
+        core: false
+        requires: [registers]
+      - id: fsm-hardware
+        title: Finite State Machines in Hardware
+        core: true
+        requires: [clocks-timing]
+      - id: memory-cells
+        title: "SRAM & DRAM Cells"
+        core: true
+        requires: [latches-flipflops]

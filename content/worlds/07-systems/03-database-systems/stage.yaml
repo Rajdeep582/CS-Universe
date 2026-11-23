@@ -1,0 +1,173 @@
+# World 7 · Stage 3 — Database Systems
+id: database-systems
+order: 3
+title: Database Systems
+tier: 3
+refs:
+  - "Silberschatz, Korth & Sudarshan — Database System Concepts 7e"
+  - "Ramakrishnan & Gehrke — Database Management Systems 3e"
+  - Mohan et al. (1992) — ARIES
+boss:
+  title: Bank on It
+  description: "Design the schema, write queries, choose indexes and an isolation level for a banking workload, then survive a crash."
+units:
+  - id: the-relational-model
+    title: The Relational Model
+    levels:
+      - id: why-databases
+        title: "Why Databases? Data Models & the DBMS"
+        core: true
+        requires: [file-concept, sets]
+      - id: relational-model
+        title: "Relations, Keys & Schemas"
+        core: true
+        requires: [why-databases, relations]
+      - id: relational-algebra
+        title: Relational Algebra
+        core: true
+        requires: [relational-model]
+  - id: sql
+    title: SQL
+    levels:
+      - id: sql-basics
+        title: "SQL: SELECT, WHERE, ORDER BY"
+        core: true
+        requires: [relational-algebra]
+      - id: sql-joins
+        title: SQL Joins
+        core: true
+        requires: [sql-basics]
+      - id: sql-aggregation
+        title: "Aggregation & GROUP BY"
+        core: true
+        requires: [sql-basics]
+      - id: sql-subqueries
+        title: "Subqueries & Set Operations"
+        core: false
+        requires: [sql-joins]
+      - id: sql-nulls
+        title: "NULLs & Three-Valued Logic"
+        core: false
+        requires: [sql-basics]
+      - id: sql-ddl-constraints
+        title: "DDL & Integrity Constraints"
+        core: false
+        requires: [sql-basics]
+      - id: sql-window
+        title: Window Functions
+        core: false
+        requires: [sql-aggregation]
+      - id: views
+        title: Views
+        core: false
+        requires: [sql-subqueries]
+  - id: design
+    title: Design
+    levels:
+      - id: er-modeling
+        title: Entity–Relationship Modeling
+        core: true
+        requires: [relational-model]
+      - id: functional-dependencies
+        title: Functional Dependencies
+        core: true
+        requires: [relational-model, functions]
+      - id: normalization
+        title: "Normal Forms: 1NF to BCNF"
+        core: true
+        requires: [functional-dependencies]
+      - id: decomposition
+        title: "Lossless Decomposition & Dependency Preservation"
+        core: false
+        requires: [normalization]
+  - id: storage-indexing
+    title: "Storage & Indexing"
+    levels:
+      - id: storage-pages
+        title: "Disk Storage, Pages & Records"
+        core: true
+        requires: [why-databases, memory-hierarchy]
+      - id: buffer-pool
+        title: Buffer Pool Management
+        core: false
+        requires: [storage-pages, page-replacement]
+      - id: indexing-basics
+        title: "Indexing: Primary, Secondary & Clustered"
+        core: true
+        requires: [storage-pages]
+      - id: bplus-trees
+        title: B+-Trees
+        core: true
+        requires: [indexing-basics, bst]
+      - id: hash-indexes
+        title: "Hash Indexes: Static, Extendible & Linear"
+        core: false
+        requires: [indexing-basics, hash-collisions]
+      - id: lsm-trees
+        title: LSM Trees
+        core: false
+        requires: [indexing-basics]
+  - id: query-processing
+    title: Query Processing
+    levels:
+      - id: query-processing
+        title: The Query Processing Pipeline
+        core: true
+        requires: [relational-algebra, indexing-basics]
+      - id: external-sorting
+        title: External Merge Sort
+        core: false
+        requires: [merge-sort, storage-pages]
+      - id: join-algorithms
+        title: "Join Algorithms: Nested-Loop, Hash & Sort-Merge"
+        core: true
+        requires: [query-processing, merge-sort]
+      - id: query-optimization
+        title: "Query Optimization & Cost Estimation"
+        core: false
+        requires: [join-algorithms]
+  - id: transactions
+    title: Transactions
+    levels:
+      - id: transactions-acid
+        title: "Transactions & ACID"
+        core: true
+        requires: [sql-basics]
+      - id: schedules-serializability
+        title: "Schedules & Conflict Serializability"
+        core: true
+        requires: [transactions-acid, paths-connectivity]
+      - id: two-phase-locking
+        title: Two-Phase Locking
+        core: true
+        requires: [schedules-serializability, mutex-semaphores]
+      - id: isolation-levels
+        title: "Isolation Levels & Anomalies"
+        core: false
+        requires: [two-phase-locking]
+      - id: mvcc
+        title: "MVCC & Snapshot Isolation"
+        core: false
+        requires: [isolation-levels]
+      - id: timestamp-ordering
+        title: "Timestamp Ordering & Optimistic Concurrency"
+        core: false
+        requires: [schedules-serializability]
+  - id: recovery
+    title: Recovery
+    levels:
+      - id: logging-recovery
+        title: "Logging & Write-Ahead Logging"
+        core: true
+        requires: [transactions-acid, storage-pages]
+      - id: aries
+        title: ARIES Recovery
+        core: false
+        requires: [logging-recovery]
+  - id: beyond-relational
+    title: Beyond Relational
+    levels:
+      - id: nosql-models
+        title: "Key-Value, Document & Wide-Column Stores"
+        core: false
+        requires: [relational-model]

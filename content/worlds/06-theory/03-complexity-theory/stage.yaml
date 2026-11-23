@@ -1,0 +1,55 @@
+# World 6 · Stage 3 — Computational Complexity
+id: complexity-theory
+order: 3
+title: Computational Complexity
+tier: 3
+refs:
+  - "Sipser — Introduction to the Theory of Computation 3e, ch. 7–8, 10"
+  - "Garey & Johnson — Computers and Intractability"
+  - Cook (1971) — The Complexity of Theorem-Proving Procedures
+boss:
+  title: Reduction Relay
+  description: Chain reductions from 3-SAT to a target problem and verify gadgets in the visualizer.
+units:
+  - id: classes
+    title: Classes
+    levels:
+      - id: time-complexity-classes
+        title: "Time Complexity & the Class P"
+        core: true
+        requires: [decidability]
+      - id: np
+        title: "The Class NP & Verifiers"
+        core: true
+        requires: [time-complexity-classes]
+      - id: space-complexity-classes
+        title: "PSPACE & Space Classes"
+        core: false
+        requires: [time-complexity-classes]
+      - id: randomized-complexity
+        title: "Randomized Classes: RP & BPP (overview)"
+        core: false
+        requires: [time-complexity-classes, probability-basics]
+  - id: hardness
+    title: Hardness
+    levels:
+      - id: poly-reductions
+        title: Polynomial-Time Reductions
+        core: true
+        requires: [np, reductions-computability]
+      - id: np-completeness
+        title: "NP-Completeness & Cook–Levin"
+        core: true
+        requires: [poly-reductions]
+      - id: classic-npc
+        title: Classic NP-Complete Problems
+        core: false
+        requires: [np-completeness]
+      - id: p-vs-np
+        title: P vs NP
+        core: true
+        requires: [np-completeness]
+      - id: approximation
+        title: Approximation Algorithms
+        core: false
+        requires: [classic-npc, greedy-method]

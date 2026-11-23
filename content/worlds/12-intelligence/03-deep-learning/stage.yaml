@@ -1,0 +1,77 @@
+# World 12 · Stage 3 — Neural Networks & Deep Learning
+id: deep-learning
+order: 3
+title: "Neural Networks & Deep Learning"
+tier: 5
+refs:
+  - "Goodfellow, Bengio & Courville — Deep Learning (free online)"
+  - "Bishop & Bishop — Deep Learning: Foundations and Concepts"
+  - Vaswani et al. (2017) — Attention Is All You Need
+boss:
+  title: Backprop by Hand
+  description: "Compute every gradient of a tiny network, then train an MLP in the browser to a target accuracy."
+units:
+  - id: networks
+    title: Networks
+    levels:
+      - id: perceptron
+        title: The Perceptron
+        core: true
+        requires: [logistic-regression]
+      - id: mlp
+        title: "Multi-Layer Networks & Activations"
+        core: true
+        requires: [perceptron]
+      - id: backprop
+        title: "Backpropagation & Computational Graphs"
+        core: true
+        requires: [mlp]
+  - id: training
+    title: Training
+    levels:
+      - id: training-dynamics
+        title: "Initialization & Optimizers: SGD, Momentum, Adam"
+        core: true
+        requires: [backprop]
+      - id: regularization-dl
+        title: "Dropout, Batch Norm & Early Stopping"
+        core: true
+        requires: [training-dynamics, generalization]
+  - id: architectures
+    title: Architectures
+    levels:
+      - id: cnn
+        title: Convolutional Neural Networks
+        core: true
+        requires: [mlp, images-pixels]
+      - id: rnn
+        title: "Recurrent Networks & LSTMs"
+        core: false
+        requires: [mlp, sequences-sums]
+      - id: embeddings
+        title: "Embeddings & Representation Learning"
+        core: true
+        requires: [mlp, dot-product]
+      - id: attention
+        title: Attention
+        core: true
+        requires: [embeddings]
+      - id: transformers
+        title: Transformers (overview)
+        core: true
+        requires: [attention]
+      - id: language-models
+        title: "Language Models & Pretraining (overview)"
+        core: false
+        requires: [transformers]
+      - id: generative-models
+        title: "Generative Models: VAEs, GANs & Diffusion (overview)"
+        core: false
+        requires: [mlp]
+  - id: responsibility
+    title: Responsibility
+    levels:
+      - id: ml-ethics
+        title: "Fairness, Bias & Responsible ML"
+        core: false
+        requires: [evaluation]

@@ -1,0 +1,42 @@
+# World 1 · Stage 1 — Information & Bits
+id: information-bits
+order: 1
+title: "Information & Bits"
+tier: 0
+refs:
+  - "Petzold — Code, 2nd ed."
+  - "Bryant & O'Hallaron — CS:APP 3e, ch. 2"
+boss:
+  title: Signal Decoder
+  description: Turn a raw mystery bitstream into a message by choosing the right unit and grouping.
+units:
+  - id: the-big-picture
+    title: The Big Picture
+    levels:
+      - id: what-is-computer
+        title: What Is a Computer?
+        core: true
+        requires: []
+      - id: abstraction-layers
+        title: Layers of Abstraction
+        core: true
+        requires: [what-is-computer]
+  - id: information
+    title: Information
+    levels:
+      - id: information-idea
+        title: Information as Distinguishable States
+        core: true
+        requires: [what-is-computer]
+      - id: bits
+        title: The Bit
+        core: true
+        requires: [information-idea]
+      - id: bytes-words
+        title: "Bytes, Words & Units (kB vs KiB)"
+        core: true
+        requires: [bits]
+      - id: info-entropy-intro
+        title: "Measuring Information (Shannon, intro)"
+        core: false
+        requires: [bits]

@@ -1,0 +1,127 @@
+# World 5 · Stage 3 — Algorithm Design
+id: algorithm-design
+order: 3
+title: Algorithm Design
+tier: 2
+refs:
+  - "CLRS 4e, ch. 2, 4, 6–9, 14–15, 32"
+  - "Kleinberg & Tardos — Algorithm Design, ch. 4–6"
+boss:
+  title: Strategy Gauntlet
+  description: Identify the paradigm for six unseen problems and implement two of them.
+units:
+  - id: search-sort
+    title: "Search & Sort"
+    levels:
+      - id: linear-search
+        title: Linear Search
+        core: true
+        requires: [what-is-algorithm, arrays-lists]
+      - id: binary-search
+        title: Binary Search
+        core: true
+        requires: [linear-search, loop-invariants]
+      - id: elementary-sorts
+        title: "Selection, Insertion & Bubble Sort"
+        core: true
+        requires: [loop-invariants, asymptotic]
+      - id: merge-sort
+        title: Merge Sort
+        core: true
+        requires: [elementary-sorts, recurrences-analysis]
+      - id: quicksort
+        title: "Quicksort & Partitioning"
+        core: true
+        requires: [merge-sort]
+      - id: randomized-quicksort
+        title: Randomized Quicksort Analysis
+        core: false
+        requires: [quicksort, linearity-expectation]
+      - id: heapsort
+        title: Heapsort
+        core: true
+        requires: [heaps, elementary-sorts]
+      - id: sorting-lower-bound
+        title: The Comparison-Sorting Lower Bound
+        core: false
+        requires: [merge-sort, trees-ds]
+      - id: linear-time-sorts
+        title: "Counting, Radix & Bucket Sort"
+        core: false
+        requires: [sorting-lower-bound]
+      - id: selection-algorithms
+        title: "Order Statistics & Quickselect"
+        core: false
+        requires: [quicksort]
+  - id: divide-conquer
+    title: "Divide & Conquer"
+    levels:
+      - id: divide-conquer
+        title: The Divide-and-Conquer Strategy
+        core: true
+        requires: [merge-sort]
+      - id: karatsuba
+        title: Karatsuba Multiplication
+        core: false
+        requires: [divide-conquer, master-theorem]
+      - id: closest-pair
+        title: Closest Pair of Points
+        core: false
+        requires: [divide-conquer]
+  - id: greedy
+    title: Greedy
+    levels:
+      - id: greedy-method
+        title: "The Greedy Method & Exchange Arguments"
+        core: true
+        requires: [elementary-sorts, proof-contradiction]
+      - id: activity-selection
+        title: "Activity Selection & Interval Scheduling"
+        core: false
+        requires: [greedy-method]
+      - id: huffman-coding
+        title: Huffman Coding
+        core: false
+        requires: [greedy-method, priority-queues]
+  - id: dynamic-programming
+    title: Dynamic Programming
+    levels:
+      - id: dp-intro
+        title: "Dynamic Programming: Overlapping Subproblems"
+        core: true
+        requires: [divide-conquer]
+      - id: memo-tabulation
+        title: Memoization vs Tabulation
+        core: true
+        requires: [dp-intro, maps-sets-prog]
+      - id: knapsack
+        title: 0/1 Knapsack
+        core: false
+        requires: [memo-tabulation]
+      - id: lcs-edit-distance
+        title: "LCS & Edit Distance"
+        core: false
+        requires: [memo-tabulation, strings]
+      - id: lis
+        title: Longest Increasing Subsequence
+        core: false
+        requires: [memo-tabulation]
+      - id: matrix-chain
+        title: Matrix-Chain Multiplication
+        core: false
+        requires: [memo-tabulation, matrices]
+  - id: exhaustive-strings
+    title: "Exhaustive & Strings"
+    levels:
+      - id: backtracking
+        title: "Backtracking: N-Queens & Sudoku"
+        core: false
+        requires: [recursion]
+      - id: branch-bound
+        title: "Branch & Bound"
+        core: false
+        requires: [backtracking, priority-queues]
+      - id: string-matching
+        title: "String Matching: KMP & Rabin–Karp"
+        core: false
+        requires: [linear-search, strings, hash-functions]

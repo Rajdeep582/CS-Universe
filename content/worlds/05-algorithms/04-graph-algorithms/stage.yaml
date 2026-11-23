@@ -1,0 +1,85 @@
+# World 5 · Stage 4 — Graph Algorithms
+id: graph-algorithms
+order: 4
+title: Graph Algorithms
+tier: 2
+refs:
+  - "CLRS 4e, ch. 20–25"
+  - "Sedgewick & Wayne — Algorithms 4e, ch. 4"
+boss:
+  title: Route Planner
+  description: Implement shortest paths and a minimum spanning tree for a city map with constraints.
+units:
+  - id: traversal
+    title: Traversal
+    levels:
+      - id: bfs
+        title: Breadth-First Search
+        core: true
+        requires: [graph-representations, queues]
+      - id: dfs
+        title: Depth-First Search
+        core: true
+        requires: [graph-representations, stacks, recursion]
+      - id: topological-sort
+        title: Topological Sort
+        core: true
+        requires: [dfs]
+      - id: connected-components
+        title: Connected Components
+        core: false
+        requires: [bfs, dfs]
+      - id: scc
+        title: Strongly Connected Components
+        core: false
+        requires: [topological-sort]
+      - id: cycle-detection
+        title: Cycle Detection
+        core: false
+        requires: [dfs]
+      - id: bipartite-check
+        title: Bipartiteness Testing
+        core: false
+        requires: [bfs]
+  - id: shortest-paths
+    title: Shortest Paths
+    levels:
+      - id: dijkstra
+        title: "Dijkstra's Algorithm"
+        core: true
+        requires: [bfs, priority-queues, greedy-method]
+      - id: bellman-ford
+        title: "Bellman–Ford & Negative Cycles"
+        core: false
+        requires: [dijkstra, memo-tabulation]
+      - id: floyd-warshall
+        title: Floyd–Warshall All-Pairs
+        core: false
+        requires: [memo-tabulation, graph-representations]
+      - id: a-star
+        title: "A* Search"
+        core: false
+        requires: [dijkstra]
+  - id: spanning-trees-flow
+    title: "Spanning Trees & Flow"
+    levels:
+      - id: mst-prim
+        title: "MST: The Cut Property & Prim's Algorithm"
+        core: true
+        requires: [greedy-method, priority-queues]
+      - id: mst-kruskal
+        title: "Kruskal's Algorithm"
+        core: false
+        requires: [mst-prim, union-find]
+      - id: max-flow
+        title: "Maximum Flow: Ford–Fulkerson"
+        core: false
+        requires: [bfs, dfs]
+      - id: min-cut
+        title: The Max-Flow Min-Cut Theorem
+        core: false
+        requires: [max-flow]
+      - id: bipartite-matching
+        title: Bipartite Matching
+        core: false
+        requires: [max-flow, bipartite-check]

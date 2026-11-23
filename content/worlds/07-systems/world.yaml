@@ -1,0 +1,8 @@
+# World 7 — Systems
+id: systems
+order: 7
+title: Systems
+tagline: Software that runs the machine and connects the world
+biome: Harbor City
+biomeKind: city
+color: "#4FD1E0"

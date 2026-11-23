@@ -1,0 +1,55 @@
+# World 4 · Stage 3 — From Source to Running Process
+id: source-to-process
+order: 3
+title: From Source to Running Process
+tier: 2
+refs:
+  - "Bryant & O'Hallaron — CS:APP 3e, ch. 7"
+  - Levine — Linkers and Loaders
+  - System V ABI / ELF specification
+boss:
+  title: Link Map
+  description: Resolve symbols and relocations by hand for three object files and predict the loaded memory layout.
+units:
+  - id: build
+    title: Build
+    levels:
+      - id: compilation-overview
+        title: The Compilation Pipeline (overview)
+        core: true
+        requires: [what-is-program, riscv-assembly]
+      - id: preprocess-compile
+        title: "Preprocessing & Compiling to Assembly"
+        core: true
+        requires: [compilation-overview]
+      - id: object-files
+        title: "Assembling & Object Files"
+        core: true
+        requires: [preprocess-compile, instruction-encoding]
+      - id: executable-formats
+        title: "Executable Formats: ELF & PE"
+        core: false
+        requires: [object-files]
+  - id: link-load
+    title: "Link & Load"
+    levels:
+      - id: symbols-relocation
+        title: "Symbols & Relocation"
+        core: true
+        requires: [object-files]
+      - id: linking
+        title: Static Linking
+        core: true
+        requires: [symbols-relocation]
+      - id: dynamic-linking
+        title: "Dynamic Linking & Shared Libraries"
+        core: false
+        requires: [linking]
+      - id: loading
+        title: "Loading & Process Memory Layout"
+        core: true
+        requires: [linking, stack-heap]
+      - id: interpreters-jit
+        title: "Interpreters, Bytecode & JIT (overview)"
+        core: false
+        requires: [compilation-overview]

@@ -1,0 +1,184 @@
+# World 7 · Stage 2 — Computer Networks
+id: computer-networks
+order: 2
+title: Computer Networks
+tier: 3
+refs:
+  - "Kurose & Ross — Computer Networking: A Top-Down Approach 8e"
+  - "Peterson & Davie — Computer Networks: A Systems Approach (open edition)"
+  - RFC 9293 — TCP
+  - RFC 791 — IPv4
+boss:
+  title: "Packet's Journey"
+  description: "Trace one URL fetch end to end (DNS, ARP, NAT, handshake, congestion window, HTTP) and predict every step."
+units:
+  - id: foundations
+    title: Foundations
+    levels:
+      - id: network-intro
+        title: "Hosts, Links & Packets"
+        core: true
+        requires: [abstraction-layers]
+      - id: packet-switching
+        title: Packet vs Circuit Switching
+        core: true
+        requires: [network-intro]
+      - id: delay-throughput
+        title: "Delay, Loss & Throughput"
+        core: true
+        requires: [packet-switching]
+      - id: layering
+        title: "Protocol Layering: OSI & TCP/IP"
+        core: true
+        requires: [network-intro]
+  - id: physical-link
+    title: "Physical & Link"
+    levels:
+      - id: physical-signals
+        title: "The Physical Layer: Signals & Encoding"
+        core: true
+        requires: [layering, bits]
+      - id: framing-errors
+        title: "Framing & Error Detection (CRC)"
+        core: true
+        requires: [physical-signals, error-detection-intro]
+      - id: mac-protocols
+        title: "Multiple Access: ALOHA, CSMA/CD & CSMA/CA"
+        core: true
+        requires: [framing-errors]
+      - id: ethernet-switching
+        title: "Ethernet, MAC Addresses & Switches"
+        core: true
+        requires: [mac-protocols]
+      - id: vlans
+        title: VLANs
+        core: false
+        requires: [ethernet-switching]
+      - id: wireless-lan
+        title: Wi-Fi Basics (802.11)
+        core: false
+        requires: [mac-protocols]
+  - id: network-layer
+    title: Network Layer
+    levels:
+      - id: ip-datagram
+        title: "IPv4 Datagrams & Forwarding"
+        core: true
+        requires: [layering, binary-numbers]
+      - id: ip-addressing
+        title: "IP Addressing & Subnetting (CIDR)"
+        core: true
+        requires: [ip-datagram, bitwise-ops]
+      - id: arp
+        title: "ARP: Linking IP to MAC Addresses"
+        core: false
+        requires: [ethernet-switching, ip-addressing]
+      - id: dhcp
+        title: DHCP
+        core: false
+        requires: [ip-addressing]
+      - id: nat
+        title: NAT
+        core: true
+        requires: [ip-addressing]
+      - id: icmp
+        title: "ICMP, ping & traceroute"
+        core: false
+        requires: [ip-datagram]
+      - id: ipv6
+        title: IPv6
+        core: false
+        requires: [ip-addressing]
+      - id: routing-algorithms
+        title: "Routing: Link-State vs Distance-Vector"
+        core: true
+        requires: [ip-datagram, dijkstra]
+      - id: ospf
+        title: "Intra-Domain Routing: OSPF"
+        core: false
+        requires: [routing-algorithms]
+      - id: bgp
+        title: "Inter-Domain Routing: BGP"
+        core: false
+        requires: [routing-algorithms]
+  - id: transport-layer
+    title: Transport Layer
+    levels:
+      - id: transport-services
+        title: "Transport Services & Port Multiplexing"
+        core: true
+        requires: [ip-datagram]
+      - id: udp
+        title: UDP
+        core: true
+        requires: [transport-services]
+      - id: reliable-transfer
+        title: Principles of Reliable Transfer (ARQ)
+        core: true
+        requires: [transport-services, framing-errors]
+      - id: sliding-window
+        title: "Go-Back-N & Selective Repeat"
+        core: true
+        requires: [reliable-transfer]
+      - id: tcp-connection
+        title: "TCP Segments & the Three-Way Handshake"
+        core: true
+        requires: [reliable-transfer]
+      - id: tcp-state-machine
+        title: The TCP Connection State Machine
+        core: false
+        requires: [tcp-connection]
+      - id: tcp-reliability
+        title: "TCP Reliability, RTT Estimation & Flow Control"
+        core: true
+        requires: [tcp-connection, sliding-window]
+      - id: congestion-principles
+        title: Congestion Control Principles
+        core: true
+        requires: [tcp-reliability, delay-throughput]
+      - id: tcp-congestion
+        title: "TCP Reno: Slow Start, AIMD & Fast Recovery"
+        core: true
+        requires: [congestion-principles]
+      - id: cubic-bbr
+        title: "CUBIC & BBR"
+        core: false
+        requires: [tcp-congestion]
+  - id: application-layer
+    title: Application Layer
+    levels:
+      - id: dns
+        title: DNS
+        core: true
+        requires: [udp]
+      - id: http
+        title: "HTTP/1.1 & the Web"
+        core: true
+        requires: [tcp-connection, dns]
+      - id: http2-3
+        title: "HTTP/2, HTTP/3 & QUIC"
+        core: false
+        requires: [http, tcp-congestion]
+      - id: tls
+        title: "TLS: Secure Channels"
+        core: false
+        requires: [http, certificates-pki, diffie-hellman, authenticated-encryption]
+      - id: email-protocols
+        title: "Email: SMTP & IMAP"
+        core: false
+        requires: [tcp-connection, dns]
+      - id: cdn-p2p
+        title: "CDNs & Peer-to-Peer"
+        core: false
+        requires: [http]
+  - id: sockets
+    title: Sockets
+    levels:
+      - id: sockets-api
+        title: The Sockets API
+        core: true
+        requires: [tcp-connection, udp, system-calls]
+      - id: socket-servers
+        title: "Concurrent Servers: Threads, select & epoll"
+        core: false
+        requires: [sockets-api, threads]

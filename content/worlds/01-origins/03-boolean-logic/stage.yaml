@@ -1,0 +1,50 @@
+# World 1 · Stage 3 — Boolean Logic
+id: boolean-logic
+order: 3
+title: Boolean Logic
+tier: 0
+refs:
+  - "Harris & Harris — Digital Design and Computer Architecture, RISC-V ed., ch. 2"
+  - "Petzold — Code, 2nd ed."
+boss:
+  title: Gatekeeper
+  description: "Derive and minimize an expression from a truth table, then build it from NAND gates only."
+units:
+  - id: truth
+    title: Truth
+    levels:
+      - id: truth-values
+        title: "Truth Values & Logical Operators"
+        core: true
+        requires: [bits]
+      - id: truth-tables
+        title: Truth Tables
+        core: true
+        requires: [truth-values]
+      - id: boolean-algebra
+        title: Boolean Algebra Laws
+        core: true
+        requires: [truth-tables]
+      - id: de-morgan
+        title: "De Morgan's Laws"
+        core: true
+        requires: [boolean-algebra]
+      - id: bitwise-ops
+        title: "Bitwise Operations & Masks"
+        core: true
+        requires: [truth-tables, binary-numbers]
+  - id: simplification
+    title: Simplification
+    levels:
+      - id: normal-forms
+        title: "Sum-of-Products & Product-of-Sums"
+        core: true
+        requires: [boolean-algebra]
+      - id: karnaugh-maps
+        title: Karnaugh Map Simplification
+        core: true
+        requires: [normal-forms]
+      - id: universal-gates
+        title: "NAND & NOR Universality"
+        core: true
+        requires: [de-morgan]

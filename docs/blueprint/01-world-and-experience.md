@@ -36,8 +36,8 @@ Deviation from master prompt §1 ("3D space world"): replaced by a 3D island wor
 | Core Path topic | **Numbered level** on the road (1, 2, 3…) | Medallion on a stone pedestal, 3D stars above |
 | Off-path topic | **Bonus chest** on a side trail, hung off the level that unlocks it | Chest + glass tag, dotted leader line |
 | Subject boss | **Castle** at the end of the road | Boss card with unlock rule |
-| Topic lesson | **Level play** — the lesson chamber | Full-screen panels, world blurred behind |
-| Mastery tier | **Stars**: 1★ Explored · 2★ Practiced · 3★ Mastered | 3D gold stars; HUD shows 246 / 1,743 |
+| Topic lesson + test | **Level play** — study the lesson, then take the **level test** built only from what that lesson taught | Full-screen panels, world blurred behind |
+| Mastery tier | **Stars** (earned only through tests): 1★ Cleared (level test ≥ 70 %) · 2★ Excellent (≥ 90 %) · 3★ Mastered (review test ≥ 3 days later) | 3D gold stars; HUD shows 246 / 1,743 |
 | Prerequisite from another world | **Bridge** marker on the level card ("Needs: Dijkstra's Algorithm · World 5") | Card line + fly-to |
 
 DAG on a road: levels are numbered in Core Path topological order, so walking the road never hits a lock. Locks still come only from prerequisite edges (02); bonus chests open when their host level's prerequisites are met.
@@ -47,7 +47,7 @@ DAG on a road: levels are numbered in Core Path topological order, so walking th
 | DAG, multi-parent edges | Road = core topological order; extra parents shown as bridges; full edges in Atlas and on level focus |
 | ≥ 4 zoom levels | World Map → Island → Stage → Level focus → Level play |
 | Core Path + freedom | Road + sea-route = Core Path; any open level/chest/island is clickable |
-| Lock states | Locked = grey medallion + padlock; Available = glowing rim; In progress = partial ring; 1–3 stars = tiers |
+| Lock states | Locked = grey medallion + padlock; Available = glowing rim; In progress = partial ring; Studied = test open; 1–3 stars = tiers. A level unlocks only when all its prerequisite levels are Cleared |
 | Visual progress | Islands go from mist-covered grey to full colour; road tiles brighten as levels clear; castle raises its flag when beaten; sea-route turns gold |
 | Legibility | One focus; labels are DOM cards placed by a collision solver (no overlaps, leader lines when displaced) |
 | 1,000+ nodes | Per stage ≤ ~50 levels; world map renders islands, not topics; instanced props |

@@ -1,0 +1,46 @@
+# World 3 · Stage 6 — Calculus for Computing
+id: calculus-computing
+order: 6
+title: Calculus for Computing
+tier: 1
+refs:
+  - "Strang — Calculus 3e (MIT OpenCourseWare, free)"
+  - "Deisenroth, Faisal & Ong — Mathematics for Machine Learning, ch. 5"
+boss:
+  title: Descent
+  description: Reach the minimum of a 2D loss surface by computing every gradient yourself.
+units:
+  - id: change
+    title: Change
+    levels:
+      - id: functions-limits
+        title: "Limits & Continuity (intuition)"
+        core: true
+        requires: [functions]
+      - id: derivatives
+        title: "Derivatives & Rates of Change"
+        core: true
+        requires: [functions-limits]
+      - id: chain-rule
+        title: The Chain Rule
+        core: true
+        requires: [derivatives]
+      - id: partial-derivatives
+        title: "Partial Derivatives & Gradients"
+        core: true
+        requires: [chain-rule, vectors]
+  - id: applications
+    title: Applications
+    levels:
+      - id: optimization-calc
+        title: "Finding Minima & Maxima"
+        core: false
+        requires: [derivatives]
+      - id: integrals
+        title: Integrals as Accumulation
+        core: false
+        requires: [derivatives]
+      - id: series-approx
+        title: Taylor Approximations
+        core: false
+        requires: [derivatives]

@@ -1,0 +1,54 @@
+# World 3 · Stage 4 — Graph Theory
+id: graph-theory
+order: 4
+title: Graph Theory
+tier: 1
+refs:
+  - "Rosen — Discrete Mathematics and Its Applications 8e, ch. 10–11"
+  - West — Introduction to Graph Theory 2e
+boss:
+  title: Königsberg+
+  description: "Decide Eulerian, Hamiltonian and colorability for generated graphs, with proof sketches."
+units:
+  - id: graphs
+    title: Graphs
+    levels:
+      - id: graph-basics
+        title: "Graphs, Vertices, Edges & Degree"
+        core: true
+        requires: [relations]
+      - id: graph-types
+        title: "Directed, Weighted, Bipartite & Complete Graphs"
+        core: true
+        requires: [graph-basics]
+      - id: paths-connectivity
+        title: "Paths, Cycles & Connectivity"
+        core: true
+        requires: [graph-basics]
+      - id: trees-math
+        title: "Trees & Their Properties"
+        core: true
+        requires: [paths-connectivity, induction]
+      - id: dags-toposort-math
+        title: "DAGs & Partial Orders"
+        core: false
+        requires: [graph-types, partial-orders]
+  - id: classic-problems
+    title: Classic Problems
+    levels:
+      - id: euler-hamilton
+        title: "Euler & Hamilton Paths"
+        core: false
+        requires: [paths-connectivity]
+      - id: planarity
+        title: "Planar Graphs & Euler's Formula"
+        core: false
+        requires: [paths-connectivity]
+      - id: graph-coloring
+        title: Graph Coloring
+        core: false
+        requires: [graph-types]
+      - id: isomorphism
+        title: Graph Isomorphism
+        core: false
+        requires: [graph-types]

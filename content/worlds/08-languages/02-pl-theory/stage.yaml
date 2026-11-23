@@ -1,0 +1,74 @@
+# World 8 · Stage 2 — Programming Language Theory
+id: pl-theory
+order: 2
+title: Programming Language Theory
+tier: 4
+refs:
+  - Pierce — Types and Programming Languages
+  - "Krishnamurthi — Programming Languages: Application and Interpretation (free)"
+  - Nystrom — Crafting Interpreters (free online)
+boss:
+  title: Interpreter Forge
+  description: Write an evaluator and type checker for a small lambda language.
+units:
+  - id: meaning
+    title: Meaning
+    levels:
+      - id: syntax-semantics
+        title: Syntax vs Semantics
+        core: true
+        requires: [ast]
+      - id: tree-walk-interpreter
+        title: Tree-Walking Interpreters
+        core: true
+        requires: [ast]
+      - id: bytecode-vm
+        title: "Bytecode & Stack-Based VMs"
+        core: false
+        requires: [tree-walk-interpreter, stacks]
+      - id: operational-semantics
+        title: Operational Semantics
+        core: false
+        requires: [syntax-semantics, inference-rules]
+  - id: lambda-calculus
+    title: Lambda Calculus
+    levels:
+      - id: lambda-calculus
+        title: The Untyped Lambda Calculus
+        core: true
+        requires: [closures]
+      - id: evaluation-strategies
+        title: "Evaluation Strategies: Strict, Lazy & Call-by-Name"
+        core: false
+        requires: [lambda-calculus]
+      - id: continuations
+        title: Continuations
+        core: false
+        requires: [lambda-calculus]
+  - id: types
+    title: Types
+    levels:
+      - id: type-systems
+        title: "Type Systems & Soundness"
+        core: true
+        requires: [type-checking, syntax-semantics]
+      - id: simply-typed-lambda
+        title: The Simply Typed Lambda Calculus
+        core: false
+        requires: [type-systems, lambda-calculus]
+      - id: type-inference
+        title: Hindley–Milner Type Inference
+        core: false
+        requires: [simply-typed-lambda]
+      - id: subtyping
+        title: "Subtyping & Variance"
+        core: false
+        requires: [type-systems, polymorphism]
+      - id: parametric-polymorphism
+        title: Parametric Polymorphism
+        core: false
+        requires: [type-systems, generics-intro]
+      - id: algebraic-data-types
+        title: "Algebraic Data Types & Pattern Matching"
+        core: false
+        requires: [composite-types, type-systems]

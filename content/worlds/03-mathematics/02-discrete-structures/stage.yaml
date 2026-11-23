@@ -1,0 +1,81 @@
+# World 3 · Stage 2 — Discrete Structures
+id: discrete-structures
+order: 2
+title: Discrete Structures
+tier: 1
+refs:
+  - "Rosen — Discrete Mathematics and Its Applications 8e, ch. 2, 4, 9"
+  - "Lehman, Leighton & Meyer — Mathematics for Computer Science"
+boss:
+  title: Structure Atlas
+  description: Classify relations and functions by their properties and solve a system of congruences.
+units:
+  - id: sets-functions
+    title: "Sets & Functions"
+    levels:
+      - id: sets
+        title: "Sets & Set Operations"
+        core: true
+        requires: [predicate-logic]
+      - id: functions
+        title: "Functions: Injective, Surjective, Bijective"
+        core: true
+        requires: [sets]
+      - id: log-exp
+        title: "Exponentials & Logarithms"
+        core: true
+        requires: [functions]
+      - id: sequences-sums
+        title: "Sequences & Summations"
+        core: true
+        requires: [functions]
+      - id: recursive-definitions
+        title: Recursive Definitions
+        core: true
+        requires: [sequences-sums, induction]
+      - id: structural-induction
+        title: Structural Induction
+        core: false
+        requires: [strong-induction, recursive-definitions]
+      - id: cardinality
+        title: "Cardinality & Countability"
+        core: true
+        requires: [functions]
+  - id: relations
+    title: Relations
+    levels:
+      - id: relations
+        title: "Relations & Their Properties"
+        core: true
+        requires: [sets]
+      - id: equivalence-relations
+        title: "Equivalence Relations & Partitions"
+        core: false
+        requires: [relations]
+      - id: partial-orders
+        title: "Partial Orders & Hasse Diagrams"
+        core: true
+        requires: [relations]
+  - id: number-theory
+    title: Number Theory
+    levels:
+      - id: modular-arithmetic
+        title: "Divisibility & Modular Arithmetic"
+        core: true
+        requires: [proof-direct]
+      - id: gcd-euclid
+        title: "GCD & the Euclidean Algorithm"
+        core: true
+        requires: [modular-arithmetic]
+      - id: primes
+        title: "Primes & Factorization"
+        core: true
+        requires: [modular-arithmetic]
+      - id: modular-inverse
+        title: "Modular Inverses & Fermat's Little Theorem"
+        core: true
+        requires: [gcd-euclid, primes]
+      - id: crt
+        title: Chinese Remainder Theorem
+        core: false
+        requires: [modular-inverse]

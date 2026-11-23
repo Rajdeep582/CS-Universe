@@ -1,0 +1,83 @@
+# World 11 · Stage 2 — Cryptography
+id: cryptography
+order: 2
+title: Cryptography
+tier: 4
+refs:
+  - "Katz & Lindell — Introduction to Modern Cryptography 3e"
+  - "Boneh & Shoup — A Graduate Course in Applied Cryptography (free)"
+  - FIPS 197 — AES
+  - RFC 8446 — TLS 1.3
+boss:
+  title: Cipher Breaker
+  description: "Break toy systems (ECB images, a reused one-time pad, tiny RSA) and explain each flaw."
+units:
+  - id: symmetric
+    title: Symmetric
+    levels:
+      - id: crypto-intro
+        title: "Classical Ciphers & Kerckhoffs's Principle"
+        core: true
+        requires: [security-goals, modular-arithmetic]
+      - id: one-time-pad
+        title: "Perfect Secrecy & the One-Time Pad"
+        core: true
+        requires: [crypto-intro, bitwise-ops, probability-basics]
+      - id: stream-ciphers
+        title: Stream Ciphers
+        core: false
+        requires: [one-time-pad]
+      - id: block-ciphers
+        title: "Block Ciphers & AES Structure"
+        core: true
+        requires: [one-time-pad]
+      - id: modes-of-operation
+        title: "Modes of Operation: ECB, CBC, CTR & GCM"
+        core: true
+        requires: [block-ciphers]
+  - id: integrity
+    title: Integrity
+    levels:
+      - id: crypto-hash
+        title: Cryptographic Hash Functions
+        core: true
+        requires: [hash-functions, security-goals]
+      - id: mac
+        title: "Message Authentication Codes & HMAC"
+        core: true
+        requires: [crypto-hash]
+      - id: authenticated-encryption
+        title: Authenticated Encryption
+        core: false
+        requires: [modes-of-operation, mac]
+  - id: public-key
+    title: Public Key
+    levels:
+      - id: public-key-crypto
+        title: The Public-Key Idea
+        core: true
+        requires: [crypto-intro]
+      - id: rsa
+        title: RSA
+        core: true
+        requires: [public-key-crypto, modular-inverse]
+      - id: diffie-hellman
+        title: Diffie–Hellman Key Exchange
+        core: true
+        requires: [public-key-crypto]
+      - id: elliptic-curves
+        title: Elliptic-Curve Cryptography (overview)
+        core: false
+        requires: [diffie-hellman]
+      - id: digital-signatures
+        title: Digital Signatures
+        core: true
+        requires: [rsa, crypto-hash]
+      - id: certificates-pki
+        title: "Certificates & PKI"
+        core: true
+        requires: [digital-signatures]
+      - id: key-management
+        title: "Key Management & Randomness"
+        core: false
+        requires: [public-key-crypto]

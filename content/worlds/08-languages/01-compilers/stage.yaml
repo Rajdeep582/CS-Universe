@@ -1,0 +1,117 @@
+# World 8 · Stage 1 — Compilers
+id: compilers
+order: 1
+title: Compilers
+tier: 4
+refs:
+  - "Aho, Lam, Sethi & Ullman — Compilers: Principles, Techniques, and Tools 2e (Dragon Book)"
+  - "Cooper & Torczon — Engineering a Compiler 3e"
+  - Appel — Modern Compiler Implementation
+boss:
+  title: Mini-Compiler
+  description: "Finish a compiler for a tiny language: lexer, parser, type checker and code generator, all tests green."
+units:
+  - id: front-end
+    title: Front End
+    levels:
+      - id: compiler-structure
+        title: The Structure of a Compiler
+        core: true
+        requires: [compilation-overview]
+      - id: tokens-lexemes
+        title: "Tokens, Lexemes & Patterns"
+        core: true
+        requires: [compiler-structure, regular-expressions]
+      - id: lexer-construction
+        title: "Building a Lexer from Regexes & DFAs"
+        core: true
+        requires: [tokens-lexemes, subset-construction]
+      - id: grammars-for-parsing
+        title: Grammars for Programming Languages
+        core: true
+        requires: [derivations-parse-trees]
+      - id: recursive-descent
+        title: Recursive-Descent Parsing
+        core: true
+        requires: [grammars-for-parsing, recursion]
+      - id: first-follow
+        title: "FIRST & FOLLOW Sets"
+        core: false
+        requires: [grammars-for-parsing]
+      - id: ll1
+        title: LL(1) Parsing Tables
+        core: false
+        requires: [first-follow]
+      - id: shift-reduce
+        title: "Bottom-Up & Shift–Reduce Parsing"
+        core: true
+        requires: [grammars-for-parsing, pda]
+      - id: lr-parsing
+        title: "LR(0), SLR & LALR Parsing"
+        core: false
+        requires: [shift-reduce, first-follow]
+  - id: middle
+    title: Middle
+    levels:
+      - id: ast
+        title: Abstract Syntax Trees
+        core: true
+        requires: [recursive-descent]
+      - id: symbol-tables
+        title: "Scopes & Symbol Tables"
+        core: true
+        requires: [ast, scope, maps-sets-prog]
+      - id: type-checking
+        title: Type Checking
+        core: true
+        requires: [symbol-tables, static-dynamic-types]
+      - id: three-address-code
+        title: "Intermediate Representation: Three-Address Code"
+        core: true
+        requires: [ast]
+      - id: control-flow-graphs
+        title: "Basic Blocks & Control-Flow Graphs"
+        core: false
+        requires: [three-address-code, graph-representations]
+      - id: ssa
+        title: Static Single Assignment Form
+        core: false
+        requires: [control-flow-graphs]
+  - id: optimization
+    title: Optimization
+    levels:
+      - id: local-optimization
+        title: "Local Optimization: Constant Folding & CSE"
+        core: false
+        requires: [three-address-code]
+      - id: dataflow-analysis
+        title: "Dataflow Analysis: Liveness & Reaching Definitions"
+        core: false
+        requires: [control-flow-graphs]
+      - id: loop-optimization
+        title: Loop Optimizations
+        core: false
+        requires: [dataflow-analysis]
+  - id: back-end-runtime
+    title: "Back End & Runtime"
+    levels:
+      - id: instruction-selection
+        title: Instruction Selection
+        core: true
+        requires: [three-address-code, riscv-assembly]
+      - id: register-allocation
+        title: Register Allocation by Graph Coloring
+        core: false
+        requires: [dataflow-analysis, graph-coloring]
+      - id: activation-records
+        title: Activation Records
+        core: true
+        requires: [procedures-assembly, symbol-tables]
+      - id: garbage-collection
+        title: "Garbage Collection: Ref-Counting, Mark–Sweep & Copying"
+        core: true
+        requires: [activation-records, references-pointers]
+      - id: generational-gc
+        title: "Generational & Incremental GC"
+        core: false
+        requires: [garbage-collection]

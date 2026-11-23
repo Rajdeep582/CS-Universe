@@ -1,0 +1,70 @@
+# World 11 · Stage 3 — Systems & Software Security
+id: applied-security
+order: 3
+title: "Systems & Software Security"
+tier: 4
+refs:
+  - OWASP Top 10 (current edition)
+  - Anderson — Security Engineering 3e
+  - "Erickson — Hacking: The Art of Exploitation 2e"
+boss:
+  title: Red Team / Blue Team
+  description: Find and patch five vulnerabilities in a sandboxed app.
+units:
+  - id: identity
+    title: Identity
+    levels:
+      - id: password-storage
+        title: "Password Storage: Salts & Slow Hashes"
+        core: true
+        requires: [authentication-concepts, crypto-hash]
+      - id: sessions-tokens
+        title: "Sessions, Cookies & Tokens"
+        core: false
+        requires: [authentication-concepts, http]
+      - id: oauth-oidc
+        title: "OAuth 2.0 & OpenID Connect"
+        core: false
+        requires: [sessions-tokens, digital-signatures]
+      - id: mfa
+        title: Multi-Factor Authentication
+        core: false
+        requires: [authentication-concepts]
+  - id: vulnerabilities
+    title: Vulnerabilities
+    levels:
+      - id: memory-safety-vulns
+        title: "Buffer Overflows & Memory-Safety Bugs"
+        core: true
+        requires: [memory-bugs, call-stack]
+      - id: exploit-mitigations
+        title: "Mitigations: ASLR, NX & Stack Canaries"
+        core: false
+        requires: [memory-safety-vulns]
+      - id: injection
+        title: "Injection: SQL & Command Injection"
+        core: true
+        requires: [sql-basics, strings]
+      - id: xss
+        title: Cross-Site Scripting
+        core: true
+        requires: [http, injection]
+      - id: csrf
+        title: Cross-Site Request Forgery
+        core: false
+        requires: [sessions-tokens]
+  - id: defense
+    title: Defense
+    levels:
+      - id: secure-coding
+        title: "Input Validation & Secure Coding"
+        core: true
+        requires: [injection, principles-secure-design]
+      - id: sandboxing
+        title: "Sandboxing & Isolation"
+        core: false
+        requires: [dual-mode, principles-secure-design]
+      - id: network-security
+        title: "Firewalls, VPNs & Intrusion Detection"
+        core: false
+        requires: [nat, principles-secure-design]

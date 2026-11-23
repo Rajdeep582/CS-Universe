@@ -10,7 +10,7 @@
 | 1 | Vision document | [00-vision.md](00-vision.md) |
 | 2 | World direction **Isles of Computing**: decision log, curriculum→game mapping, biomes, visual language, HUD, camera, layout | [01-world-and-experience.md](01-world-and-experience.md) |
 | 3 | Premium 3D renders: World Map, Stage Map, Level Clear | [renders/](renders/) |
-| 4 | Full curriculum graph — machine-readable | [curriculum.graph.yaml](curriculum.graph.yaml) |
+| 4 | Full curriculum — machine-readable (moved to one file per stage in Phase 1) | [content/](../../content/) |
 | 5 | Full curriculum graph — readable | [02-curriculum.md](02-curriculum.md) |
 | 6 | Reward & progression design (stars = mastery tiers, celebrations, goals) | [03-progression-and-rewards.md](03-progression-and-rewards.md) |
 | 7 | Architecture, tech decisions, license audit | [04-architecture.md](04-architecture.md) |
@@ -56,4 +56,4 @@
 
 ## What Phase 1 will do
 
-Scaffold Vite + React + TypeScript (strict) with ESLint, Prettier, Vitest and Playwright; build design tokens and the glass/gem component library matching the renders (profile card, chips, tool buttons, CTA, cards, modal); HUD shell and deep-link routes; move `curriculum.graph.yaml` into `content/graph/` behind a Zod schema that fails the build on broken edges, cycles or Core Path violations. Exact install commands will be listed for you to run.
+Scaffold Vite + React + TypeScript (strict) with ESLint, Prettier, Vitest and Playwright; build design tokens and the glass/gem component library matching the renders (profile card, chips, tool buttons, CTA, cards, modal); HUD shell and deep-link routes; split the curriculum into `content/worlds/<world>/<stage>/stage.yaml` behind a Zod schema that fails the build on broken edges, cycles or Core Path violations. Exact install commands will be listed for you to run.
