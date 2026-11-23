@@ -21,36 +21,79 @@ function Shell() {
   return (
     <MotionConfig reducedMotion="user">
       <TooltipProvider>
-        <div className="app-bg" aria-hidden />
         <TopBar />
-        <main id="main" className="relative z-10 mx-auto max-w-[1280px] px-6 pb-40 pt-[150px]">
-          <Outlet />
-        </main>
-        <ContinueBar />
+        <Outlet />
         <CommandPalette />
-        <ScrollRestoration />
       </TooltipProvider>
     </MotionConfig>
   );
 }
 
+function AtlasLayout() {
+  return (
+    <>
+      <div className="app-bg" aria-hidden />
+      <main id="main" className="relative z-10 mx-auto max-w-[1280px] px-6 pb-40 pt-[150px]">
+        <Outlet />
+      </main>
+      <ContinueBar />
+      <ScrollRestoration />
+    </>
+  );
+}
+
 const root = createRootRoute({ component: Shell, notFoundComponent: NotFound });
-const index = createRoute({ getParentRoute: () => root, path: '/', component: AtlasHome });
-const atlas = createRoute({ getParentRoute: () => root, path: '/atlas', component: AtlasHome });
-const world = createRoute({ getParentRoute: () => root, path: '/atlas/$worldId', component: WorldPage });
-const stage = createRoute({ getParentRoute: () => root, path: '/atlas/$worldId/$stageId', component: StagePage });
-const level = createRoute({
+
+// 3D world (lazy: three.js only loads here)
+const world = createRoute({
   getParentRoute: () => root,
-  path: '/atlas/$worldId/$stageId/$levelId',
+  id: '_world',
+  component: lazyRouteComponent(() => import('@/world/WorldLayout'), 'WorldLayout'),
+});
+const worldMap = createRoute({
+  getParentRoute: () => world,
+  path: '/',
+  component: lazyRouteComponent(() => import('@/world/views'), 'WorldMapView'),
+});
+const island = createRoute({
+  getParentRoute: () => world,
+  path: 'world/$worldId',
+  component: lazyRouteComponent(() => import('@/world/views'), 'IslandView'),
+});
+const stage = createRoute({
+  getParentRoute: () => world,
+  path: 'world/$worldId/$stageId',
+  validateSearch: (s: Record<string, unknown>): { level?: string } =>
+    typeof s.level === 'string' ? { level: s.level } : {},
+  component: lazyRouteComponent(() => import('@/world/views'), 'StageView'),
+});
+
+// 2D Atlas
+const atlas = createRoute({ getParentRoute: () => root, id: '_atlas', component: AtlasLayout });
+const atlasHome = createRoute({
+  getParentRoute: () => atlas,
+  path: 'atlas',
+  validateSearch: (s: Record<string, unknown>): { notice?: 'webgl' } =>
+    s.notice === 'webgl' ? { notice: 'webgl' } : {},
+  component: AtlasHome,
+});
+const atlasWorld = createRoute({ getParentRoute: () => atlas, path: 'atlas/$worldId', component: WorldPage });
+const atlasStage = createRoute({ getParentRoute: () => atlas, path: 'atlas/$worldId/$stageId', component: StagePage });
+const atlasLevel = createRoute({
+  getParentRoute: () => atlas,
+  path: 'atlas/$worldId/$stageId/$levelId',
   component: LevelPage,
 });
 const gallery = createRoute({
-  getParentRoute: () => root,
-  path: '/gallery',
+  getParentRoute: () => atlas,
+  path: 'gallery',
   component: lazyRouteComponent(() => import('./routes/Gallery'), 'Gallery'),
 });
 
-export const routeTree = root.addChildren([index, atlas, world, stage, level, gallery]);
+export const routeTree = root.addChildren([
+  world.addChildren([worldMap, island, stage]),
+  atlas.addChildren([atlasHome, atlasWorld, atlasStage, atlasLevel, gallery]),
+]);
 export const router = createRouter({ routeTree, defaultPreload: 'intent', scrollRestoration: true });
 
 declare module '@tanstack/react-router' {

@@ -6,7 +6,7 @@ const shot = async (page: Page, name: string) => {
 };
 
 test('Atlas lists 12 worlds with only the first one open for a new learner', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/atlas');
   const worlds = page.getByRole('list', { name: 'Worlds' }).getByRole('link');
   await expect(worlds).toHaveCount(12);
   await expect(page.getByRole('link', { name: /World 1: Sunny Shores, Origins$/ })).toBeVisible();
@@ -17,7 +17,7 @@ test('Atlas lists 12 worlds with only the first one open for a new learner', asy
 });
 
 test('World → Stage → Level navigation with breadcrumbs', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/atlas');
   await page.getByRole('link', { name: /World 1: Sunny Shores/ }).click();
   await expect(page.getByRole('heading', { level: 1, name: 'Sunny Shores' })).toBeVisible();
   await shot(page, '02-world');
@@ -34,7 +34,7 @@ test('World → Stage → Level navigation with breadcrumbs', async ({ page }) =
   await expect(page.getByRole('heading', { name: /CLEAR THESE FIRST \(1\)/ })).toBeVisible();
   await shot(page, '04-level-locked');
   await page.getByRole('navigation', { name: 'Breadcrumb' }).getByRole('link', { name: 'Atlas' }).click();
-  await expect(page).toHaveURL(/\/$/);
+  await expect(page).toHaveURL(/\/atlas$/);
 });
 
 test('Locked level points to its prerequisite', async ({ page }) => {
@@ -45,7 +45,7 @@ test('Locked level points to its prerequisite', async ({ page }) => {
 });
 
 test('Continue goes to the first Core Path level, which is ready to play', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/atlas');
   await page.getByRole('button', { name: 'START' }).click();
   await expect(page).toHaveURL(/\/atlas\/origins\/information-bits\/what-is-computer$/);
   await expect(page.getByText('Ready to play')).toBeVisible();
@@ -54,7 +54,7 @@ test('Continue goes to the first Core Path level, which is ready to play', async
 });
 
 test('Ctrl K search finds a level and navigates to it', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/atlas');
   await expect(page.getByRole('heading', { level: 1, name: 'Isles of Computing' })).toBeVisible();
   await page.keyboard.press('Control+k');
   const dialog = page.getByRole('dialog', { name: 'Search the Atlas' });
@@ -67,7 +67,7 @@ test('Ctrl K search finds a level and navigates to it', async ({ page }) => {
 });
 
 test('Keyboard only: tab to a world and open it', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/atlas');
   await expect(page.getByRole('heading', { level: 1, name: 'Isles of Computing' })).toBeVisible();
   for (let i = 0; i < 12; i++) {
     await page.keyboard.press('Tab');

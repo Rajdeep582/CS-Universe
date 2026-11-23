@@ -2,9 +2,9 @@
 
 A free, browser-based 3D island-adventure game for learning the foundations of computer science. Every topic is a level on a winding road across 12 island worlds: study it, pass its level test to clear it, earn up to 3 stars, beat each stage's castle boss.
 
-| Status | Phase 1 — Foundation & Design System (awaiting approval) |
+| Status | Phase 2 — World Engine (awaiting approval) |
 |---|---|
-| Phase reports | [Phase 0](docs/blueprint/README.md) · [Phase 1](docs/phases/phase-1.md) |
+| Phase reports | [Phase 0](docs/blueprint/README.md) · [Phase 1](docs/phases/phase-1.md) · [Phase 2](docs/phases/phase-2.md) |
 | Curriculum | [docs/blueprint/02-curriculum.md](docs/blueprint/02-curriculum.md) · source: [content/](content/) (one folder per world, one per stage) |
 | World concept + renders | [docs/blueprint/01-world-and-experience.md](docs/blueprint/01-world-and-experience.md) |
 | Credits & licenses | [CREDITS.md](CREDITS.md) |
@@ -18,7 +18,7 @@ cd "C:\Users\brajd\Desktop\CS UNIVERSE"
 npm ci
 npm run dev
 ```
-Open the URL Vite prints (normally `http://localhost:5173`).
+Open the URL Vite prints (normally `http://localhost:5173`). `/` is the 3D World Map, `/atlas` the 2D Atlas. Press **F3** in the 3D world for the performance overlay; graphics quality is under Settings (gear icon).
 
 | Command | What it does |
 |---|---|

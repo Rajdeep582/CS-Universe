@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Command } from 'cmdk';
 import { Search } from 'lucide-react';
-import { useNavigate } from '@tanstack/react-router';
+import { useNavigate, useRouterState } from '@tanstack/react-router';
 import { curriculum, levelsOfStage, stageById, stageCode, worldById } from '@/engine/content';
 import { useUi } from '@/app/uiStore';
 import { useProgress } from '@/app/useProgress';
@@ -11,6 +11,7 @@ export function CommandPalette() {
   const { paletteOpen, setPaletteOpen } = useUi();
   const navigate = useNavigate();
   const { medal } = useProgress();
+  const inAtlas = useRouterState({ select: (s) => s.location.pathname.startsWith('/atlas') });
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -49,7 +50,13 @@ export function CommandPalette() {
               <Command.Item
                 key={w.id}
                 value={`world ${w.title} ${w.biome}`}
-                onSelect={() => go(() => navigate({ to: '/atlas/$worldId', params: { worldId: w.id } }))}
+                onSelect={() =>
+                  go(() =>
+                    inAtlas
+                      ? navigate({ to: '/atlas/$worldId', params: { worldId: w.id } })
+                      : navigate({ to: '/world/$worldId', params: { worldId: w.id } }),
+                  )
+                }
               >
                 <span
                   className="swatch size-8 flex-none"
@@ -69,7 +76,15 @@ export function CommandPalette() {
                 key={s.id}
                 value={`stage ${s.title} ${worldById.get(s.worldId)!.title}`}
                 onSelect={() =>
-                  go(() => navigate({ to: '/atlas/$worldId/$stageId', params: { worldId: s.worldId, stageId: s.id } }))
+                  go(() =>
+                    inAtlas
+                      ? navigate({ to: '/atlas/$worldId/$stageId', params: { worldId: s.worldId, stageId: s.id } })
+                      : navigate({
+                          to: '/world/$worldId/$stageId',
+                          params: { worldId: s.worldId, stageId: s.id },
+                          search: {},
+                        }),
+                  )
                 }
               >
                 <span className="tile tile-sky size-8 flex-none text-xs font-extrabold">{stageCode(s)}</span>
@@ -87,10 +102,16 @@ export function CommandPalette() {
                   value={`level ${l.title} ${l.id} ${s.title}`}
                   onSelect={() =>
                     go(() =>
-                      navigate({
-                        to: '/atlas/$worldId/$stageId/$levelId',
-                        params: { worldId: l.worldId, stageId: l.stageId, levelId: l.id },
-                      }),
+                      inAtlas
+                        ? navigate({
+                            to: '/atlas/$worldId/$stageId/$levelId',
+                            params: { worldId: l.worldId, stageId: l.stageId, levelId: l.id },
+                          })
+                        : navigate({
+                            to: '/world/$worldId/$stageId',
+                            params: { worldId: l.worldId, stageId: l.stageId },
+                            search: { level: l.id },
+                          }),
                     )
                   }
                 >

@@ -4,7 +4,7 @@
 
 ## 1. Shape of the system
 
-Static, local-first single-page app. No server in Phases 1–8. Everything heavy (layout, validation, content compilation, search index) happens **at build time**; the browser loads precomputed JSON and lazy-loads runtimes only when a lesson needs them.
+Static, local-first single-page app. No server in Phases 1–8. Content validation and compilation happen **at build time**. World layout is a pure, unit-tested function of the compiled curriculum (milliseconds), and terrain heightfields are generated in a **Web Worker** at runtime from per-stage seeds — this keeps downloads small (no baked heightfields) while staying deterministic. Heavy code (three.js, runtimes) is lazy-loaded.
 
 ```mermaid
 flowchart LR
@@ -100,7 +100,10 @@ Exact versions are pinned in Phase 1 from what is current then; every dependency
 
 | URL | View | Since |
 |---|---|---|
-| `/` | Atlas home (Phase 2: 3D World Map; Atlas stays at `/atlas`) | 1 |
+| `/` | 3D World Map | 2 |
+| `/world/<world>` | 3D island view with its stages | 2 |
+| `/world/<world>/<stage>?level=<id>` | 3D stage view; `level` opens the level card and flies to it (`__boss` = castle) | 2 |
+| `/atlas` | 2D Atlas home (`?notice=webgl` when 3D is unavailable) | 1 |
 | `/atlas/<world>` | World: its stages in order | 1 |
 | `/atlas/<world>/<stage>` | Stage: units → levels, boss, sources | 1 |
 | `/atlas/<world>/<stage>/<level>` | Level card: state, prerequisites, what it unlocks | 1 |

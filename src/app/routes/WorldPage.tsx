@@ -7,14 +7,14 @@ import { Breadcrumbs, GlassPanel, ProgressBar, Tag } from '@/ui/components';
 import { NotFound } from './NotFound';
 
 export function WorldPage() {
-  const { worldId } = useParams({ from: '/atlas/$worldId' });
+  const { worldId } = useParams({ from: '/_atlas/atlas/$worldId' });
   const w = worldById.get(worldId);
   const { cleared } = useProgress();
   if (!w) return <NotFound />;
   const ws = worldStatus(w, cleared);
   return (
     <div className="space-y-6">
-      <Breadcrumbs items={[{ label: 'Atlas', to: '/' }, { label: `World ${w.order} · ${w.biome}` }]} />
+      <Breadcrumbs items={[{ label: 'Atlas', to: '/atlas' }, { label: `World ${w.order} · ${w.biome}` }]} />
       <GlassPanel className="rise flex items-center gap-6 overflow-hidden rounded-[28px] p-0">
         <div className="relative h-[170px] w-[420px] flex-none overflow-hidden" aria-hidden>
           <img

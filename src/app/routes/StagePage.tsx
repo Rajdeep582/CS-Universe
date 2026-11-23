@@ -49,7 +49,7 @@ function LevelRow({ l, here }: { l: Level; here: string }) {
 }
 
 export function StagePage() {
-  const { worldId, stageId } = useParams({ from: '/atlas/$worldId/$stageId' });
+  const { worldId, stageId } = useParams({ from: '/_atlas/atlas/$worldId/$stageId' });
   const s = stageById.get(stageId);
   const { cleared } = useProgress();
   if (!s || s.worldId !== worldId) return <NotFound />;
@@ -61,7 +61,7 @@ export function StagePage() {
     <div className="space-y-6">
       <Breadcrumbs
         items={[
-          { label: 'Atlas', to: '/' },
+          { label: 'Atlas', to: '/atlas' },
           { label: `World ${w.order} · ${w.biome}`, to: '/atlas/$worldId', params: { worldId: w.id } },
           { label: s.title },
         ]}

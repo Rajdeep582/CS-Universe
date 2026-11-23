@@ -52,7 +52,7 @@ const STEPS = [
 ] as const;
 
 export function LevelPage() {
-  const { worldId, stageId, levelId } = useParams({ from: '/atlas/$worldId/$stageId/$levelId' });
+  const { worldId, stageId, levelId } = useParams({ from: '/_atlas/atlas/$worldId/$stageId/$levelId' });
   const l = levelById.get(levelId);
   const { cleared, medal, starsOf } = useProgress();
   if (!l || l.stageId !== stageId || l.worldId !== worldId) return <NotFound />;
@@ -66,7 +66,7 @@ export function LevelPage() {
     <div className="space-y-6">
       <Breadcrumbs
         items={[
-          { label: 'Atlas', to: '/' },
+          { label: 'Atlas', to: '/atlas' },
           { label: `World ${w.order} · ${w.biome}`, to: '/atlas/$worldId', params: { worldId: w.id } },
           { label: s.title, to: '/atlas/$worldId/$stageId', params: { worldId: w.id, stageId: s.id } },
           { label: l.title },

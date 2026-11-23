@@ -11,7 +11,7 @@ export function NotFound() {
       <h1 className="mt-4 font-display text-3xl font-extrabold">Uncharted waters</h1>
       <p className="mt-2 font-medium text-ink-2">This place is not on the map.</p>
       <Link to="/" className="gem gem-sky gem-md mt-5">
-        Back to the Atlas
+        Back to the World Map
       </Link>
     </GlassPanel>
   );

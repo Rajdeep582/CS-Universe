@@ -18,5 +18,10 @@ export default tseslint.config(
       '@typescript-eslint/no-non-null-assertion': 'off',
     },
   },
+  {
+    // three.js scene code mutates GPU-side objects (uniforms, Object3D) and loads data in effects by design.
+    files: ['src/world/**/*.{ts,tsx}'],
+    rules: { 'react-hooks/immutability': 'off', 'react-hooks/set-state-in-effect': 'off', 'react-hooks/refs': 'off' },
+  },
   { files: ['**/*.{js,mjs}'], extends: [js.configs.recommended], languageOptions: { globals: globals.node } },
 );

@@ -338,3 +338,19 @@
 [cmdk-input]:focus-visible {
   box-shadow: none;
 }
+
+/* ── 3D world labels (positioned by LabelProjector) ── */
+.world-label {
+  position: absolute;
+  left: 0;
+  top: 0;
+  will-change: transform;
+  transition: opacity 0.18s ease-out;
+}
+.world-label[data-hidden='1'] {
+  opacity: 0;
+}
+.world-label[data-hidden='1'],
+.world-label[data-hidden='1'] * {
+  pointer-events: none !important;
+}

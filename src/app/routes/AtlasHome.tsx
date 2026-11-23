@@ -1,5 +1,5 @@
-import { Link } from '@tanstack/react-router';
-import { Layers, Lock, Map, Sparkles, Star } from 'lucide-react';
+import { Link, useSearch } from '@tanstack/react-router';
+import { Layers, Lock, Map, MonitorX, Sparkles, Star } from 'lucide-react';
 import { curriculum, levelsOfWorld } from '@/engine/content';
 import { useProgress } from '../useProgress';
 import { worldStatus } from '../derive';
@@ -8,8 +8,20 @@ import { GlassPanel, ProgressBar, StarRating, Tag } from '@/ui/components';
 export function AtlasHome() {
   const { cleared, stars } = useProgress();
   const s = curriculum.stats;
+  const { notice } = useSearch({ from: '/_atlas/atlas' });
   return (
     <div className="space-y-6">
+      {notice === 'webgl' ? (
+        <GlassPanel role="status" className="flex items-center gap-4 rounded-[22px] p-4">
+          <span className="tile tile-sky size-11 flex-none">
+            <MonitorX size={22} />
+          </span>
+          <p className="text-[14px] font-semibold text-ink-2">
+            This browser cannot show the 3D world (WebGL 2 is unavailable), so you are in the 2D Atlas. Everything —
+            worlds, stages, levels and progress — works the same here.
+          </p>
+        </GlassPanel>
+      ) : null}
       <GlassPanel className="rise flex flex-wrap items-end justify-between gap-6 rounded-[28px] p-7">
         <div>
           <p className="font-display text-xs font-extrabold tracking-[.16em] text-gold-4">ATLAS · ALL WORLDS</p>

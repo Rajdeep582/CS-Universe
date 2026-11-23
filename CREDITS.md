@@ -14,13 +14,18 @@ Every third-party library, font, icon set or asset used by CS Universe, with its
 | cmdk | 1.1.1 | MIT | Command palette |
 | lucide-react | 1.78.0 | ISC | Icons |
 | clsx | 2.1.1 | MIT | Class names |
+| three | 0.187.0 | MIT | 3D engine |
+| @react-three/fiber | 9.8.2 | MIT | React renderer for three.js |
+| @react-three/drei | 10.7.9 | MIT | CameraControls, PerformanceMonitor (pulls in camera-controls MIT, three-stdlib MIT, detect-gpu MIT, webgl-constants MIT, hls.js Apache-2.0, @mediapipe/tasks-vision Apache-2.0) |
+| @react-three/postprocessing | 3.2.2 | MIT | Bloom (High tier) |
+| postprocessing | 6.39.6 | **Zlib** (approved D1) | Effect passes |
 | @fontsource-variable/outfit, /inter, /jetbrains-mono | 5.3.0 | OFL-1.1 | Self-hosted fonts |
 
-Transitive production packages: 60 in total, all checked by the script.
+Transitive production packages: 124 in total, all checked by the script.
 
 ## Build & test tooling (not shipped)
 
-Vite (MIT), @vitejs/plugin-react (MIT), TypeScript (Apache-2.0), Tailwind CSS + @tailwindcss/vite (MIT), Zod (MIT), yaml (ISC), tsx (MIT), Vitest (MIT), jsdom (MIT), Testing Library (MIT), ESLint + typescript-eslint + eslint-plugin-react-hooks + eslint-plugin-jsx-a11y (MIT), globals (MIT), Prettier (MIT), Playwright (Apache-2.0).
+Vite (MIT), @vitejs/plugin-react (MIT), TypeScript (Apache-2.0), @types/three (MIT), Tailwind CSS + @tailwindcss/vite (MIT), Zod (MIT), yaml (ISC), tsx (MIT), Vitest (MIT), jsdom (MIT), Testing Library (MIT), ESLint + typescript-eslint + eslint-plugin-react-hooks + eslint-plugin-jsx-a11y (MIT), globals (MIT), Prettier (MIT), Playwright (Apache-2.0).
 
 ## Fonts
 
