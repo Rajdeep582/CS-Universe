@@ -14,6 +14,8 @@ import {
   Tag,
 } from '@/ui/components';
 import type { ReactNode } from 'react';
+import { SimulationFrame } from '@/play/mdx';
+import '@/play/play.css';
 
 function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
@@ -160,6 +162,9 @@ export function Gallery() {
           </div>
         </Section>
       </div>
+      <Section title="SIMULATIONS">
+        <SimulationFrame id="page-replacement" />
+      </Section>
     </div>
   );
 }

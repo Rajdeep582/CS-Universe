@@ -1,0 +1,151 @@
+<Step id="hook" section="hook" title="One idea, a billion machines">
+
+A phone, a washing machine's control board and a supercomputer look nothing alike. Yet each of them does the same thing at heart: it **follows a list of instructions, one tiny step at a time, very fast**.
+
+By the end of this level you will be able to say exactly what that "thing" is — and watch it happen inside a working machine.
+
+</Step>
+
+<Step id="intuition-ipo" section="intuition" title="Input, processing, output — and memory">
+
+Think of a cook working from a recipe card:
+
+| Kitchen | Computer |
+|---|---|
+| Ingredients arrive | **Input** — data comes in (keys, a sensor, a file) |
+| The cook follows the recipe | **Processing** — instructions transform the data |
+| The dish is served | **Output** — results go out (screen, motor, network) |
+| The recipe card and the bench | **Memory** — holds the instructions *and* the data being worked on |
+
+A computer is a machine that takes **input**, **processes** it by following instructions, produces **output**, and keeps both the instructions and its working data in **memory**.
+
+</Step>
+
+<Step id="intuition-program" section="intuition" title="Programs make one machine do many jobs">
+
+The list of instructions is called a **program**. Hand the cook a different recipe card and the same kitchen produces a different dish.
+
+That is why a laptop can be a music player one minute and a calculator the next: the hardware stays the same, only the program changes. A machine that can run *any* program you load into it is called **general-purpose**.
+
+<Callout kind="note">A pocket calculator from the 1970s could only ever calculate — its "program" was fixed in its circuits. A computer's program is something you can replace.</Callout>
+
+</Step>
+
+<Step id="formal-definition" section="formal" title="The parts, precisely">
+
+Every computer you will meet in this course has the same four parts:
+
+| Part | Job |
+|---|---|
+| **CPU** (central processing unit) | Fetches instructions and carries them out. Contains the **control unit** (decides what to do next), the **ALU** (arithmetic logic unit: adds, compares…) and a few fast **registers** |
+| **Memory** | A long row of numbered cells. Each cell has an **address** and holds a value |
+| **Input devices** | Bring data in |
+| **Output devices** | Send results out |
+
+Seen from outside, a computer is a **state machine**: its *state* (everything in its registers and memory) changes in discrete steps, each step decided by the current state and any input $x_t$:
+
+$$
+s_{t+1} = f(s_t,\, x_t)
+$$
+
+A **program** is a finite sequence of instructions that drives those steps.
+
+</Step>
+
+<Step id="formal-stored-program" section="formal" title="The stored-program idea">
+
+Early machines such as ENIAC were set up for a new problem by re-plugging cables and switches. In 1945 John von Neumann's *First Draft of a Report on the EDVAC* described the design almost every computer has used since: **instructions are stored in the same memory as the data**, as ordinary numbers.
+
+Two consequences:
+
+1. Changing what the machine does means changing memory — no rewiring.
+2. The CPU needs to know *where* the next instruction is. It keeps that address in a register called the **program counter (PC)**.
+
+</Step>
+
+<Step id="mechanism-cycle" section="mechanism" title="Fetch, decode, execute — forever">
+
+The CPU runs one loop, over and over:
+
+1. **Fetch** — read the instruction at the address in the PC into the **instruction register (IR)**, then move the PC on to the next address.
+2. **Decode** — work out what the instruction asks for (which operation, which memory address).
+3. **Execute** — do it: load a number, add, store a result, send output…
+
+Then it fetches again. A modern processor performs billions of these cycles every second, and overlaps many of them, but each instruction still goes through these same stages.
+
+</Step>
+
+<Step id="mechanism-sim" section="mechanism" title="Watch the Tiny Machine">
+
+Below is a complete stored-program computer with nine memory cells. Addresses 0–4 hold the program; 6 and 7 hold its input; 8 receives the result. One register — the **accumulator (ACC)** — holds the number being worked on.
+
+Step through one fetch–decode–execute cycle at a time, scrub back and forth, then change the inputs.
+
+<Simulation id="tiny-machine" goal="Change the two inputs so the machine outputs 10, then run it to HALT." />
+
+</Step>
+
+<Step id="worked-example" section="worked-example" title="Tracing the program by hand">
+
+Tracing means writing down the state after every instruction. With 2 in address 6 and 3 in address 7:
+
+```asm
+0: LOAD 6     ; ACC ← memory[6]
+1: ADD 7      ; ACC ← ACC + memory[7]
+2: STORE 8    ; memory[8] ← ACC
+3: OUT        ; send ACC to output
+4: HALT       ; stop
+```
+
+| Cycle | Instruction | PC after fetch | ACC after execute | Change |
+|---|---|---|---|---|
+| 1 | LOAD 6 | 1 | 2 | — |
+| 2 | ADD 7 | 2 | 5 | — |
+| 3 | STORE 8 | 3 | 5 | memory[8] = 5 |
+| 4 | OUT | 4 | 5 | output 5 |
+| 5 | HALT | 5 | 5 | machine stops |
+
+Five instructions, so five fetch–decode–execute cycles. Notice the PC always points at the *next* instruction once the current one has been fetched.
+
+</Step>
+
+<Step id="tradeoffs" section="tradeoffs" title="General-purpose versus special-purpose">
+
+Running a program is flexible but not free:
+
+| Choice | Gains | Costs |
+|---|---|---|
+| **General-purpose CPU** running a program | Any task, changeable at any time | Every step pays for fetching and decoding instructions; uses more energy per result |
+| **Fixed-function hardware** (e.g. the video-decoder block inside a phone chip) | Much faster and far more energy-efficient for that one task | Can do nothing else; changing it means new hardware |
+
+Because instructions and data travel between CPU and memory over the same path, that path can limit speed — the **von Neumann bottleneck**, a name popularised by John Backus in his 1977 Turing Award lecture. Caches, which you will meet in World 4, exist largely to soften it.
+
+</Step>
+
+<Step id="pitfalls" section="pitfalls" title="Common misconceptions">
+
+<Callout kind="warning">**"The computer understands the program."** It does not. It mechanically performs each instruction. Any meaning lives in the minds of the people who wrote and use the program.</Callout>
+
+<Callout kind="warning">**"Instructions and numbers are different kinds of thing in memory."** In a stored-program computer both are just patterns of bits. The *same* cell is an instruction if the PC points at it, and a number if an instruction reads it as data. In the Tiny Machine, letting the PC run into a data cell is an error for exactly this reason.</Callout>
+
+<Callout kind="warning">**"A computer is the box with the screen."** The screen and keyboard are input/output devices. The computer is the processor and memory running a program — which is why a thermostat or a car's braking controller is a computer too.</Callout>
+
+</Step>
+
+<Step id="context" section="context" title="Where this came from, where it is now">
+
+- **1945** — ENIAC is completed; it is reprogrammed by rewiring. Von Neumann's EDVAC report describes the stored-program design.
+- **21 June 1948** — the Manchester "Baby" (Small-Scale Experimental Machine) runs the first program stored in electronic memory.
+- **Today** — the same fetch–decode–execute loop runs in your phone's processor, in the tiny microcontrollers inside appliances and cars, and in every server of every data centre.
+
+</Step>
+
+<Step id="references" section="references" title="Go deeper">
+
+- Charles Petzold, *Code: The Hidden Language of Computer Hardware and Software*, 2nd ed. (2022) — a gentle build-up from switches to a working computer.
+- Bryant & O'Hallaron, *Computer Systems: A Programmer's Perspective*, 3rd ed., ch. 1 "A Tour of Computer Systems".
+- Patterson & Hennessy, *Computer Organization and Design*, RISC-V ed., 2nd ed., ch. 1.
+- John von Neumann, *First Draft of a Report on the EDVAC* (1945).
+- John Backus, "Can Programming Be Liberated from the von Neumann Style?", *Communications of the ACM* 21(8), 1978 (his 1977 Turing Award lecture).
+
+</Step>

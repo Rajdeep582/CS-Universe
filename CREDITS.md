@@ -20,12 +20,15 @@ Every third-party library, font, icon set or asset used by CS Universe, with its
 | @react-three/postprocessing | 3.2.2 | MIT | Bloom (High tier) |
 | postprocessing | 6.39.6 | **Zlib** (approved D1) | Effect passes |
 | @fontsource-variable/outfit, /inter, /jetbrains-mono | 5.3.0 | OFL-1.1 | Self-hosted fonts |
+| katex | 0.19.1 | MIT | Maths stylesheet and KaTeX fonts (MIT) for lessons; formulas are rendered at build time (pulls in commander — MIT) |
 
-Transitive production packages: 124 in total, all checked by the script.
+Transitive production packages: 126 in total, all checked by the script.
 
 ## Build & test tooling (not shipped)
 
 Vite (MIT), @vitejs/plugin-react (MIT), TypeScript (Apache-2.0), @types/three (MIT), Tailwind CSS + @tailwindcss/vite (MIT), Zod (MIT), yaml (ISC), tsx (MIT), Vitest (MIT), jsdom (MIT), Testing Library (MIT), ESLint + typescript-eslint + eslint-plugin-react-hooks + eslint-plugin-jsx-a11y (MIT), globals (MIT), Prettier (MIT), Playwright (Apache-2.0).
+
+Lesson compilation (build time only; the output is plain HTML/JSX, no runtime code shipped): @mdx-js/rollup 3.1.1 (MIT), remark-gfm 4.0.1 (MIT), remark-math 6.0.0 (MIT), rehype-katex 7.0.1 (MIT), shiki 4.6.0 and @shikijs/rehype 4.6.0 (MIT; theme `github-dark-default` MIT; TextMate grammars from the Shiki bundle are MIT-licensed and used only to colour code at build time), @types/mdx 2.0.14 (MIT).
 
 ## Fonts
 

@@ -38,3 +38,12 @@ export function tally(levels: readonly Level[], cleared: ReadonlySet<string>): T
   }
   return { levels: levels.length, cleared: c, available: a };
 }
+
+/** Levels that were locked before and are available now — what clearing a level just opened. */
+export function newlyAvailable(
+  levels: readonly Level[],
+  before: ReadonlySet<string>,
+  after: ReadonlySet<string>,
+): Level[] {
+  return levels.filter((l) => levelState(l, before) === 'locked' && levelState(l, after) === 'available');
+}

@@ -90,8 +90,17 @@ const gallery = createRoute({
   component: lazyRouteComponent(() => import('./routes/Gallery'), 'Gallery'),
 });
 
+// Lesson chamber: study → level test → Level Clear (lazy: MDX, KaTeX CSS and simulations load here only)
+const play = createRoute({ getParentRoute: () => root, id: '_play', component: () => <Outlet /> });
+const playLevel = createRoute({
+  getParentRoute: () => play,
+  path: 'play/$levelId',
+  component: lazyRouteComponent(() => import('@/play/LessonChamber'), 'LessonChamber'),
+});
+
 export const routeTree = root.addChildren([
   world.addChildren([worldMap, island, stage]),
+  play.addChildren([playLevel]),
   atlas.addChildren([atlasHome, atlasWorld, atlasStage, atlasLevel, gallery]),
 ]);
 export const router = createRouter({ routeTree, defaultPreload: 'intent', scrollRestoration: true });

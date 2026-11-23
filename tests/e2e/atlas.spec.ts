@@ -30,7 +30,7 @@ test('World → Stage → Level navigation with breadcrumbs', async ({ page }) =
     .first()
     .click();
   await expect(page).toHaveURL(/\/atlas\/origins\/number-systems\/binary-numbers$/);
-  await expect(page.getByText('Locked', { exact: true })).toBeVisible();
+  await expect(page.getByText('Locked', { exact: true })).toHaveCount(2); // status tag + disabled Play entry
   await expect(page.getByRole('heading', { name: /CLEAR THESE FIRST \(1\)/ })).toBeVisible();
   await shot(page, '04-level-locked');
   await page.getByRole('navigation', { name: 'Breadcrumb' }).getByRole('link', { name: 'Atlas' }).click();
@@ -88,14 +88,14 @@ test('Gallery renders every component; reduced motion disables button springs', 
   await expect(page.getByRole('heading', { name: 'UI kit gallery' })).toBeVisible();
   await page.evaluate(() => document.fonts.ready);
   await shot(page, '07-gallery');
-  const play = page.getByRole('button', { name: 'PLAY' });
+  const play = page.getByRole('button', { name: 'PLAY', exact: true });
   await play.hover();
   await page.waitForTimeout(400);
   expect(await play.evaluate((el) => getComputedStyle(el).transform)).not.toBe('none');
 
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.reload();
-  const play2 = page.getByRole('button', { name: 'PLAY' });
+  const play2 = page.getByRole('button', { name: 'PLAY', exact: true });
   await play2.hover();
   await page.waitForTimeout(400);
   expect(await play2.evaluate((el) => getComputedStyle(el).transform)).toBe('none');

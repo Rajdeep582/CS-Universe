@@ -25,6 +25,17 @@ Everything a learner studies lives here, split so that **no subject is mixed wit
 | Core Path | `core: true` levels may only require other core levels from the same or an earlier stage |
 | One level, one idea | A level teaches one topic; its test only covers what its lesson teaches |
 
+## Lessons and level tests
+
+A level becomes playable when its folder exists: `worlds/NN-<world>/NN-<stage>/levels/<level-id>/` with two files.
+
+| File | Content |
+|---|---|
+| `lesson.mdx` | Markdown + `<Step id section title>` blocks, one idea per step. Sections in this order, each at least once: `hook`, `intuition`, `formal`, `mechanism`, `worked-example`, `tradeoffs`, `pitfalls`, `context`, `references`. Also available: `<Callout kind="note\|tip\|warning">`, `<Simulation id goal>`, GFM tables, `$…$` / `$$…$$` maths (KaTeX), fenced code (Shiki) |
+| `test.yaml` | `items:` pool (≥ 6). Formats: `mcq`, `numeric`, `predict-output`, `order-steps`, `spot-the-bug`, `match`. Every item names the step it checks with `teaches: <step-id>` and has an `explain` |
+
+Build checks: folder name is a level of that stage; sections present and in order; unique step ids; known simulation ids; every `teaches` points to a step in a tested section (`intuition` → `pitfalls`); each tested section has an item; answer indices valid; no duplicate options. A test draws up to 10 items, at least one per tested section; 70 % clears (★), 90 % earns ★★.
+
 ## Adding a new stage
 
 1. Create `worlds/NN-<world>/NN-<new-stage>/stage.yaml` (copy an existing one).

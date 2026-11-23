@@ -1,0 +1,182 @@
+# Level test for "What Is a Computer?" — every item is linked to the lesson step it checks (teaches).
+items:
+  - id: ipo-definition
+    type: mcq
+    teaches: intuition-ipo
+    prompt: Which sentence best describes what a computer does?
+    options:
+      - It stores files and shows them on a screen.
+      - It takes input, processes it by following instructions, produces output, and keeps instructions and data in memory.
+      - It connects to the internet to find answers.
+      - It understands questions and decides what to do.
+    answer: 1
+    explain: Input → processing (following instructions) → output, with memory holding both the instructions and the working data.
+
+  - id: general-purpose
+    type: mcq
+    teaches: intuition-program
+    prompt: A laptop plays music, then works as a calculator. What changed?
+    options:
+      - Its processor was swapped for a different one.
+      - The program it is running.
+      - Its memory was rewired.
+      - Nothing — it does both at once by design.
+    answer: 1
+    explain: A general-purpose computer keeps the same hardware and runs a different program to do a different job.
+
+  - id: parts-match
+    type: match
+    teaches: formal-definition
+    prompt: Match each part to its job.
+    pairs:
+      - left: CPU
+        right: Fetches instructions and carries them out
+      - left: Memory
+        right: Numbered cells that hold instructions and data
+      - left: Input device
+        right: Brings data into the computer
+      - left: Output device
+        right: Sends results out of the computer
+    explain: The CPU executes; memory holds values at addresses; input and output devices move data in and out.
+
+  - id: alu-role
+    type: mcq
+    teaches: formal-definition
+    prompt: Which part of the CPU performs additions and comparisons?
+    options:
+      - The program counter
+      - The ALU (arithmetic logic unit)
+      - The memory
+      - The output device
+    answer: 1
+    explain: The ALU does arithmetic and logic; the control unit decides what happens next; registers hold a few values.
+
+  - id: stored-program
+    type: mcq
+    teaches: formal-stored-program
+    prompt: In a stored-program computer, where are the program's instructions kept?
+    options:
+      - In the same memory as the data, as ordinary numbers
+      - In the wiring between the parts
+      - Inside the ALU
+      - On the screen
+    answer: 0
+    explain: That is the stored-program idea described in the 1945 EDVAC report — changing the program means changing memory, not rewiring.
+
+  - id: pc-role
+    type: mcq
+    teaches: formal-stored-program
+    prompt: What does the program counter (PC) hold?
+    options:
+      - The number of programs installed
+      - The address of the next instruction to fetch
+      - The result of the last addition
+      - The number of cycles run so far
+    answer: 1
+    explain: The PC tells the CPU where the next instruction is; it moves on after each fetch.
+
+  - id: cycle-order
+    type: order-steps
+    teaches: mechanism-cycle
+    prompt: Put one turn of the CPU's loop in order.
+    steps:
+      - Fetch the instruction at the address in the PC into the IR
+      - Move the PC on to the next address
+      - Decode the instruction
+      - Execute it
+    explain: Fetch (and advance the PC), decode, execute — then fetch again.
+
+  - id: cycles-count
+    type: numeric
+    teaches: mechanism-sim
+    prompt: The Tiny Machine runs LOAD 6, ADD 7, STORE 8, OUT, HALT. How many fetch–decode–execute cycles does it complete before it stops?
+    answer: 5
+    tolerance: 0
+    explain: One cycle per instruction, and the program has five instructions (HALT is executed too).
+
+  - id: predict-sub
+    type: predict-output
+    teaches: worked-example
+    prompt: Memory holds 9 at address 6 and 4 at address 7. What does this program output?
+    language: asm
+    code: |
+      0: LOAD 6
+      1: SUB 7
+      2: OUT
+      3: HALT
+    options:
+      - '13'
+      - '5'
+      - '-5'
+      - Nothing
+    answer: 1
+    explain: ACC ← 9, then ACC ← 9 − 4 = 5, then OUT sends 5.
+
+  - id: trace-store
+    type: numeric
+    teaches: worked-example
+    prompt: Run the five-instruction ADD program with 4 in address 6 and 7 in address 7. What value ends up in address 8?
+    answer: 11
+    tolerance: 0
+    explain: LOAD gives 4, ADD gives 11, STORE 8 writes 11 to address 8.
+
+  - id: spot-wrong-address
+    type: spot-the-bug
+    teaches: worked-example
+    prompt: This program should output the sum of addresses 6 and 7, but it outputs the wrong number. Which line is wrong?
+    language: asm
+    lines:
+      - '0: LOAD 6'
+      - '1: ADD 6'
+      - '2: OUT'
+      - '3: HALT'
+    answer: 1
+    explain: ADD 6 adds address 6 to itself. It should be ADD 7.
+
+  - id: fixed-function
+    type: mcq
+    teaches: tradeoffs
+    prompt: Why do phone chips include a fixed-function block just for decoding video?
+    options:
+      - Because a general-purpose CPU cannot run video software at all
+      - It does that one job much faster and with far less energy, at the cost of doing nothing else
+      - Because it is easier to reprogram
+      - To make the phone general-purpose
+    answer: 1
+    explain: Special-purpose hardware trades flexibility for speed and energy efficiency.
+
+  - id: bottleneck
+    type: mcq
+    teaches: tradeoffs
+    prompt: What is the "von Neumann bottleneck"?
+    options:
+      - A limit on how many programs can be installed
+      - The shared path between CPU and memory, which both instructions and data must travel, limiting speed
+      - The time it takes to switch a computer on
+      - A shortage of memory addresses
+    answer: 1
+    explain: Instructions and data share the CPU–memory path, so that path can limit how fast the CPU can work.
+
+  - id: bits-meaning
+    type: mcq
+    teaches: pitfalls
+    prompt: A memory cell holds a bit pattern. Is it an instruction or a number?
+    options:
+      - Always an instruction
+      - Always a number
+      - It depends on how it is used — fetched via the PC it is an instruction, read as data it is a number
+      - Neither; memory only holds text
+    answer: 2
+    explain: In a stored-program computer both are bit patterns; their role depends on use.
+
+  - id: understands
+    type: mcq
+    teaches: pitfalls
+    prompt: '"The computer understands what my program means." Is this right?'
+    options:
+      - Yes — that is how it knows what to do
+      - No — it mechanically performs each instruction; the meaning is in the people who write and use it
+      - Only for programs written in English
+      - Only modern computers do
+    answer: 1
+    explain: A CPU executes instructions mechanically; it has no grasp of their purpose.

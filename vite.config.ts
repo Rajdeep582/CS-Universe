@@ -2,9 +2,26 @@ import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import { fileURLToPath } from 'node:url';
+import mdx from '@mdx-js/rollup';
+import remarkGfm from 'remark-gfm';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
+import rehypeShiki from '@shikijs/rehype';
 
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  plugins: [
+    // Lessons (content/**/lesson.mdx): GFM tables, KaTeX maths and Shiki highlighting all run at build time.
+    {
+      enforce: 'pre',
+      ...mdx({
+        include: /\.mdx$/,
+        remarkPlugins: [remarkGfm, remarkMath],
+        rehypePlugins: [rehypeKatex, [rehypeShiki, { theme: 'github-dark-default' }]],
+      }),
+    },
+    react({ include: /\.(mdx|tsx|ts|jsx|js)$/ }),
+    tailwindcss(),
+  ],
   resolve: { alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) } },
   build: {
     target: 'es2023',
@@ -23,7 +40,8 @@ export default defineConfig({
             { name: 'router', test: /node_modules[\\/]@tanstack[\\/]/ },
             { name: 'motion', test: /node_modules[\\/](motion|motion-dom|motion-utils|framer-motion)[\\/]/ },
             { name: 'ui-vendor', test: /node_modules[\\/](@radix-ui|cmdk|lucide-react|zustand|clsx)[\\/]/ },
-            { name: 'curriculum', test: /src[\\/]generated[\\/]/ },
+            { name: 'curriculum', test: /src[\\/]generated[\\/]curriculum/ },
+            { name: 'katex', test: /node_modules[\\/]katex[\\/]/ },
           ],
         },
       },

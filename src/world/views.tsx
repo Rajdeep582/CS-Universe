@@ -28,6 +28,7 @@ import { useProgress } from '@/app/useProgress';
 import { stageStatus, worldStatus } from '@/app/derive';
 import { LevelMedallion, ProgressBar, StarRating, Tag } from '@/ui/components';
 import { NotFound } from '@/app/routes/NotFound';
+import { PlayButton } from '@/app/PlayButton';
 import { Label } from './labels';
 import { useStageLayout, useWorldLayout } from './useWorldData';
 import { useViewStore } from './viewStore';
@@ -607,10 +608,11 @@ function LevelPanel({ stageId, levelId }: { stageId: string; levelId: string }) 
       <p className="mt-3 text-[12.5px] font-semibold text-muted">
         Clearing it opens {l.unlocks.length} level{l.unlocks.length === 1 ? '' : 's'}.
       </p>
+      <PlayButton level={l} locked={m === 'locked'} className="mt-4 w-full" />
       <Link
         to="/atlas/$worldId/$stageId/$levelId"
         params={{ worldId: w.id, stageId: s.id, levelId: l.id }}
-        className="gem gem-sky gem-sm mt-4 w-full"
+        className="gem gem-glass gem-sm mt-2 w-full"
       >
         <BookOpen size={16} /> Level details
       </Link>

@@ -5,6 +5,7 @@ import { missingPrerequisites } from '@/engine/progress/availability';
 import { useProgress } from '../useProgress';
 import { Breadcrumbs, GlassPanel, LevelMedallion, StarRating, Tag } from '@/ui/components';
 import { NotFound } from './NotFound';
+import { PlayButton } from '../PlayButton';
 
 function LevelLink({ id }: { id: string }) {
   const { medal } = useProgress();
@@ -109,6 +110,7 @@ export function LevelPage() {
             <StarRating stars={starsOf(l.id) as 0 | 1 | 2 | 3} size={18} />
           </div>
         </div>
+        <PlayButton level={l} locked={m === 'locked'} size="lg" className="flex-none" />
       </GlassPanel>
 
       <div className="grid gap-5 lg:grid-cols-[1fr_380px]">
