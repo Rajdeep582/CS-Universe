@@ -1,0 +1,99 @@
+<Step id="hook" section="hook" title="Two directions, two algorithms">
+
+Reading a binary number as decimal is just adding weights. Going the other way — turning 156 into binary without guessing — needs an algorithm. There is a neat one, and it works for any base.
+
+</Step>
+
+<Step id="intuition-division" section="intuition" title="Peel off the last digit">
+
+In decimal, $156 \div 10 = 15$ remainder **6**: the remainder is the last digit, and the quotient is the number with that digit removed. Dividing by any base $b$ does the same in base $b$: the remainder is the last base-$b$ digit. Repeat on the quotient to peel off the next digit.
+
+</Step>
+
+<Step id="intuition-doubling" section="intuition" title="Building up instead">
+
+Going *to* decimal, Horner's rule builds the value left to right: start at 0, and for each digit, double (in binary) and add the digit. Doubling shifts every bit one place left; adding puts the new bit in the empty space.
+
+</Step>
+
+<Step id="formal-algorithms" section="formal" title="The two algorithms">
+
+**Decimal → base $b$ (repeated division).** While $n > 0$: write down $n \bmod b$, set $n \leftarrow \lfloor n / b \rfloor$. The remainders, read **last to first**, are the digits.
+
+**Base $b$ → decimal (Horner).** $v \leftarrow 0$; for each digit $d$ from left to right: $v \leftarrow v \cdot b + d$.
+
+Each is correct because $n = b \cdot \lfloor n/b \rfloor + (n \bmod b)$.
+
+</Step>
+
+<Step id="formal-fractions" section="formal" title="Fractions go the other way">
+
+For the fractional part, **multiply** by the base instead: the integer part of the product is the next digit after the point.
+
+$0.625 \times 2 = 1.25$ → 1; $0.25 \times 2 = 0.5$ → 0; $0.5 \times 2 = 1.0$ → 1. So $0.625 = 0.101_2$.
+
+Some decimals never terminate in binary: $0.1 = 0.0\overline{0011}_2$ (0.000110011…), because $1/10$ has a factor of 5 in its denominator.
+
+</Step>
+
+<Step id="mechanism-sim" section="mechanism" title="Watch repeated division">
+
+Pick a number and a base; read the remainders from the bottom up, then check the result with place values.
+
+<Simulation id="base-converter" value={156} base={2} target="2026:16" goal="Convert 2026 to base 16." />
+
+</Step>
+
+<Step id="worked-example" section="worked-example" title="156 to binary, and back">
+
+| n | n ÷ 2 | remainder |
+|---|---|---|
+| 156 | 78 | 0 |
+| 78 | 39 | 0 |
+| 39 | 19 | 1 |
+| 19 | 9 | 1 |
+| 9 | 4 | 1 |
+| 4 | 2 | 0 |
+| 2 | 1 | 0 |
+| 1 | 0 | 1 |
+
+Bottom to top: $156 = 10011100_2$.
+
+Back with Horner on 1 0 0 1 1 1 0 0: 1 → 2 → 4 → 9 → 19 → 39 → 78 → 156 ✓.
+
+</Step>
+
+<Step id="tradeoffs" section="tradeoffs" title="Which method when?">
+
+| Method | Best for |
+|---|---|
+| Subtract the largest power (previous level) | Small numbers, mental arithmetic |
+| Repeated division | Any size, any base, easy to program |
+| Horner | Reading a numeral into a machine — one multiply-add per digit |
+| Grouping bits (next level) | Binary ↔ octal/hex, no arithmetic at all |
+
+</Step>
+
+<Step id="pitfalls" section="pitfalls" title="Common misconceptions">
+
+<Callout kind="warning">**Reading the remainders top to bottom.** The first remainder is the *least* significant digit. Read bottom to top.</Callout>
+
+<Callout kind="warning">**Dividing the fractional part.** For digits after the point, multiply by the base; dividing only works for the integer part.</Callout>
+
+<Callout kind="warning">**"0.1 is stored exactly."** In binary 0.1 repeats forever; any finite-width binary format stores an approximation. This is the root of many floating-point surprises.</Callout>
+
+</Step>
+
+<Step id="context" section="context" title="Inside your computer">
+
+Every time a program prints a number, a conversion routine runs a version of repeated division; every time it reads one from text, it runs Horner's rule. Turning floating-point numbers into the *shortest* decimal that reads back exactly is a surprisingly hard problem with its own research papers.
+
+</Step>
+
+<Step id="references" section="references" title="Go deeper">
+
+- Knuth, *The Art of Computer Programming*, Vol. 2, 3rd ed., §4.4 "Radix Conversion".
+- Patt & Patel, *Introduction to Computing Systems*, 3rd ed., §2.4.
+- Bryant & O'Hallaron, *CS:APP*, 3rd ed., §2.1.1 and practice problems.
+
+</Step>

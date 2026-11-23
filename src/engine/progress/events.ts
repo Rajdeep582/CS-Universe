@@ -4,15 +4,15 @@ import { z } from 'zod';
  * The learner's history: an append-only log. Every number the game shows (XP, stars, ranks,
  * reviews, streaks, achievements) is derived by replaying it, so it can be exported, restored and audited.
  */
-const base = {
+const when = {
   /** Epoch milliseconds. */
   at: z.number().int().nonnegative(),
   /** Local calendar day when the event happened (YYYY-MM-DD). */
   day: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   /** Local hour 0–23. */
   hour: z.int().min(0).max(23),
-  level: z.string().min(1),
 };
+const base = { ...when, level: z.string().min(1) };
 
 export const EventSchema = z.discriminatedUnion('t', [
   z.strictObject({ ...base, t: z.literal('step'), step: z.string().min(1) }),
@@ -28,6 +28,15 @@ export const EventSchema = z.discriminatedUnion('t', [
   z.strictObject({
     ...base,
     t: z.literal('review'),
+    correct: z.int().min(0),
+    total: z.int().min(1),
+    ms: z.int().min(0),
+  }),
+  /** Stage boss exam. */
+  z.strictObject({
+    ...when,
+    t: z.literal('boss'),
+    stage: z.string().min(1),
     correct: z.int().min(0),
     total: z.int().min(1),
     ms: z.int().min(0),

@@ -1,0 +1,99 @@
+items:
+  - id: place-333
+    type: mcq
+    teaches: intuition-place
+    prompt: In 333, what is the leftmost 3 worth?
+    options:
+      - '3'
+      - '30'
+      - '300'
+      - '3,000'
+    answer: 2
+    explain: Third position from the right has weight 10^2 = 100.
+
+  - id: base60
+    type: mcq
+    teaches: intuition-other-bases
+    prompt: Which everyday measurement still shows the Babylonian base 60?
+    options:
+      - Kilograms
+      - Minutes and seconds
+      - Metres
+      - Litres
+    answer: 1
+    explain: 60 seconds per minute, 60 minutes per hour.
+
+  - id: formula
+    type: numeric
+    teaches: formal-def
+    prompt: What is 1011 in base 2, written in decimal?
+    answer: 11
+    explain: 8 + 0 + 2 + 1 = 11.
+
+  - id: digits-base5
+    type: mcq
+    teaches: formal-def
+    prompt: Which digits are allowed in base 5?
+    options:
+      - 1 to 5
+      - 0 to 5
+      - 0 to 4
+      - 0 to 9
+    answer: 2
+    explain: Base b uses digits 0 to b − 1.
+
+  - id: zero-role
+    type: mcq
+    teaches: formal-zero
+    prompt: Why does positional notation need a zero digit?
+    options:
+      - To make numbers look longer
+      - To mark an empty position, so 302 and 32 are different
+      - Because computers need it
+      - To represent negative numbers
+    answer: 1
+    explain: Zero is a placeholder that keeps the other digits in their positions.
+
+  - id: horner-order
+    type: order-steps
+    teaches: mechanism-horner
+    prompt: Order the running values when evaluating 4521 (base 10) with Horner's rule.
+    steps:
+      - '4'
+      - 4 × 10 + 5 = 45
+      - 45 × 10 + 2 = 452
+      - 452 × 10 + 1 = 4521
+    explain: Multiply by the base, then add the next digit.
+
+  - id: base3
+    type: numeric
+    teaches: worked-example
+    prompt: What is 212 in base 3, in decimal?
+    answer: 23
+    explain: 2·9 + 1·3 + 2 = 23.
+
+  - id: base8-val
+    type: numeric
+    teaches: worked-example
+    prompt: What is 17 in base 8, in decimal?
+    answer: 15
+    explain: 1·8 + 7 = 15.
+
+  - id: tradeoff
+    type: mcq
+    teaches: tradeoffs
+    prompt: What is a disadvantage of base 2 compared with base 10?
+    options:
+      - It needs more digit symbols
+      - Numerals are much longer
+      - Its addition table is bigger
+      - It cannot represent large numbers
+    answer: 1
+    explain: Each binary digit carries less, so more digits are needed.
+
+  - id: ten-means
+    type: numeric
+    teaches: pitfalls
+    prompt: What is the value of "10" written in base 16?
+    answer: 16
+    explain: The numeral 10 in any base equals the base itself.

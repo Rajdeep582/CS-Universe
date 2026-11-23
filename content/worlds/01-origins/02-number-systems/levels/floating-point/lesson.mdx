@@ -1,0 +1,101 @@
+<Step id="hook" section="hook" title="From atoms to galaxies in 32 bits">
+
+The mass of an electron is about $9.1 \times 10^{-31}$ kg; the mass of the Sun about $2 \times 10^{30}$ kg. Fixed point cannot hold both in any reasonable width. Scientists solved this centuries ago with **scientific notation** — and IEEE 754 floating point is scientific notation in binary.
+
+</Step>
+
+<Step id="intuition-sci" section="intuition" title="Significant digits plus an exponent">
+
+$6.02 \times 10^{23}$ stores a few **significant digits** (6.02) and a **power** (23). The point "floats" to wherever the exponent puts it. You keep the same number of significant digits whether the number is tiny or huge: precision is **relative**, not absolute.
+
+In binary: $-6.25 = -110.01_2 = -1.1001_2 \times 2^{2}$.
+
+</Step>
+
+<Step id="formal-layout" section="formal" title="The binary32 and binary64 layouts">
+
+| Format | Sign | Exponent | Fraction | Bias | Precision |
+|---|---|---|---|---|---|
+| binary32 ("float") | 1 bit | 8 bits | 23 bits | 127 | 24 significant bits ≈ 7 decimal digits |
+| binary64 ("double") | 1 bit | 11 bits | 52 bits | 1023 | 53 bits ≈ 15–16 decimal digits |
+
+For a **normal** number, with stored exponent field $e$ and fraction field $f$:
+
+$$
+v = (-1)^{s} \times 1.f_2 \times 2^{\,e - \text{bias}}
+$$
+
+The leading 1 is **not stored** (the "hidden bit"), which buys one extra bit of precision.
+
+</Step>
+
+<Step id="formal-special" section="formal" title="Special values">
+
+| Exponent field | Fraction | Meaning |
+|---|---|---|
+| all 0 | 0 | ±0 (two zeros exist) |
+| all 0 | ≠ 0 | **Subnormal**: $(-1)^s \times 0.f \times 2^{1-\text{bias}}$ — gradual underflow toward 0 |
+| 1 … 254 (binary32) | any | Normal number |
+| all 1 | 0 | ±∞ (e.g. 1/0) |
+| all 1 | ≠ 0 | **NaN** — "not a number" (e.g. 0/0, √−1) |
+
+Largest binary32 ≈ $3.4 \times 10^{38}$; smallest normal ≈ $1.18 \times 10^{-38}$; smallest subnormal $2^{-149} \approx 1.4 \times 10^{-45}$.
+
+</Step>
+
+<Step id="mechanism-sim" section="mechanism" title="Inside a float">
+
+Toggle the sign, exponent and fraction bits, or type a number and see the pattern the hardware stores — including the exact value it really holds.
+
+<Simulation id="float-explorer" target="0.1" goal="Type 0.1 and find out what is really stored." />
+
+</Step>
+
+<Step id="worked-example" section="worked-example" title="Encoding −6.25 by hand">
+
+1. Binary: $6.25 = 110.01_2$.
+2. Normalise: $1.1001_2 \times 2^2$.
+3. Sign $s = 1$ (negative).
+4. Exponent field $e = 2 + 127 = 129 = 1000\,0001_2$.
+5. Fraction: the bits after the leading 1 → `1001` followed by 19 zeros.
+
+Bits: `1 | 10000001 | 10010000000000000000000` = **0xC0C80000**.
+
+Decoding goes in reverse: $(-1)^1 \times 1.1001_2 \times 2^{129-127} = -1.5625 \times 4 = -6.25$ ✓.
+
+</Step>
+
+<Step id="tradeoffs" section="tradeoffs" title="What floating point trades">
+
+| Gains | Costs |
+|---|---|
+| Enormous range in few bits | Most decimal fractions (0.1, 0.2 …) are only approximated |
+| Constant *relative* precision | Gaps between neighbouring values grow with magnitude: above $2^{24}$ a float cannot represent every integer |
+| Standard behaviour on every platform (IEEE 754) | Rounding makes algebra laws fail — see the next level |
+
+</Step>
+
+<Step id="pitfalls" section="pitfalls" title="Common misconceptions">
+
+<Callout kind="warning">**"The exponent field is the exponent."** It is stored with a **bias**: field 127 means $2^0$ in binary32.</Callout>
+
+<Callout kind="warning">**"A float holds 32 bits of precision."** Only 24 significant bits (23 stored + hidden 1); the other bits are sign and exponent.</Callout>
+
+<Callout kind="warning">**"Floats can store every integer up to $3.4 \times 10^{38}$."** Every integer is exact only up to $2^{24} = 16{,}777{,}216$; $16{,}777{,}217$ rounds to $16{,}777{,}216$. For doubles the limit is $2^{53}$.</Callout>
+
+</Step>
+
+<Step id="context" section="context" title="A standard that ended chaos">
+
+Before 1985 every manufacturer had its own floating-point format, and the same program gave different answers on different machines. William Kahan led the work on **IEEE 754-1985**, revised in 2008 and 2019; Kahan received the 1989 Turing Award for it. GPUs and machine learning also use smaller formats: binary16 ("half") and bfloat16.
+
+</Step>
+
+<Step id="references" section="references" title="Go deeper">
+
+- IEEE Std 754-2019, *IEEE Standard for Floating-Point Arithmetic*.
+- Bryant & O'Hallaron, *CS:APP*, 3rd ed., §2.4.2–2.4.4.
+- Patterson & Hennessy, *COD* RISC-V ed., §3.5 "Floating Point".
+- David Goldberg, "What Every Computer Scientist Should Know About Floating-Point Arithmetic", *ACM Computing Surveys* 23(1), 1991.
+
+</Step>

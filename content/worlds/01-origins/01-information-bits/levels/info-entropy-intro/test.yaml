@@ -1,0 +1,101 @@
+items:
+  - id: certain
+    type: mcq
+    teaches: intuition-surprise
+    prompt: How much information does learning a certain outcome give?
+    options:
+      - 0 bits
+      - 1 bit
+      - Infinite bits
+      - It depends on the encoding
+    answer: 0
+    explain: You already knew it, so nothing new is learned.
+
+  - id: die8
+    type: numeric
+    teaches: intuition-surprise
+    prompt: How many bits of information is the result of one roll of a fair 8-sided die?
+    answer: 3
+    explain: 8 = 2^3 equally likely outcomes.
+
+  - id: self-info
+    type: numeric
+    teaches: formal-self-info
+    prompt: An outcome has probability 1/16. How many bits of information does it carry?
+    answer: 4
+    explain: −log2(1/16) = 4.
+
+  - id: max-entropy
+    type: mcq
+    teaches: formal-entropy
+    prompt: For a source with n outcomes, when is the entropy largest?
+    options:
+      - When one outcome is certain
+      - When all outcomes are equally likely — then H = log2 n
+      - When n is odd
+      - Entropy is the same for every distribution
+    answer: 1
+    explain: Uniform probabilities maximise uncertainty.
+
+  - id: limit
+    type: mcq
+    teaches: mechanism-coding
+    prompt: What does the source coding theorem say?
+    options:
+      - Every file can be halved in size
+      - No lossless code can average fewer than H bits per symbol, and codes can get close to H
+      - Variable-length codes are always longer
+      - Entropy is the size of the file in bytes
+    answer: 1
+    explain: Entropy is the lower bound for lossless compression.
+
+  - id: short-codes
+    type: mcq
+    teaches: mechanism-coding
+    prompt: In an efficient variable-length code, which symbols get the shortest codewords?
+    options:
+      - The rarest
+      - The most frequent
+      - Those earliest in the alphabet
+      - All the same length
+    answer: 1
+    explain: Short codes for frequent symbols minimise the average length.
+
+  - id: coin
+    type: numeric
+    teaches: worked-example
+    prompt: What is the entropy of a fair coin, in bits?
+    answer: 1
+    explain: −(0.5 log2 0.5 + 0.5 log2 0.5) = 1.
+
+  - id: biased
+    type: numeric
+    teaches: worked-example
+    prompt: A coin lands heads 90 % of the time. What is its entropy in bits? (Answer to two decimal places.)
+    answer: 0.47
+    tolerance: 0.01
+    explain: −(0.9 log2 0.9 + 0.1 log2 0.1) ≈ 0.469.
+
+  - id: varlen-cost
+    type: mcq
+    teaches: tradeoffs
+    prompt: What is a weakness of variable-length codes compared with fixed-length codes?
+    options:
+      - They are always longer on average
+      - Symbols cannot be located by position, and a flipped bit can garble what follows
+      - They cannot represent rare symbols
+      - They need a fair coin to decode
+    answer: 1
+    explain: Boundaries depend on decoding everything before.
+
+  - id: encrypted
+    type: mcq
+    teaches: pitfalls
+    prompt: Why do encrypted files hardly compress?
+    options:
+      - Encryption adds a password
+      - Good encryption output looks random — near maximum entropy — so there is no redundancy to remove
+      - Compressors refuse encrypted files
+      - Encrypted files are already small
+    answer: 1
+    explain: Compression removes redundancy; random-looking data has none.

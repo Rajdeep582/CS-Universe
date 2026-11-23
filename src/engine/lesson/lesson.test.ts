@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { compileLesson, parseLesson } from './compile';
-import { answerText, drawTest, gradeTest, isCorrect, seedFor, testXp, type Presented } from './testEngine';
+import { answerText, drawBoss, drawTest, gradeTest, isCorrect, seedFor, testXp, type Presented } from './testEngine';
 import { SECTIONS, type Item, type StepMeta } from './schema';
 
 const mdx =
@@ -154,5 +154,26 @@ describe('level test engine', () => {
     expect(testXp(r(7), 2, 0)).toBe(35 + 50);
     expect(testXp(r(10), 3, 1)).toBe(50 + 25);
     expect(testXp(r(5), 1, 0)).toBe(50);
+  });
+});
+
+describe('boss exam draw', () => {
+  const src = (levelId: string, core: boolean, n: number) => ({
+    levelId,
+    core,
+    steps,
+    pool: Array.from({ length: n }, (_, i) => mcq(`${levelId}-${i}`, 'intuition-a')),
+  });
+  it('covers every core level, fills to 15 and keeps stage order', () => {
+    const sources = [src('a', true, 4), src('b', false, 4), src('c', true, 4), src('d', true, 4), src('e', true, 4)];
+    const d = drawBoss(sources, 9);
+    expect(d).toHaveLength(15);
+    for (const l of ['a', 'c', 'd', 'e']) expect(d.some((p) => p.levelId === l)).toBe(true);
+    const idx = d.map((p) => 'abcde'.indexOf(p.levelId));
+    expect([...idx].sort((x, y) => x - y)).toEqual(idx);
+    expect(new Set(d.map((p) => `${p.levelId}:${p.item.id}`)).size).toBe(15);
+  });
+  it('uses everything when the stage is small', () => {
+    expect(drawBoss([src('a', true, 3), src('b', true, 2)], 1)).toHaveLength(5);
   });
 });

@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { Award, Sparkles, Target } from 'lucide-react';
+import { Award, Castle, Globe2, Sparkles, Target } from 'lucide-react';
 import { useLearner, type Reward } from '@/engine/progress/learner';
 import { achievementById } from '@/engine/progress/achievements';
 import { DAILY_GOALS } from '@/engine/progress/replay';
 import { rankFor } from '@/engine/progress/ranks';
-import { BigCelebration } from './BigCelebration';
+import { BigCelebration, TIER_SPEC, type BigTier } from './BigCelebration';
+import { stageById, worldById } from '@/engine/content';
 import { RankBadge } from './RankBadge';
 import { useCalm } from './useCalm';
 
@@ -19,14 +20,14 @@ interface Toast {
 
 /**
  * Turns rewards from the event log into the celebration hierarchy:
- * micro (XP chip) → toasts (studied, goals, achievements) → full-screen rank-up.
+ * micro (XP chip) → toasts (studied, goals, achievements) → full-screen rank-up < stage clear < world complete.
  * Level clears and mastery are celebrated by their own result screens.
  */
 export function RewardHost() {
   const calm = useCalm();
   const [chips, setChips] = useState<{ id: number; xp: number }[]>([]);
   const [toasts, setToasts] = useState<Toast[]>([]);
-  const [rank, setRank] = useState<string | null>(null);
+  const [big, setBig] = useState<Big[]>([]);
 
   useEffect(() => {
     // Rewards arrive from the store (an external system to this component): subscribe and drain the queue.
@@ -37,7 +38,7 @@ export function RewardHost() {
       useLearner.setState((st) => ({ rewards: st.rewards.filter((r) => !ids.has(r.id)) }));
       const chipsAdd: { id: number; xp: number }[] = [];
       const toastsAdd: Toast[] = [];
-      let newRank: string | null = null;
+      const bigAdd: Big[] = [];
       for (const r of rewards as Reward[]) {
         if ((r.event.t === 'step' || r.event.t === 'sim') && r.xp) {
           const goalXp = r.entries
@@ -73,12 +74,16 @@ export function RewardHost() {
               text: a.text,
             });
           }
-          if (e.kind === 'rank') newRank = e.ref!;
+          if (e.kind === 'boss') bigAdd.push({ id: `${r.id}b`, tier: 'stage', ref: e.ref!, xp: e.xp });
+          if (e.kind === 'world') bigAdd.push({ id: `${r.id}w`, tier: 'world', ref: e.ref!, xp: e.xp });
+          if (e.kind === 'rank') bigAdd.push({ id: `${r.id}r${e.ref}`, tier: 'rank', ref: e.ref!, xp: 0 });
         }
       }
       if (chipsAdd.length) setChips((c) => [...c, ...chipsAdd]);
       if (toastsAdd.length) setToasts((t) => [...t, ...toastsAdd]);
-      if (newRank) setRank(newRank);
+      // Biggest first: world, then stage, then rank (03 §6).
+      const weight = { world: 0, stage: 1, rank: 2 } as const;
+      if (bigAdd.length) setBig((b) => [...b, ...bigAdd.sort((x, y) => weight[x.tier] - weight[y.tier])]);
     };
     drain(useLearner.getState().rewards);
     return useLearner.subscribe((st, prev) => st.rewards !== prev.rewards && drain(st.rewards));
@@ -95,7 +100,8 @@ export function RewardHost() {
     return () => clearTimeout(t);
   }, [toasts]);
 
-  const r = rank ? rankFor(useLearner.getState().xp) : null;
+  const cur = big[0];
+  const close = () => setBig((b) => b.slice(1));
   return (
     <>
       <div aria-live="polite" className="pointer-events-none fixed left-[150px] top-[96px] z-50">
@@ -149,21 +155,68 @@ export function RewardHost() {
           ))}
         </AnimatePresence>
       </div>
-      {rank && r ? (
-        <BigCelebration
-          tier="rank"
-          kicker="RANK UP"
-          title={rank}
-          text={
-            r.next
-              ? `Rank ${r.number} of 16. ${(r.next.xp - useLearner.getState().xp).toLocaleString('en-US')} XP to ${r.next.name}.`
-              : 'The highest rank in the universe.'
-          }
-          badge={<RankBadge name={rank} size={TIER_BADGE} />}
-          onClose={() => setRank(null)}
-        />
-      ) : null}
+      {cur ? <BigFor key={cur.id} big={cur} onClose={close} /> : null}
     </>
   );
 }
-const TIER_BADGE = 170;
+
+interface Big {
+  id: string;
+  tier: BigTier;
+  ref: string;
+  xp: number;
+}
+
+function BigFor({ big, onClose }: { big: Big; onClose: () => void }) {
+  if (big.tier === 'rank') {
+    const r = rankFor(useLearner.getState().xp);
+    return (
+      <BigCelebration
+        tier="rank"
+        kicker="RANK UP"
+        title={big.ref}
+        text={
+          r.next
+            ? `Rank ${r.number} of 16. ${(r.next.xp - useLearner.getState().xp).toLocaleString('en-US')} XP to ${r.next.name}.`
+            : 'The highest rank in the universe.'
+        }
+        badge={<RankBadge name={big.ref} size={TIER_SPEC.rank.badge * 0.85} />}
+        onClose={onClose}
+      />
+    );
+  }
+  if (big.tier === 'stage') {
+    const st = stageById.get(big.ref);
+    return (
+      <BigCelebration
+        tier="stage"
+        kicker="STAGE CLEAR · BOSS BEATEN"
+        title={st?.title ?? big.ref}
+        text={`${st?.boss.title ?? 'The boss'} falls and the castle flag rises. +${big.xp.toLocaleString('en-US')} XP.`}
+        badge={
+          <Castle
+            size={TIER_SPEC.stage.badge * 0.7}
+            className="text-gold-1 drop-shadow-[0_6px_24px_rgb(255_200_60/.7)]"
+          />
+        }
+        onClose={onClose}
+      />
+    );
+  }
+  const w = worldById.get(big.ref);
+  return (
+    <BigCelebration
+      tier="world"
+      kicker="WORLD COMPLETE"
+      title={w?.biome ?? big.ref}
+      text={`Every stage of ${w?.title ?? 'this world'} is done. The sea route to the next island turns gold. +${big.xp.toLocaleString('en-US')} XP.`}
+      badge={
+        <Globe2
+          size={TIER_SPEC.world.badge * 0.7}
+          className="text-gold-1 drop-shadow-[0_6px_30px_rgb(255_200_60/.8)]"
+        />
+      }
+      onClose={onClose}
+    />
+  );
+}

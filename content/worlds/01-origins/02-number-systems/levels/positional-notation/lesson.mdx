@@ -1,0 +1,106 @@
+<Step id="hook" section="hook" title="Why MMXXVI is hard to multiply">
+
+Try multiplying MMXXVI by XLVII using only Roman numerals. Now try 2026 × 47 on paper. The second is easy because each digit's **position** tells you its value. That idea — positional notation — is what makes arithmetic mechanical, for people and for machines.
+
+</Step>
+
+<Step id="intuition-place" section="intuition" title="Position decides value">
+
+In 333 the three 3s mean different things: three hundreds, three tens, three ones. Moving one place left multiplies a digit's worth by ten. The digit says *how many*; the position says *of what*.
+
+</Step>
+
+<Step id="intuition-other-bases" section="intuition" title="Ten is not special">
+
+We count in tens probably because we have ten fingers. Babylonian astronomers used base 60 — which survives in 60 minutes per hour and 360 degrees in a circle. Computers use base 2. Any whole number b ≥ 2 can be a **base** (or **radix**).
+
+</Step>
+
+<Step id="formal-def" section="formal" title="The positional formula">
+
+In base $b$, digits are $0, 1, \dots, b-1$. A numeral $d_{n-1} \dots d_1 d_0$ has value
+
+$$
+\sum_{i=0}^{n-1} d_i \, b^{i} = d_{n-1} b^{n-1} + \dots + d_1 b + d_0 .
+$$
+
+The rightmost digit has weight $b^0 = 1$. We write the base as a subscript when it is not obvious: $101_2 = 5_{10}$.
+
+</Step>
+
+<Step id="formal-zero" section="formal" title="Zero holds the place">
+
+Positional notation needs a symbol for "nothing in this position": without zero, 302 and 32 would look alike. Zero as a digit came to Europe through Indian and Arabic mathematics (Fibonacci's *Liber Abaci*, 1202, popularised the Hindu–Arabic numerals in Europe).
+
+</Step>
+
+<Step id="mechanism-horner" section="mechanism" title="Evaluating a numeral, digit by digit">
+
+To read a numeral left to right, keep a running value: **multiply by the base, then add the next digit** (Horner's rule). For $2306_{10}$:
+
+| Digit | Running value |
+|---|---|
+| 2 | 2 |
+| 3 | 2 × 10 + 3 = 23 |
+| 0 | 23 × 10 + 0 = 230 |
+| 6 | 230 × 10 + 6 = 2306 |
+
+The same loop works in any base — only the multiplier changes. Try the place-value view below.
+
+<Simulation id="base-converter" value={345} base={10} />
+
+</Step>
+
+<Step id="worked-example" section="worked-example" title="Reading numbers in other bases">
+
+$$
+1101_2 = 1\cdot 8 + 1\cdot 4 + 0\cdot 2 + 1\cdot 1 = 13
+$$
+
+$$
+212_3 = 2\cdot 9 + 1\cdot 3 + 2\cdot 1 = 23
+$$
+
+$$
+1{,}30_{60} \text{ (one hour thirty) } = 1\cdot 60 + 30 = 90 \text{ minutes}
+$$
+
+Check with Horner for $212_3$: 2 → 2·3+1 = 7 → 7·3+2 = 23. ✓
+
+</Step>
+
+<Step id="tradeoffs" section="tradeoffs" title="Big base or small base?">
+
+| Small base (e.g. 2) | Large base (e.g. 60) |
+|---|---|
+| Few digit symbols, simplest hardware | Many symbols to learn and recognise |
+| Long numerals (1,000 needs 10 binary digits) | Short numerals |
+| Tiny arithmetic tables (1 + 1 is the only carry case) | Large tables to memorise |
+
+Computers pick base 2 because two-state hardware is cheap and reliable; people pick base 10 by habit and anatomy.
+
+</Step>
+
+<Step id="pitfalls" section="pitfalls" title="Common misconceptions">
+
+<Callout kind="warning">**"10 always means ten."** "10" means *the base*: $10_2 = 2$, $10_8 = 8$, $10_{16} = 16$.</Callout>
+
+<Callout kind="warning">**"A digit can equal the base."** In base $b$ the largest digit is $b-1$. There is no digit "2" in binary.</Callout>
+
+<Callout kind="warning">**"The leftmost digit has weight $b^n$."** With $n$ digits the leftmost has weight $b^{n-1}$; positions start at 0.</Callout>
+
+</Step>
+
+<Step id="context" section="context" title="Bases you will meet">
+
+Binary (base 2) for hardware, hexadecimal (16) and octal (8) as compact ways to write binary, decimal (10) for people, base 64 for sending binary data as text, and base 60 every time you read a clock.
+
+</Step>
+
+<Step id="references" section="references" title="Go deeper">
+
+- Donald E. Knuth, *The Art of Computer Programming*, Vol. 2, 3rd ed., §4.1 "Positional Number Systems".
+- Petzold, *Code*, 2nd ed., ch. 7–10.
+- Bryant & O'Hallaron, *CS:APP*, 3rd ed., §2.1.
+
+</Step>

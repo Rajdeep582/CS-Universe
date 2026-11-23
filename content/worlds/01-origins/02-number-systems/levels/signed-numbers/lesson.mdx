@@ -1,0 +1,99 @@
+<Step id="hook" section="hook" title="Where do negative numbers go?">
+
+Bits have no minus sign. To store −5 the machine must agree on a *meaning* for some bit patterns. Three schemes were tried; one won so completely that every processor you will ever use relies on it.
+
+</Step>
+
+<Step id="intuition-sign-bit" section="intuition" title="Idea 1: a sign bit">
+
+The obvious idea — **sign-magnitude** — uses the leftmost bit as a sign (1 = negative) and the rest as the size. In 8 bits, $+5 = 0000\,0101$ and $-5 = 1000\,0101$. Easy to read — but it has two zeros (`0000 0000` and `1000 0000`), and adding a positive to a negative needs special subtraction logic.
+
+</Step>
+
+<Step id="intuition-odometer" section="intuition" title="Idea 2: the odometer">
+
+Roll a 3-digit car odometer back one step from 000 and it shows 999. In 8-bit binary, one below `0000 0000` is `1111 1111`. **Two's complement** simply *declares* that pattern to be −1, the one before it −2, and so on. Then ordinary unsigned addition circuits produce the right signed answers automatically.
+
+</Step>
+
+<Step id="formal-twos" section="formal" title="Two's complement, precisely">
+
+In $n$-bit two's complement the MSB has weight $-2^{n-1}$ instead of $+2^{n-1}$:
+
+$$
+v = -b_{n-1} 2^{n-1} + \sum_{i=0}^{n-2} b_i 2^i
+$$
+
+Range: $-2^{n-1}$ to $2^{n-1} - 1$ — for 8 bits, −128 to 127. There is one zero. The MSB still acts as a sign bit.
+
+**Negation**: invert every bit, then add 1. **Subtraction**: $a - b = a + (\overline{b} + 1)$ — the same adder does both.
+
+</Step>
+
+<Step id="formal-others" section="formal" title="The three schemes compared">
+
+| Pattern (4 bits) | Unsigned | Sign-magnitude | One's complement | Two's complement |
+|---|---|---|---|---|
+| 0111 | 7 | +7 | +7 | +7 |
+| 1000 | 8 | −0 | −7 | −8 |
+| 1011 | 11 | −3 | −4 | −5 |
+| 1111 | 15 | −7 | −0 | −1 |
+
+**One's complement** negates by inverting all bits; it also has two zeros and needs an "end-around carry" when adding.
+
+</Step>
+
+<Step id="mechanism-sim" section="mechanism" title="One pattern, many readings">
+
+Toggle bits, press **Negate**, and watch how the same 8 bits read under each scheme. Try the adder below with a signed value.
+
+<Simulation id="twos-complement" bits={8} target={-100} goal="Make the pattern for −100." />
+
+</Step>
+
+<Step id="worked-example" section="worked-example" title="Encoding −100 in 8 bits">
+
+1. $+100 = 0110\,0100$.
+2. Invert: $1001\,1011$.
+3. Add 1: $1001\,1100$. So $-100 = 1001\,1100$.
+
+Check with the weights: $-128 + 16 + 8 + 4 = -100$ ✓.
+
+**Sign extension**: to widen a two's-complement number, copy the sign bit into the new bits. $-100$ in 16 bits is $1111\,1111\,1001\,1100$.
+
+</Step>
+
+<Step id="tradeoffs" section="tradeoffs" title="Why two's complement won">
+
+| Two's complement gains | Two's complement costs |
+|---|---|
+| One adder for signed, unsigned, addition and subtraction | Asymmetric range: −128 has no +128 partner |
+| A single zero; comparisons with 0 are simple | Patterns are not human-readable (−1 is all ones) |
+
+Sign-magnitude did not disappear entirely: floating-point numbers use a sign bit.
+
+</Step>
+
+<Step id="pitfalls" section="pitfalls" title="Common misconceptions">
+
+<Callout kind="warning">**"Negate by flipping the sign bit."** That is sign-magnitude. In two's complement, invert *all* bits and add 1.</Callout>
+
+<Callout kind="warning">**"−x is always representable if x is."** In 8 bits, $-(-128)$ would be +128, which does not fit; negation gives −128 back.</Callout>
+
+<Callout kind="warning">**"The pattern tells you the sign."** Only with an agreed interpretation: `1111 1111` is 255 unsigned and −1 signed. The bits are the same; the program decides.</Callout>
+
+</Step>
+
+<Step id="context" section="context" title="In real machines">
+
+Early computers such as the UNIVAC 1100 and CDC 6600 used one's complement; essentially all processors since the 1970s use two's complement. The C++20 and C23 standards finally *require* two's complement for signed integers.
+
+</Step>
+
+<Step id="references" section="references" title="Go deeper">
+
+- Bryant & O'Hallaron, *CS:APP*, 3rd ed., §2.2.3 (two's-complement encodings) and §2.2.6 (sign extension).
+- Patterson & Hennessy, *COD* RISC-V ed., §2.4 "Signed and Unsigned Numbers".
+- Patt & Patel, *Introduction to Computing Systems*, 3rd ed., §2.3–2.5.
+
+</Step>

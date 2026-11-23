@@ -107,9 +107,15 @@ const playLevel = createRoute({
   component: lazyRouteComponent(() => import('@/play/LessonChamber'), 'LessonChamber'),
 });
 
+const playBoss = createRoute({
+  getParentRoute: () => play,
+  path: 'boss/$stageId',
+  component: lazyRouteComponent(() => import('@/play/BossArena'), 'BossArena'),
+});
+
 export const routeTree = root.addChildren([
   world.addChildren([worldMap, island, stage]),
-  play.addChildren([playLevel]),
+  play.addChildren([playLevel, playBoss]),
   atlas.addChildren([atlasHome, atlasWorld, atlasStage, atlasLevel, journey, gallery]),
 ]);
 export const router = createRouter({ routeTree, defaultPreload: 'intent', scrollRestoration: true });

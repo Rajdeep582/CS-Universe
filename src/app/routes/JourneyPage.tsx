@@ -2,6 +2,8 @@ import { Link } from '@tanstack/react-router';
 import {
   Award,
   CalendarClock,
+  Castle,
+  Globe2,
   Crown,
   Flame,
   Lock,
@@ -13,7 +15,7 @@ import {
   Trophy,
 } from 'lucide-react';
 import { clsx } from 'clsx';
-import { levelById, stageById, curriculum } from '@/engine/content';
+import { levelById, stageById, worldById, curriculum } from '@/engine/content';
 import { useLearner, starTotal } from '@/engine/progress/learner';
 import { ACHIEVEMENTS, achievementById } from '@/engine/progress/achievements';
 import { DAILY_GOALS, MASTERY_GAP_DAYS, XP, type JournalEntry } from '@/engine/progress/replay';
@@ -40,6 +42,10 @@ function entryText(e: JournalEntry): { icon: React.ReactNode; text: string } {
       return { icon: <Star size={16} />, text: `${lv?.title ?? e.levelId} ★★` };
     case 'mastered':
       return { icon: <Crown size={16} />, text: `Mastered ${lv?.title ?? e.levelId} ★★★` };
+    case 'boss':
+      return { icon: <Castle size={16} />, text: `Beat the ${stageById.get(e.ref!)?.title ?? e.ref} boss` };
+    case 'world':
+      return { icon: <Globe2 size={16} />, text: `Completed ${worldById.get(e.ref!)?.biome ?? e.ref}` };
     case 'rank':
       return { icon: <Trophy size={16} />, text: `Reached the rank of ${e.ref}` };
     case 'achievement':
@@ -381,6 +387,14 @@ export function JourneyPage() {
               <tr>
                 <td>Mastered (review ≥ {MASTERY_GAP_DAYS} days after clearing)</td>
                 <td>+{XP.mastered}</td>
+              </tr>
+              <tr>
+                <td>Stage boss beaten (boss + stage)</td>
+                <td>+{XP.boss + XP.stage}</td>
+              </tr>
+              <tr>
+                <td>World complete (all stage bosses)</td>
+                <td>+{XP.world}</td>
               </tr>
               <tr>
                 <td>Today&apos;s goal</td>

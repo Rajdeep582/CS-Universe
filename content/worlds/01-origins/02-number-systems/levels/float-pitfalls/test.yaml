@@ -1,0 +1,128 @@
+items:
+  - id: why-not-point-three
+    type: mcq
+    teaches: intuition-rounding
+    prompt: Why does 0.1 + 0.2 print 0.30000000000000004 in binary64?
+    options:
+      - A bug in JavaScript
+      - 0.1 and 0.2 are stored approximately, and the sum is rounded to a double just above the one nearest 0.3
+      - Floating point is non-deterministic
+      - The CPU adds incorrectly
+    answer: 1
+    explain: Inputs and result are each rounded to representable values.
+
+  - id: eps
+    type: mcq
+    teaches: formal-epsilon
+    prompt: What is machine epsilon for binary64?
+    options:
+      - 2^−23
+      - 2^−52
+      - 2^−1023
+      - 10^−16 exactly
+    answer: 1
+    explain: 52 fraction bits; ε = 2^−52 ≈ 2.22 × 10^−16.
+
+  - id: ulp-grows
+    type: mcq
+    teaches: formal-epsilon
+    prompt: How does the gap between neighbouring doubles change as numbers get larger?
+    options:
+      - It stays the same
+      - It grows in proportion to the magnitude
+      - It shrinks
+      - It is always 1
+    answer: 1
+    explain: Precision is relative, so absolute gaps grow.
+
+  - id: nan-eq
+    type: mcq
+    teaches: formal-laws
+    prompt: What does NaN == NaN evaluate to?
+    options:
+      - 'true'
+      - 'false'
+      - NaN
+      - It throws an error
+    answer: 1
+    explain: NaN compares unequal to everything, itself included.
+
+  - id: assoc
+    type: mcq
+    teaches: formal-laws
+    prompt: Which algebraic law does floating-point addition break?
+    options:
+      - Commutativity (a + b = b + a)
+      - Associativity ((a + b) + c = a + (b + c))
+      - Identity (a + 0 = a)
+      - None
+    answer: 1
+    explain: Rounding after each addition makes grouping matter. Floating-point addition is still commutative.
+
+  - id: lost
+    type: numeric
+    teaches: mechanism-trace
+    prompt: In binary64, what is (1e16 + 1) − 1e16?
+    answer: 0
+    explain: Near 10^16 doubles are 2 apart, so the 1 is rounded away.
+
+  - id: kahan
+    type: mcq
+    teaches: mechanism-trace
+    prompt: What does Kahan summation do?
+    options:
+      - Sorts the numbers first
+      - Tracks the low-order bits lost in each addition and adds them back
+      - Uses integers instead of floats
+      - Rounds every result down
+    answer: 1
+    explain: A compensation term carries the rounding error forward.
+
+  - id: compare
+    type: spot-the-bug
+    teaches: worked-example
+    prompt: Which line makes this check unreliable?
+    language: js
+    lines:
+      - 'const total = 0.1 + 0.2;'
+      - 'if (total === 0.3) {'
+      - '  console.log("equal");'
+      - '}'
+    answer: 1
+    explain: Exact equality on computed floats fails; compare with a relative tolerance.
+
+  - id: tolerance
+    type: mcq
+    teaches: worked-example
+    prompt: Why does a good float comparison combine a relative and an absolute tolerance?
+    options:
+      - To make it slower
+      - A relative tolerance scales with the values; an absolute floor handles values near zero
+      - Absolute tolerances never work
+      - Because NaN needs it
+    answer: 1
+    explain: Relative alone fails at 0; absolute alone fails for large numbers.
+
+  - id: money
+    type: mcq
+    teaches: tradeoffs
+    prompt: Which is the best way to store prices in a shop's database?
+    options:
+      - binary64 dollars
+      - binary32 dollars
+      - Integer cents, or a decimal type
+      - Strings
+    answer: 2
+    explain: Binary floats cannot store 0.10 exactly.
+
+  - id: isnan
+    type: mcq
+    teaches: pitfalls
+    prompt: How should you test whether x is NaN in JavaScript?
+    options:
+      - x === NaN
+      - Number.isNaN(x)
+      - x == undefined
+      - x < 0
+    answer: 1
+    explain: Equality with NaN is always false.

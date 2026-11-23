@@ -224,11 +224,13 @@ function ItemBody({
 interface Props {
   presented: Presented[];
   steps: StepMeta[];
+  /** Where an item's step lives, when items come from several lessons (boss exams). */
+  sourceOf?: (p: Presented) => { step: StepMeta; level?: string };
   onFinish: (responses: Response[]) => void;
 }
 
 /** One question at a time: answer → check → feedback (with the lesson step it came from) → next. */
-export function TestRunner({ presented, steps, onFinish }: Props) {
+export function TestRunner({ presented, steps, sourceOf, onFinish }: Props) {
   const [i, setI] = useState(0);
   const [drafts, setDrafts] = useState<Draft[]>(() => presented.map(initialDraft));
   const [responses, setResponses] = useState<Response[]>([]);
@@ -237,7 +239,8 @@ export function TestRunner({ presented, steps, onFinish }: Props) {
   const checked = responses.length > i;
   const response = toResponse(p, drafts[i]!);
   const right = checked && isCorrect(p.item, responses[i]!);
-  const step = steps.find((s) => s.id === p.item.teaches)!;
+  const src = sourceOf ? sourceOf(p) : { step: steps.find((s) => s.id === p.item.teaches)! };
+  const step = src.step;
   useEffect(() => heading.current?.focus(), [i]);
 
   const submit = (e: FormEvent) => {
@@ -261,7 +264,7 @@ export function TestRunner({ presented, steps, onFinish }: Props) {
         >
           {presented.map((q, k) => (
             <span
-              key={q.item.id}
+              key={k}
               className={clsx(
                 'h-2 flex-1 rounded-full',
                 k < responses.length
@@ -305,7 +308,10 @@ export function TestRunner({ presented, steps, onFinish }: Props) {
             </p>
           ) : null}
           <p className="mt-1.5 text-[14px] font-medium">{p.item.explain}</p>
-          <p className="mt-2 text-[12.5px] font-bold opacity-80">Taught in: {step.title}</p>
+          <p className="mt-2 text-[12.5px] font-bold opacity-80">
+            Taught in: {src.level ? `${src.level} · ` : ''}
+            {step.title}
+          </p>
         </div>
       ) : null}
       <div className="flex justify-end">

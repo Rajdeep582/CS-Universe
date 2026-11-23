@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import lessonsJson from '@/generated/lessons.json';
 import type { LessonMeta } from '../lesson/schema';
+import { stageById, worldById } from '../content';
 import { SAVE_VERSION, SaveFileSchema, stamp, type EventInput, type LearnerEvent, type SaveFile } from './events';
 import {
   EMPTY_STATE,
@@ -22,6 +23,8 @@ const contextFor = (p: Pick<Prefs, 'retention' | 'dailyGoals'>): ReplayContext =
   retention: p.retention,
   dailyGoals: p.dailyGoals,
   stepsOf,
+  worldOfStage: (id) => stageById.get(id)?.worldId,
+  stagesOfWorld: (id) => worldById.get(id)?.stageIds ?? [],
 });
 
 /** Something the learner just earned, for the celebration layer. */

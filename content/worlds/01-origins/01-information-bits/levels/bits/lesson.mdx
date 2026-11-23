@@ -1,0 +1,103 @@
+<Step id="hook" section="hook" title="Twenty questions">
+
+In the game *Twenty Questions*, each yes/no answer halves what is left. Twenty answers can single out one item from over a million ($2^{20} = 1{,}048{,}576$).
+
+Each answer is worth exactly one **bit**.
+
+</Step>
+
+<Step id="intuition-bit" section="intuition" title="One bit, one choice between two">
+
+A **bit** (*binary digit*) is the smallest unit of information: one choice between two equally likely possibilities, written **0** or **1**. Yes/no, on/off, true/false, heads/tails — any two-way choice can be stored in one bit.
+
+</Step>
+
+<Step id="intuition-doubling" section="intuition" title="Every extra bit doubles the possibilities">
+
+One bit gives 2 patterns. Add a bit and each old pattern can be followed by 0 or by 1, so the count doubles:
+
+| Bits | Patterns |
+|---|---|
+| 1 | 0, 1 — 2 |
+| 2 | 00, 01, 10, 11 — 4 |
+| 3 | 000 … 111 — 8 |
+| 8 | 256 |
+| 10 | 1,024 |
+| 32 | 4,294,967,296 |
+
+</Step>
+
+<Step id="formal-count" section="formal" title="Patterns and the bits you need">
+
+**n bits give exactly $2^n$ distinct patterns.**
+
+Going the other way: to give each of **k** things its own pattern you need
+
+$$
+n = \lceil \log_2 k \rceil
+$$
+
+bits — the smallest $n$ with $2^n \ge k$. For example, 26 letters need $\lceil \log_2 26 \rceil = 5$ bits, because $2^4 = 16$ is too few and $2^5 = 32$ is enough.
+
+</Step>
+
+<Step id="formal-msb" section="formal" title="Naming the bits">
+
+In a row of bits, the bit worth the most is the **most significant bit (MSB)**, written on the left; the one worth the least is the **least significant bit (LSB)**, on the right. Bits are usually numbered from 0 at the LSB. These names will matter when bit patterns become numbers.
+
+</Step>
+
+<Step id="mechanism-board" section="mechanism" title="Patterns on a bit board">
+
+Each switch below is a bit. Flip them to see how many patterns a few bits can make, and how each new bit doubles the range. (The numbers under each bit come from the next stage, Number Systems — for now, just watch how the count of possibilities grows.)
+
+<Simulation id="binary-board" bits={6} target={63} goal="Turn on all six bits — the largest of the 64 patterns." />
+
+</Step>
+
+<Step id="worked-example" section="worked-example" title="Sizing a code">
+
+**Days of the week** (7): $2^2 = 4$ is too few, $2^3 = 8$ is enough → **3 bits**, with one pattern unused.
+
+**Students in a school of 1,200**: $2^{10} = 1{,}024$ is too few, $2^{11} = 2{,}048$ → **11 bits**.
+
+**Unused patterns**: a 3-bit day code uses 7 of 8 patterns. That spare pattern is not wasted — it can mean "no day" or flag an error.
+
+</Step>
+
+<Step id="tradeoffs" section="tradeoffs" title="Fixed width: room versus space">
+
+Computers store values in a **fixed number of bits**. Choosing the width is a trade-off:
+
+| Wider | Narrower |
+|---|---|
+| Room for more values and future growth | Saves memory and bandwidth, faster to move |
+| Wastes space if values stay small | Runs out — a 16-bit counter wraps after 65,535 |
+
+Many famous bugs come from widths chosen too small, as you will see with overflow.
+
+</Step>
+
+<Step id="pitfalls" section="pitfalls" title="Common misconceptions">
+
+<Callout kind="warning">**"n bits can count up to n."** No — n bits give $2^n$ patterns. Eight bits give 256, not 8.</Callout>
+
+<Callout kind="warning">**"Adding one bit adds one more value."** It *doubles* the number of values.</Callout>
+
+<Callout kind="warning">**"log₂ k gives the bits exactly."** Only when k is a power of two. Otherwise round **up**: 26 letters need 5 bits, not 4.7.</Callout>
+
+</Step>
+
+<Step id="context" section="context" title="Bits everywhere">
+
+A 24-bit colour pixel holds one of $2^{24} \approx 16.7$ million colours. An IPv4 address is 32 bits (about 4.3 billion addresses — fewer than the devices now online, one reason IPv6 uses 128 bits). The word *bit* first appeared in print in Shannon's 1948 paper.
+
+</Step>
+
+<Step id="references" section="references" title="Go deeper">
+
+- Patt & Patel, *Introduction to Computing Systems*, 3rd ed., §2.1.
+- Bryant & O'Hallaron, *Computer Systems: A Programmer's Perspective*, 3rd ed., §2.1.
+- Petzold, *Code*, 2nd ed., ch. 9 "Bit by Bit by Bit".
+
+</Step>

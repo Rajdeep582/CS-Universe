@@ -1,0 +1,118 @@
+items:
+  - id: left-fill
+    type: mcq
+    teaches: intuition-slide
+    prompt: What enters at the right end during a left shift?
+    options:
+      - Copies of the sign bit
+      - Zeros
+      - The bits that fell off the left
+      - Ones
+    answer: 1
+    explain: Left shifts always fill with zeros.
+
+  - id: kinds
+    type: match
+    teaches: formal-kinds
+    prompt: Match each shift to what fills the vacated left bits.
+    pairs:
+      - left: Logical right shift
+        right: Zeros
+      - left: Arithmetic right shift
+        right: Copies of the sign bit
+      - left: Left shift
+        right: Nothing — zeros enter at the right
+    explain: Arithmetic shifts preserve the sign of two's-complement numbers; left shifts fill from the right.
+
+  - id: java
+    type: mcq
+    teaches: formal-kinds
+    prompt: In Java, which operator is the logical (zero-filling) right shift?
+    options:
+      - '>>'
+      - '>>>'
+      - '<<'
+      - '>>='
+    answer: 1
+    explain: '>> is arithmetic; >>> fills with zeros.'
+
+  - id: field
+    type: mcq
+    teaches: formal-masks
+    prompt: Which expression reads bits 4–7 of x as a small number?
+    options:
+      - (x >> 4) & 0xF
+      - (x << 4) & 0xF
+      - x & 0xF0 >> 8
+      - x >> 0xF
+    answer: 0
+    explain: Move the field down to bit 0, then keep 4 bits.
+
+  - id: arith
+    type: mcq
+    teaches: mechanism-trace
+    prompt: What is the 8-bit arithmetic right shift by 1 of 1111 1001?
+    options:
+      - '0111 1100'
+      - '1111 1100'
+      - '1111 0010'
+      - '0111 1101'
+    answer: 1
+    explain: The sign bit (1) is copied in.
+
+  - id: logical-val
+    type: numeric
+    teaches: mechanism-trace
+    prompt: What unsigned value is 1111 1001 logically shifted right by 1?
+    answer: 124
+    explain: 0111 1100 = 124.
+
+  - id: green
+    type: numeric
+    teaches: worked-example
+    prompt: For c = 0x3366CC, what is (c >> 8) & 0xFF in decimal?
+    answer: 102
+    explain: The green byte is 0x66 = 102.
+
+  - id: pack
+    type: mcq
+    teaches: worked-example
+    prompt: Which expression packs bytes r, g, b into 0xRRGGBB?
+    options:
+      - (r << 16) | (g << 8) | b
+      - (r >> 16) | (g >> 8) | b
+      - r + g + b
+      - (b << 16) | (g << 8) | r
+    answer: 0
+    explain: Red goes to the top byte.
+
+  - id: prefer
+    type: mcq
+    teaches: tradeoffs
+    prompt: When should you NOT replace signed division by a shift?
+    options:
+      - When you need rounding toward zero for negative numbers
+      - When dividing unsigned numbers by 4
+      - When packing colours
+      - Never — shifts are always equivalent
+    answer: 0
+    explain: Arithmetic shifts round toward −∞.
+
+  - id: div-vs-shift
+    type: numeric
+    teaches: pitfalls
+    prompt: In Java, what is -7 / 2?
+    answer: -3
+    explain: Integer division rounds toward zero; -7 >> 1 would give −4.
+
+  - id: wide-shift
+    type: spot-the-bug
+    teaches: pitfalls
+    prompt: This C code builds a 32-bit mask of the low n bits (0 ≤ n ≤ 32). Which line has undefined behaviour for n = 32?
+    language: c
+    lines:
+      - 'uint32_t low_mask(unsigned n) {'
+      - '  return (1u << n) - 1;'
+      - '}'
+    answer: 1
+    explain: Shifting a 32-bit value by 32 is undefined in C; handle n = 32 separately.

@@ -1,0 +1,104 @@
+<Step id="hook" section="hook" title="Counting on one hand to 31">
+
+Hold up fingers as bits: thumb = 1, index = 2, middle = 4, ring = 8, little = 16. Every whole number from 0 to 31 is a unique finger pattern. That is binary — and every number inside a computer is stored this way.
+
+</Step>
+
+<Step id="intuition-weights" section="intuition" title="Weights that double">
+
+In binary each position is worth twice the one to its right: 1, 2, 4, 8, 16, 32, 64, 128 … A number is the sum of the weights whose bit is 1.
+
+$$
+1011_2 = 8 + 2 + 1 = 11
+$$
+
+</Step>
+
+<Step id="intuition-counting" section="intuition" title="Counting in binary">
+
+Counting works like an odometer with only two digits per wheel: when a bit goes past 1 it resets to 0 and carries into the next bit.
+
+| Decimal | Binary |
+|---|---|
+| 0 | 0000 |
+| 1 | 0001 |
+| 2 | 0010 |
+| 3 | 0011 |
+| 4 | 0100 |
+| 7 | 0111 |
+| 8 | 1000 |
+
+The lowest bit alternates every count; bit 1 every two counts; bit 2 every four.
+
+</Step>
+
+<Step id="formal-range" section="formal" title="Range of n bits">
+
+An $n$-bit unsigned binary number has value
+
+$$
+\sum_{i=0}^{n-1} b_i 2^{i}, \qquad b_i \in \lbrace 0, 1 \rbrace
+$$
+
+and can represent every integer from $0$ to $2^n - 1$. Useful facts: $2^8 = 256$, $2^{10} = 1024 \approx 10^3$, $2^{16} = 65{,}536$, $2^{32} \approx 4.29 \times 10^9$.
+
+</Step>
+
+<Step id="formal-parity" section="formal" title="What single bits tell you">
+
+- The **LSB** (bit 0) is 1 exactly when the number is **odd**.
+- A number is a **power of two** exactly when exactly one bit is 1.
+- $2^n - 1$ is **all ones**: $255 = 11111111_2$.
+
+</Step>
+
+<Step id="mechanism-board" section="mechanism" title="Build numbers from bits">
+
+Toggle bits to build numbers; the readout shows the sum of the weights.
+
+<Simulation id="binary-board" bits={12} target={2026} goal="Build 2026 — the current year — from bits." />
+
+</Step>
+
+<Step id="worked-example" section="worked-example" title="Reading and writing binary">
+
+**Read** $11010110_2$: bits set at weights 128, 64, 16, 4, 2 → $128 + 64 + 16 + 4 + 2 = 214$.
+
+**Write** 100 by taking the largest weight that fits each time: $100 - 64 = 36$, $36 - 32 = 4$, $4 - 4 = 0$ → weights 64, 32, 4 → $1100100_2$.
+
+**Check**: 100 is even, so the LSB must be 0 ✓.
+
+</Step>
+
+<Step id="tradeoffs" section="tradeoffs" title="Binary for machines, not for eyes">
+
+| For binary | Against binary |
+|---|---|
+| Matches two-state hardware exactly | Long and hard for people to read: 2026 is 11111101010 |
+| Arithmetic circuits are simple | Easy to miscount digits — which is why hexadecimal exists |
+
+</Step>
+
+<Step id="pitfalls" section="pitfalls" title="Common misconceptions">
+
+<Callout kind="warning">**"The biggest 8-bit value is 256."** 8 bits give 256 *patterns*, from 0 to **255**.</Callout>
+
+<Callout kind="warning">**"Binary 10 is ten."** $10_2 = 2$. Say "one-zero", not "ten".</Callout>
+
+<Callout kind="warning">**"Leading zeros change the value."** $00101_2 = 101_2 = 5$. They matter only when a fixed width is required.</Callout>
+
+</Step>
+
+<Step id="context" section="context" title="Where binary shows">
+
+Permission bits, feature flags, IP subnet masks, colour channels (0–255) and every integer in every program are binary underneath. Leibniz described binary arithmetic in 1703; Boole's logic (1854) and Shannon's 1937 thesis connected it to switching circuits.
+
+</Step>
+
+<Step id="references" section="references" title="Go deeper">
+
+- Bryant & O'Hallaron, *CS:APP*, 3rd ed., §2.1 and §2.2.1.
+- Patt & Patel, *Introduction to Computing Systems*, 3rd ed., §2.2–2.3.
+- Petzold, *Code*, 2nd ed., ch. 10 "Logic and Switches" and ch. 9.
+
+</Step>

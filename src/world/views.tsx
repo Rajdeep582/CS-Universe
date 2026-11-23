@@ -3,6 +3,8 @@ import {
   ArrowLeft,
   BookOpen,
   Castle,
+  Swords,
+  Trophy,
   CheckCircle2,
   ClipboardCheck,
   Gift,
@@ -25,6 +27,7 @@ import {
 } from '@/engine/content';
 import { missingPrerequisites } from '@/engine/progress/availability';
 import { useProgress } from '@/app/useProgress';
+import { useLearner } from '@/engine/progress/learner';
 import { stageStatus, worldStatus } from '@/app/derive';
 import { LevelMedallion, ProgressBar, StarRating, Tag } from '@/ui/components';
 import { NotFound } from '@/app/routes/NotFound';
@@ -491,6 +494,7 @@ export function StageView() {
 function LevelPanel({ stageId, levelId }: { stageId: string; levelId: string }) {
   const navigate = useNavigate();
   const { medal, medalProps, cleared, starsOf, info } = useProgress();
+  const bosses = useLearner((st) => st.bosses);
   const s = stageById.get(stageId)!;
   const w = worldById.get(s.worldId)!;
   const close = () =>
@@ -516,6 +520,7 @@ function LevelPanel({ stageId, levelId }: { stageId: string; levelId: string }) 
     </aside>
   );
   if (levelId === '__boss') {
+    const beaten = bosses.has(s.id);
     const core = levelsOfStage(s.id).filter((l) => l.core);
     const done = core.filter((l) => cleared.has(l.id)).length;
     return shell(
@@ -529,11 +534,20 @@ function LevelPanel({ stageId, levelId }: { stageId: string; levelId: string }) 
         <h2 className="font-display text-2xl font-extrabold">{s.boss.title}</h2>
         <p className="mt-2 text-[13.5px] font-medium leading-relaxed text-ink-2">{s.boss.description}</p>
         <p className="mt-3 flex items-center gap-2 text-[12.5px] font-bold text-rose-3">
-          <Lock size={15} aria-hidden />{' '}
-          {done === core.length
-            ? 'Unlocked'
-            : `Clear all ${core.length} road levels to unlock (${done}/${core.length})`}
+          {beaten ? <Trophy size={15} aria-hidden /> : <Lock size={15} aria-hidden />}{' '}
+          {beaten
+            ? 'Beaten — the flag flies'
+            : done === core.length
+              ? 'Unlocked'
+              : `Clear all ${core.length} road levels to unlock (${done}/${core.length})`}
         </p>
+        <Link
+          to="/boss/$stageId"
+          params={{ stageId: s.id }}
+          className={clsx('gem gem-md mt-4 w-full', done === core.length ? 'gem-rose' : 'gem-glass')}
+        >
+          <Swords size={18} /> {done === core.length ? (beaten ? 'Fight again' : 'Fight the boss') : 'Boss details'}
+        </Link>
       </>,
       'Boss details',
     );

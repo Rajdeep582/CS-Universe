@@ -29,7 +29,17 @@ function Callout({ kind = 'note', children }: { kind?: keyof typeof CALLOUT; chi
   );
 }
 
-export function SimulationFrame({ id, goal, onGoal }: { id: SimulationId; goal?: string; onGoal?: () => void }) {
+export function SimulationFrame({
+  id,
+  goal,
+  onGoal,
+  params,
+}: {
+  id: SimulationId;
+  goal?: string;
+  onGoal?: () => void;
+  params?: Record<string, unknown>;
+}) {
   const View = SIM_VIEWS[id];
   const reached = useLearner((s) => s.simGoals);
   const { levelId } = useContext(LessonCtx);
@@ -51,19 +61,19 @@ export function SimulationFrame({ id, goal, onGoal }: { id: SimulationId; goal?:
         ) : null}
       </figcaption>
       <Suspense fallback={<p className="text-[13px] text-white/70">Loading simulation…</p>}>
-        <View {...(onGoal ? { onGoal } : {})} />
+        <View {...(onGoal ? { onGoal } : {})} {...(params ? { params } : {})} />
       </Suspense>
     </figure>
   );
 }
 
-function Simulation({ id, goal }: { id: SimulationId; goal?: string }) {
+function Simulation({ id, goal, ...params }: { id: SimulationId; goal?: string } & Record<string, unknown>) {
   const { levelId } = useContext(LessonCtx);
   const record = useLearner((s) => s.record);
   const onGoal = useCallback(() => {
     if (!useLearner.getState().simGoals.has(`${levelId}:${id}`)) record({ t: 'sim', level: levelId, sim: id });
   }, [record, levelId, id]);
-  return <SimulationFrame id={id} {...(goal ? { goal, onGoal } : {})} />;
+  return <SimulationFrame id={id} params={params} {...(goal ? { goal, onGoal } : {})} />;
 }
 
 export const mdxComponents = { Step, Callout, Simulation };

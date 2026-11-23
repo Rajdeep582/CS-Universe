@@ -167,7 +167,13 @@ export function Gallery() {
       </div>
       <CelebrationPreview />
       <Section title="SIMULATIONS">
-        <SimulationFrame id="page-replacement" />
+        <div className="space-y-5">
+          <SimulationFrame id="page-replacement" />
+          <SimulationFrame id="twos-complement" />
+          <SimulationFrame id="float-explorer" />
+          <SimulationFrame id="base-converter" />
+          <SimulationFrame id="binary-board" params={{ bits: 16 }} />
+        </div>
       </Section>
     </div>
   );

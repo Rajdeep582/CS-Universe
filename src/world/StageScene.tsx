@@ -115,11 +115,13 @@ interface Props {
   /** Progress halo under a pedestal: gold (cleared), bright gold (mastered), blue (review due). */
   halo: (levelId: string) => 'mastered' | 'due' | 'cleared' | null;
   bossOpen: boolean;
+  /** Boss beaten: the castle glows gold and bright (stage complete). */
+  bossBeaten: boolean;
   onPickLevel: (levelId: string) => void;
 }
 
 /** One stage = one island: the numbered road, pedestals, bonus chests, unit signposts and the boss castle. */
-export function StageScene({ stageId, layout, tier, medal, stars, halo, bossOpen, onPickLevel }: Props) {
+export function StageScene({ stageId, layout, tier, medal, stars, halo, bossOpen, bossBeaten, onPickLevel }: Props) {
   const q = TIERS[tier];
   const P = pieces();
   const spec: TerrainSpec = useMemo(
@@ -321,8 +323,8 @@ export function StageScene({ stageId, layout, tier, medal, stars, halo, bossOpen
             <mesh geometry={P.castleDark} material={M.castleDark} />
             <pointLight
               position={[0, 10, 10]}
-              color={bossOpen ? '#ffc61a' : '#ff3d8b'}
-              intensity={120}
+              color={bossBeaten ? '#fff1a0' : bossOpen ? '#ffc61a' : '#ff3d8b'}
+              intensity={bossBeaten ? 260 : 120}
               distance={40}
               decay={2}
             />

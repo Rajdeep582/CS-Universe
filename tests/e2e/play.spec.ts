@@ -34,7 +34,11 @@ async function answer(page: Page, right: boolean) {
     case 'mcq':
     case 'predict-output': {
       const pick = right ? item.answer : (item.answer + 1) % item.options.length;
-      await form.locator('label.choice', { hasText: item.options[pick]! }).first().click();
+      await form
+        .locator('label.choice')
+        .filter({ has: page.getByText(item.options[pick]!, { exact: true }) })
+        .first()
+        .click();
       break;
     }
     case 'spot-the-bug':

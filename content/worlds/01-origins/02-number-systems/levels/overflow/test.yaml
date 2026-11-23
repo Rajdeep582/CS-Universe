@@ -1,0 +1,135 @@
+items:
+  - id: wrap-unsigned
+    type: numeric
+    teaches: intuition-wheel
+    prompt: In 8-bit unsigned arithmetic, what is 255 + 1?
+    answer: 0
+    explain: The result wraps around modulo 256.
+
+  - id: wrap-signed
+    type: numeric
+    teaches: intuition-wheel
+    prompt: In 8-bit two's complement, what pattern value do you get for 127 + 1?
+    answer: -128
+    explain: 0111 1111 + 1 = 1000 0000, which reads as −128.
+
+  - id: unsigned-detect
+    type: mcq
+    teaches: formal-unsigned
+    prompt: How does hardware detect unsigned overflow in addition?
+    options:
+      - The result is negative
+      - There is a carry out of the top bit
+      - The operands have different signs
+      - The result is zero
+    answer: 1
+    explain: A carry out means the true sum needs one more bit.
+
+  - id: unsigned-value
+    type: numeric
+    teaches: formal-unsigned
+    prompt: What 8-bit unsigned result does 200 + 100 produce?
+    answer: 44
+    explain: 300 − 256 = 44.
+
+  - id: signed-rule
+    type: mcq
+    teaches: formal-signed
+    prompt: When does adding two two's-complement numbers overflow?
+    options:
+      - Whenever there is a carry out
+      - When both operands have the same sign and the result has the opposite sign
+      - When the operands have different signs
+      - Whenever the result is negative
+    answer: 1
+    explain: Different-sign additions can never overflow.
+
+  - id: never
+    type: mcq
+    teaches: formal-signed
+    prompt: Which signed 8-bit addition can never overflow?
+    options:
+      - 100 + 50
+      - −100 + 50
+      - −100 + −50
+      - 127 + 1
+    answer: 1
+    explain: Operands of different signs always give a result between them.
+
+  - id: flags
+    type: match
+    teaches: mechanism-flags
+    prompt: Match each flag to what it signals.
+    pairs:
+      - left: C (carry)
+        right: Unsigned result did not fit
+      - left: V (overflow)
+        right: Signed result did not fit
+      - left: Z (zero)
+        right: Result is all zeros
+      - left: N (negative)
+        right: Top bit of the result is 1
+    explain: The same addition sets all four.
+
+  - id: table-row
+    type: mcq
+    teaches: worked-example
+    prompt: For the 8-bit addition 1111 1111 + 0000 0001, which flags are set?
+    options:
+      - C = 1, V = 0
+      - C = 0, V = 1
+      - C = 1, V = 1
+      - C = 0, V = 0
+    answer: 0
+    explain: Unsigned 255 + 1 wraps (carry); signed −1 + 1 = 0 is correct (no overflow).
+
+  - id: both
+    type: mcq
+    teaches: worked-example
+    prompt: Which 8-bit addition sets both C and V?
+    options:
+      - 1000 0000 + 1000 0000
+      - 0110 0100 + 0011 0010
+      - 1100 1000 + 0110 0100
+      - 0000 0001 + 0000 0001
+    answer: 0
+    explain: −128 + −128 overflows signed, and 128 + 128 carries out unsigned.
+
+  - id: policy
+    type: match
+    teaches: tradeoffs
+    prompt: Match each language behaviour to its overflow policy.
+    pairs:
+      - left: Python int
+        right: Grow the number
+      - left: C unsigned int
+        right: Wrap around
+      - left: Ada (Ariane 5)
+        right: Raise an exception
+      - left: DSP audio instructions
+        right: Saturate at the limit
+    explain: Different trade-offs between speed and safety.
+
+  - id: check-bug
+    type: spot-the-bug
+    teaches: pitfalls
+    prompt: This C function should report whether a + b would overflow (b ≥ 0). Which line is wrong?
+    language: c
+    lines:
+      - 'bool overflows(int a, int b) {'
+      - '  return a + b > INT_MAX;'
+      - '}'
+    answer: 1
+    explain: The sum overflows before the comparison (undefined behaviour). Test a > INT_MAX − b instead.
+
+  - id: y2038
+    type: mcq
+    teaches: pitfalls
+    prompt: Why will some systems fail in January 2038?
+    options:
+      - Leap-second rules change
+      - Signed 32-bit counters of seconds since 1970 reach 2^31 − 1 and wrap
+      - The year has five digits
+      - Clocks switch to UTC+1
+    answer: 1
+    explain: 2^31 − 1 seconds after 1 Jan 1970 is 03:14:07 UTC on 19 Jan 2038.

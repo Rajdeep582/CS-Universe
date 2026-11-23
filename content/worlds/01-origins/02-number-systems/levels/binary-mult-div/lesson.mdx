@@ -1,0 +1,99 @@
+<Step id="hook" section="hook" title="Long multiplication without the times table">
+
+Decimal long multiplication needs the whole times table. In binary, each digit of the multiplier is 0 or 1, so each partial product is either **zero** or **the multiplicand itself, shifted**. Multiplication becomes shifting and adding.
+
+</Step>
+
+<Step id="intuition-shift" section="intuition" title="Shifting multiplies by the base">
+
+Appending a 0 to a decimal number multiplies it by 10. Appending a 0 to a binary number — shifting every bit one place left — multiplies it by **2**. Shifting left by $k$ places multiplies by $2^k$; shifting right by $k$ divides an unsigned number by $2^k$, dropping the remainder.
+
+</Step>
+
+<Step id="formal-mult" section="formal" title="Shift-and-add multiplication">
+
+For unsigned $a \times b$ with $b = \sum b_i 2^i$:
+
+$$
+a \times b = \sum_{i:\, b_i = 1} a \cdot 2^{i}
+$$
+
+Add a copy of $a$ shifted left by $i$ for every 1-bit of $b$. Multiplying two $n$-bit numbers can need up to **$2n$ bits** for the product.
+
+</Step>
+
+<Step id="formal-div" section="formal" title="Long division in binary">
+
+Binary long division works like decimal, but each step's quotient digit is just 1 ("it fits": subtract) or 0 ("it doesn't": bring down the next bit). The result satisfies
+
+$$
+a = q \cdot d + r, \qquad 0 \le r < d .
+$$
+
+</Step>
+
+<Step id="mechanism-trace" section="mechanism" title="Multiplication step by step">
+
+$1011_2 \times 101_2$ (11 × 5):
+
+| Multiplier bit | Partial product |
+|---|---|
+| bit 0 = 1 | 1011 |
+| bit 1 = 0 | 0000 (shifted 1) |
+| bit 2 = 1 | 1011 (shifted 2) = 101100 |
+| **Sum** | 1011 + 101100 = **110111** = 55 ✓ |
+
+Hardware does the same thing: one adder, a shift register, and one step per multiplier bit — or many adders in parallel in fast multipliers.
+
+</Step>
+
+<Step id="worked-example" section="worked-example" title="Dividing 13 by 3">
+
+$1101_2 \div 11_2$:
+
+| Step | Bits so far | ≥ 11? | Quotient bit | Remainder |
+|---|---|---|---|---|
+| 1 | 1 | no | 0 | 1 |
+| 2 | 11 | yes | 1 | 0 |
+| 3 | 00 | no | 0 | 0 |
+| 4 | 01 | no | 0 | 1 |
+
+Quotient $0100_2 = 4$, remainder $1$: $13 = 4 \cdot 3 + 1$ ✓.
+
+</Step>
+
+<Step id="tradeoffs" section="tradeoffs" title="Speed of multiply and divide">
+
+| Operation | Typical cost on a modern CPU |
+|---|---|
+| Add, shift | 1 cycle |
+| Integer multiply | About 3 cycles (wide parallel multiplier) |
+| Integer divide | Tens of cycles — division is inherently sequential |
+
+Compilers therefore replace multiplication and division by constants with shifts and adds where they can (e.g. `x * 8` → `x << 3`), and divide by constants using multiplication by a "magic" reciprocal.
+
+</Step>
+
+<Step id="pitfalls" section="pitfalls" title="Common misconceptions">
+
+<Callout kind="warning">**"The product fits in the same width."** An $n \times n$-bit product needs up to $2n$ bits; keeping only the low $n$ bits silently overflows.</Callout>
+
+<Callout kind="warning">**"Right shift divides any integer by 2."** For negative two's-complement numbers, an arithmetic right shift rounds toward $-\infty$ ($-7 \gg 1 = -4$), while C's `/` rounds toward zero ($-7 / 2 = -3$). See the shifts level.</Callout>
+
+<Callout kind="warning">**"Dividing by zero just gives zero."** Integer division by zero is an error: a hardware exception on x86, undefined behaviour in C.</Callout>
+
+</Step>
+
+<Step id="context" section="context" title="Faster multipliers">
+
+Booth's algorithm (1951) handles signed numbers and skips runs of 1s; Wallace-tree multipliers add all partial products in parallel. Cryptography multiplies numbers thousands of bits long using algorithms such as Karatsuba's (1960), which beats the schoolbook method.
+
+</Step>
+
+<Step id="references" section="references" title="Go deeper">
+
+- Patterson & Hennessy, *COD* RISC-V ed., §3.3 "Multiplication" and §3.4 "Division".
+- Bryant & O'Hallaron, *CS:APP*, 3rd ed., §2.3.5–2.3.7 (multiplying and dividing by powers of 2).
+- Knuth, *TAOCP* Vol. 2, §4.3.1 (classical algorithms) and §4.3.3 (Karatsuba).
+
+</Step>

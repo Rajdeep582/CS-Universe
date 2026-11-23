@@ -1,0 +1,120 @@
+items:
+  - id: min-states
+    type: mcq
+    teaches: intuition-difference
+    prompt: What is the minimum number of distinguishable states needed to carry any information?
+    options:
+      - '1'
+      - '2'
+      - '8'
+      - '10'
+    answer: 1
+    explain: With one state there is nothing to tell apart; two states can answer one yes/no question.
+
+  - id: physical
+    type: match
+    teaches: intuition-physical
+    prompt: Match each medium to the two states it uses.
+    pairs:
+      - left: Wire in a chip
+        right: Low or high voltage
+      - left: Optical fibre
+        right: Light pulse or no pulse
+      - left: Hard-disk surface
+        right: Magnetised one way or the other
+      - left: CD
+        right: Pit or land
+    explain: Any reliably distinguishable physical difference can encode information.
+
+  - id: n-to-k
+    type: numeric
+    teaches: formal-states
+    prompt: A code uses 3 symbols in a row, and each symbol can be one of 4 colours. How many different messages can it express?
+    answer: 64
+    explain: 4^3 = 64.
+
+  - id: meaning
+    type: mcq
+    teaches: formal-states
+    prompt: Where does the meaning of a signal come from?
+    options:
+      - From the physics of the signal
+      - From the agreed encoding between sender and receiver
+      - From the speed of transmission
+      - From the number of wires
+    answer: 1
+    explain: Physical states only become information under an encoding both sides share.
+
+  - id: why-binary
+    type: mcq
+    teaches: formal-why-binary
+    prompt: Why do computers mostly use two voltage levels instead of ten?
+    options:
+      - Ten levels are impossible to generate
+      - Two levels leave wide noise margins, so small disturbances do not change the value
+      - Binary uses less memory than decimal
+      - Because transistors can only count to two
+    answer: 1
+    explain: Fewer, widely separated levels are far more robust against noise and easy to build with switches.
+
+  - id: forbidden
+    type: mcq
+    teaches: mechanism-thresholds
+    prompt: In 3.3 V logic, an input reads 1.4 V. What happens?
+    options:
+      - It is read as exactly 0.42
+      - It is in the forbidden zone between thresholds — a correctly working circuit never produces it as a steady value
+      - It is always read as 1
+      - It is always read as 0
+    answer: 1
+    explain: Voltages between the low and high thresholds are not valid logic levels.
+
+  - id: restoration
+    type: mcq
+    teaches: mechanism-thresholds
+    prompt: Why don't digital copies degrade like copies of an analogue tape?
+    options:
+      - Digital signals have no noise at all
+      - Each gate restores a clean 0 or 1 as long as the noise stays within the margin
+      - Digital data is compressed
+      - Copies are checked by a human
+    answer: 1
+    explain: Thresholds plus strong outputs re-create clean levels at every stage.
+
+  - id: seats
+    type: numeric
+    teaches: worked-example
+    prompt: What is the smallest number of on/off switches that can give each of 50 seats its own pattern?
+    answer: 6
+    explain: 2^5 = 32 is too few; 2^6 = 64 is enough.
+
+  - id: switches
+    type: numeric
+    teaches: worked-example
+    prompt: How many combinations do 3 independent on/off switches have?
+    answer: 8
+    explain: 2 × 2 × 2 = 8.
+
+  - id: multilevel
+    type: mcq
+    teaches: tradeoffs
+    prompt: Flash memory that stores 4 bits per cell (16 charge levels) gains density. What does it pay?
+    options:
+      - Nothing — it is strictly better
+      - Levels are closer together, so reading is slower and more error correction is needed
+      - It can only store text
+      - It needs more cells per bit
+    answer: 1
+    explain: More levels per cell shrink the margins between them.
+
+  - id: digital-perfect
+    type: mcq
+    teaches: pitfalls
+    prompt: '"Digital storage is perfect, so it never needs error checking." Is this true?'
+    options:
+      - Yes
+      - No — noise beyond the margin can flip values, so systems add error-detecting and error-correcting codes
+      - Only for optical discs
+      - Only when the power is off
+    answer: 1
+    explain: Margins make errors rare, not impossible.

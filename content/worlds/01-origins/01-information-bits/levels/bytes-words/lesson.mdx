@@ -1,0 +1,102 @@
+<Step id="hook" section="hook" title="Where did my 69 gigabytes go?">
+
+You buy a "1 TB" drive, plug it in, and the computer reports about **931 GB**. Nothing is missing. The box and the computer are using **two different meanings** of the same prefix — and this level shows you both.
+
+</Step>
+
+<Step id="intuition-groups" section="intuition" title="Bits travel in groups">
+
+Single bits are too small to be handy, so hardware moves them in fixed-size groups:
+
+| Group | Size | Typical use |
+|---|---|---|
+| Nibble | 4 bits | One hexadecimal digit |
+| **Byte** | 8 bits | The unit memory is addressed in; one ASCII character |
+| Word | The processor's natural size — today usually 32 or 64 bits | Registers, integers, addresses |
+
+</Step>
+
+<Step id="intuition-byte" section="intuition" title="Why 8?">
+
+A byte has been 8 bits almost everywhere since IBM's System/360 (1964) standardised it. Eight bits give $2^8 = 256$ patterns — enough for every letter, digit and punctuation mark of English text with room to spare, and a power of two that splits neatly into two 4-bit nibbles. Standards documents that need to be unambiguous call an 8-bit unit an **octet**.
+
+</Step>
+
+<Step id="formal-units" section="formal" title="Two sets of prefixes">
+
+| Decimal (SI) prefix | Value | Binary (IEC) prefix | Value |
+|---|---|---|---|
+| kilobyte, kB | $10^3$ = 1,000 B | kibibyte, KiB | $2^{10}$ = 1,024 B |
+| megabyte, MB | $10^6$ B | mebibyte, MiB | $2^{20}$ = 1,048,576 B |
+| gigabyte, GB | $10^9$ B | gibibyte, GiB | $2^{30}$ B |
+| terabyte, TB | $10^{12}$ B | tebibyte, TiB | $2^{40}$ B |
+
+The binary prefixes were standardised by the IEC in 1998 to end the confusion. Storage makers and network speeds use decimal prefixes; memory sizes are naturally powers of two; some operating systems show binary values but print "GB".
+
+Also: **b** is a bit, **B** is a byte. Network speeds are in bits per second — 100 Mb/s is 12.5 MB/s.
+
+</Step>
+
+<Step id="formal-word" section="formal" title="The word size">
+
+A processor's **word size** is the width it handles most naturally: its general registers, its integer arithmetic and (usually) its memory addresses. A 64-bit processor has 64-bit registers and can address up to $2^{64}$ bytes in principle. A 32-bit address can reach only $2^{32}$ bytes = 4 GiB, which is why 32-bit systems could not use more than 4 GiB of RAM per process.
+
+</Step>
+
+<Step id="mechanism-addressing" section="mechanism" title="Bytes in memory">
+
+Memory is a long row of **byte-sized cells**, each with a numeric address. Larger values occupy several consecutive bytes:
+
+| Address | 1000 | 1001 | 1002 | 1003 |
+|---|---|---|---|---|
+| Contents | byte 0 | byte 1 | byte 2 | byte 3 |
+
+A 32-bit word stored at address 1000 occupies addresses 1000–1003. (Which byte of the word goes first is called *endianness* — a later level.) Because addresses count bytes, a machine with 32-bit addresses can name $2^{32}$ different bytes.
+
+</Step>
+
+<Step id="worked-example" section="worked-example" title="Solving the missing-gigabytes puzzle">
+
+A "1 TB" drive holds $10^{12}$ bytes. Divide by the bytes in one GiB:
+
+$$
+\frac{10^{12}}{2^{30}} = \frac{1{,}000{,}000{,}000{,}000}{1{,}073{,}741{,}824} \approx 931.3 \text{ GiB}
+$$
+
+The operating system shows "931 GB" but means GiB. Another example: downloading a 500 MB file over a 100 Mb/s link takes at least $500 \times 8 / 100 = 40$ seconds — the factor 8 converts bytes to bits.
+
+</Step>
+
+<Step id="tradeoffs" section="tradeoffs" title="Choosing sizes">
+
+| Decision | Trade-off |
+|---|---|
+| Byte-addressable memory | Any single byte can be reached directly, but addresses need more bits than word-addressing would |
+| 64-bit words instead of 32 | Huge address space and fast big integers, but pointers take twice the memory |
+| Decimal vs binary prefixes | Decimal is easy for people; binary matches how memory is built. Mixing them silently causes the 7 % gap seen above |
+
+</Step>
+
+<Step id="pitfalls" section="pitfalls" title="Common misconceptions">
+
+<Callout kind="warning">**"1 kB is always 1,024 bytes."** Under the SI standard, 1 kB = 1,000 B. The 1,024-byte unit is the KiB.</Callout>
+
+<Callout kind="warning">**"Mb and MB are the same."** Lower-case b is bits, upper-case B is bytes — an eightfold difference.</Callout>
+
+<Callout kind="warning">**"A word is always 16 bits."** Word size depends on the processor. (Some documentation, such as Intel's x86 manuals, keeps "word = 16 bits" for historical reasons — always check the context.)</Callout>
+
+</Step>
+
+<Step id="context" section="context" title="In practice">
+
+RAM modules are sold in binary sizes (16 GiB, labelled "16 GB"); SSDs and hard drives use decimal sizes; Wi-Fi and broadband are quoted in bits per second. Knowing which unit a number uses is everyday engineering hygiene.
+
+</Step>
+
+<Step id="references" section="references" title="Go deeper">
+
+- Bryant & O'Hallaron, *Computer Systems: A Programmer's Perspective*, 3rd ed., §2.1 (bytes, words, addresses).
+- Patterson & Hennessy, *Computer Organization and Design*, RISC-V ed., ch. 1 (units, and the "decimal vs binary prefix" table).
+- IEC 80000-13:2008, binary prefixes (kibi, mebi, gibi …).
+
+</Step>

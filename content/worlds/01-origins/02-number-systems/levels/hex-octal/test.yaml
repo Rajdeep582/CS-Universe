@@ -1,0 +1,119 @@
+items:
+  - id: nibble-digit
+    type: mcq
+    teaches: intuition-nibbles
+    prompt: How many bits does one hexadecimal digit stand for?
+    options:
+      - '2'
+      - '3'
+      - '4'
+      - '8'
+    answer: 2
+    explain: 16 = 2^4.
+
+  - id: octal-bits
+    type: numeric
+    teaches: intuition-nibbles
+    prompt: How many bits does one octal digit stand for?
+    answer: 3
+    explain: 8 = 2^3.
+
+  - id: table-match
+    type: match
+    teaches: formal-table
+    prompt: Match each hex digit to its 4 bits.
+    pairs:
+      - left: A
+        right: '1010'
+      - left: '7'
+        right: '0111'
+      - left: C
+        right: '1100'
+      - left: F
+        right: '1111'
+    explain: A=10, 7=7, C=12, F=15.
+
+  - id: why
+    type: mcq
+    teaches: formal-why
+    prompt: Why can binary be converted to hex just by grouping bits?
+    options:
+      - Because 16 = 2^4, each 4-bit group is exactly one hex digit with no carries between groups
+      - Because hex is always shorter
+      - Because computers store hex internally
+      - It only works for numbers below 256
+    answer: 0
+    explain: Each nibble contributes an independent digit.
+
+  - id: to-hex
+    type: mcq
+    teaches: mechanism-grouping
+    prompt: What is 11111101010 (binary) in hex?
+    options:
+      - FD2
+      - 7EA
+      - FEA
+      - '3752'
+    answer: 1
+    explain: 0111 1110 1010 → 7 E A.
+
+  - id: to-octal
+    type: mcq
+    teaches: mechanism-grouping
+    prompt: What is 101110 (binary) in octal?
+    options:
+      - '56'
+      - '46'
+      - '2E'
+      - '65'
+    answer: 0
+    explain: 101 110 → 5 6.
+
+  - id: colour
+    type: numeric
+    teaches: worked-example
+    prompt: In the colour #FF8800, what is the green component in decimal?
+    answer: 136
+    explain: 0x88 = 8·16 + 8 = 136.
+
+  - id: chmod
+    type: mcq
+    teaches: worked-example
+    prompt: What permissions does octal 6 give (read=4, write=2, execute=1)?
+    options:
+      - read and write
+      - read and execute
+      - write and execute
+      - read only
+    answer: 0
+    explain: 6 = 4 + 2 = 110.
+
+  - id: hex-dec
+    type: numeric
+    teaches: worked-example
+    prompt: What is 0x2F in decimal?
+    answer: 47
+    explain: 2·16 + 15 = 47.
+
+  - id: hex-bytes
+    type: mcq
+    teaches: tradeoffs
+    prompt: Why is hex preferred over octal for showing bytes?
+    options:
+      - Hex digits are smaller
+      - Two hex digits fit one 8-bit byte exactly; octal digits straddle byte boundaries
+      - Octal cannot show the value 255
+      - Hex is faster to compute
+    answer: 1
+    explain: 8 bits = 2 × 4, but 8 is not a multiple of 3.
+
+  - id: leading-zero
+    type: spot-the-bug
+    teaches: pitfalls
+    prompt: This C code should set n to ten. Which line is the bug?
+    language: c
+    lines:
+      - 'int n = 010;'
+      - 'printf("%d", n);'
+    answer: 0
+    explain: A leading 0 makes the literal octal — 010 is 8.

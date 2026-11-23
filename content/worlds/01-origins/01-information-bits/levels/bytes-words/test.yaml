@@ -1,0 +1,101 @@
+items:
+  - id: group-match
+    type: match
+    teaches: intuition-groups
+    prompt: Match each group to its size.
+    pairs:
+      - left: Nibble
+        right: 4 bits
+      - left: Byte
+        right: 8 bits
+      - left: Word on a modern 64-bit CPU
+        right: 64 bits
+    explain: A nibble is half a byte; a word is the processor's natural width.
+
+  - id: byte-patterns
+    type: numeric
+    teaches: intuition-byte
+    prompt: How many different values can one byte hold?
+    answer: 256
+    explain: 2^8 = 256.
+
+  - id: kb-vs-kib
+    type: mcq
+    teaches: formal-units
+    prompt: How many bytes are in 1 KiB?
+    options:
+      - '1,000'
+      - '1,024'
+      - '8,000'
+      - '8,192'
+    answer: 1
+    explain: KiB is the binary prefix, 2^10 = 1,024 bytes; kB is 1,000 bytes.
+
+  - id: mbps
+    type: numeric
+    teaches: formal-units
+    prompt: A link runs at 80 Mb/s (megabits per second). How many megabytes per second is that?
+    answer: 10
+    explain: Divide by 8 bits per byte.
+
+  - id: addr-32
+    type: mcq
+    teaches: formal-word
+    prompt: How much memory can a 32-bit byte address reach?
+    options:
+      - 32 bytes
+      - 4 GiB (2^32 bytes)
+      - 32 GiB
+      - 4 TB
+    answer: 1
+    explain: 2^32 bytes = 4 GiB.
+
+  - id: word-bytes
+    type: numeric
+    teaches: mechanism-addressing
+    prompt: A 64-bit word is stored starting at address 2000. What is the address of its last byte?
+    answer: 2007
+    explain: 64 bits = 8 bytes, at addresses 2000 to 2007.
+
+  - id: drive
+    type: mcq
+    teaches: worked-example
+    prompt: Why does a "1 TB" drive show as about 931 GB?
+    options:
+      - The file system uses 69 GB
+      - The drive has bad sectors
+      - The box uses 10^12 bytes; the computer divides by 2^30 per "GB" (really GiB)
+      - The drive is compressed
+    answer: 2
+    explain: 10^12 ÷ 2^30 ≈ 931.3.
+
+  - id: download
+    type: numeric
+    teaches: worked-example
+    prompt: At least how many seconds does a 250 MB download take over a 50 Mb/s link?
+    answer: 40
+    explain: 250 × 8 = 2,000 megabits; 2,000 ÷ 50 = 40 s.
+
+  - id: pointer-cost
+    type: mcq
+    teaches: tradeoffs
+    prompt: What is one cost of moving from 32-bit to 64-bit addresses?
+    options:
+      - Programs can address less memory
+      - Every pointer takes twice the memory
+      - Bytes become 16 bits
+      - Integer arithmetic stops working
+    answer: 1
+    explain: 64-bit pointers are 8 bytes instead of 4.
+
+  - id: bit-vs-byte
+    type: mcq
+    teaches: pitfalls
+    prompt: Which is larger, 10 MB or 10 Mb?
+    options:
+      - 10 Mb
+      - 10 MB, eight times larger
+      - They are equal
+      - It depends on the operating system
+    answer: 1
+    explain: B = byte = 8 bits; b = bit.

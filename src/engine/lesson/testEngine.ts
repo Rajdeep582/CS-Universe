@@ -156,4 +156,41 @@ export function testXp(result: TestResult, attempt: number, previousStars: numbe
 export const STUDIED_XP = 25;
 export const STEP_XP = 5;
 
+/** A presented item tagged with the level it came from (boss exams draw from many lessons). */
+export interface BossPresented extends Presented {
+  levelId: string;
+}
+export const BOSS_SIZE = 15;
+
+/**
+ * Boss exam (03 §7): one item from every core level first (so the exam spans the whole stage),
+ * then extra items from core and cleared bonus levels at random, up to BOSS_SIZE; presented in stage order.
+ */
+export function drawBoss(
+  sources: readonly { levelId: string; core: boolean; pool: readonly Item[]; steps: readonly StepMeta[] }[],
+  seed: number,
+  size = BOSS_SIZE,
+): BossPresented[] {
+  const r = rng(seed);
+  const order = new Map(sources.map((s, i) => [s.levelId, i]));
+  const picked = new Map<string, { levelId: string; item: Item }>();
+  const key = (l: string, i: Item) => `${l}:${i.id}`;
+  for (const src of sources)
+    if (src.core && src.pool.length && picked.size < size) {
+      const item = src.pool[Math.floor(r() * src.pool.length)]!;
+      picked.set(key(src.levelId, item), { levelId: src.levelId, item });
+    }
+  const rest = shuffle(
+    sources.flatMap((s) => s.pool.map((item) => ({ levelId: s.levelId, item }))),
+    r,
+  );
+  for (const x of rest) {
+    if (picked.size >= size) break;
+    picked.set(key(x.levelId, x.item), x);
+  }
+  return [...picked.values()]
+    .sort((a, b) => order.get(a.levelId)! - order.get(b.levelId)!)
+    .map((x) => ({ ...x, order: presentOrder(x.item, r) }));
+}
+
 export const seedFor = (levelId: string, attempt: number) => hashString(`${levelId}#${attempt}`);

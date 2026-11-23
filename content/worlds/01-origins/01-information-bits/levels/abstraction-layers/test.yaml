@@ -1,0 +1,137 @@
+items:
+  - id: abstraction-def
+    type: mcq
+    teaches: intuition-driving
+    prompt: What is an abstraction in computing?
+    options:
+      - A simpler view of something, given by an interface, that hides details not needed for the task
+      - A copy of a program kept as a backup
+      - The lowest level of the hardware
+      - A vague description that cannot be implemented
+    answer: 0
+    explain: An abstraction exposes an interface and hides the implementation behind it.
+
+  - id: layer-uses
+    type: mcq
+    teaches: intuition-layers
+    prompt: In a layered system, which layer does a given layer rely on directly?
+    options:
+      - Every layer, all the way down to transistors
+      - Only the interface of the layer directly below it
+      - Only the layer above it
+      - None; layers are independent
+    answer: 1
+    explain: Each layer uses just the interface of the next layer down and offers a simpler interface upward.
+
+  - id: levels-order
+    type: order-steps
+    teaches: formal-levels
+    prompt: Order Patt & Patel's levels of transformation from the top (problem) to the bottom.
+    steps:
+      - Problem
+      - Algorithm
+      - Program
+      - Instruction set architecture (ISA)
+      - Microarchitecture
+      - Logic circuits
+      - Devices (transistors)
+    explain: Problem → algorithm → program → ISA → microarchitecture → circuits → devices.
+
+  - id: isa-contract
+    type: mcq
+    teaches: formal-contract
+    prompt: Why can the same compiled program run on many different processors?
+    options:
+      - Because all processors have the same microarchitecture
+      - Because they implement the same ISA, the contract between software and hardware
+      - Because the operating system rewrites the program for each chip
+      - Because programs are stored as text
+    answer: 1
+    explain: Different microarchitectures implementing one ISA all honour the same contract.
+
+  - id: match-levels
+    type: match
+    teaches: formal-levels
+    prompt: Match each item to its level.
+    pairs:
+      - left: Merge sort
+        right: Algorithm
+      - left: x86-64
+        right: ISA
+      - left: A full-adder circuit
+        right: Logic circuits
+      - left: A transistor
+        right: Devices
+    explain: Merge sort is a procedure; x86-64 is an instruction set; a full adder is a circuit; a transistor is a device.
+
+  - id: translation-order
+    type: order-steps
+    teaches: mechanism-translation
+    prompt: Put the journey of one high-level statement in order.
+    steps:
+      - A programmer writes the statement in a high-level language
+      - A compiler translates it into ISA instructions
+      - The CPU fetches and decodes those instructions
+      - Adder circuits built from gates do the arithmetic
+      - Transistors switch to implement the gates
+    explain: Each layer is realised by the one below it.
+
+  - id: which-layer-cache
+    type: mcq
+    teaches: worked-example
+    prompt: A new chip adds a larger cache but runs exactly the same instructions as before. Which level changed?
+    options:
+      - Algorithm
+      - ISA
+      - Microarchitecture
+      - Program
+    answer: 2
+    explain: Same ISA (contract), different hardware organisation — a microarchitecture change.
+
+  - id: which-layer-lang
+    type: mcq
+    teaches: worked-example
+    prompt: You rewrite the same sorting algorithm from Python into C. Which level changed?
+    options:
+      - Program
+      - Algorithm
+      - Devices
+      - ISA
+    answer: 0
+    explain: The procedure is the same; only its expression in a language changed.
+
+  - id: cost
+    type: mcq
+    teaches: tradeoffs
+    prompt: Which is a real cost of layering?
+    options:
+      - Layers can never be replaced
+      - Generic interfaces add overhead, and some performance needs knowledge of lower layers
+      - Programs stop working when hardware improves
+      - It forces one person to understand everything
+    answer: 1
+    explain: Abstraction buys independence at the price of some overhead and hidden performance details.
+
+  - id: leaky
+    type: mcq
+    teaches: pitfalls
+    prompt: '"Reading an array in a different order can be ten times slower." What does this illustrate?'
+    options:
+      - A leaky abstraction — the cache below shows through as performance
+      - A compiler bug
+      - That memory is not really made of bytes
+      - That the ISA changed
+    answer: 0
+    explain: Flat memory is an abstraction; the cache hierarchy leaks through it as timing.
+
+  - id: isa-not-hw
+    type: mcq
+    teaches: pitfalls
+    prompt: Is the ISA the same thing as the hardware?
+    options:
+      - Yes, the ISA is the chip
+      - No — the ISA is a specification; the microarchitecture is hardware that implements it
+      - Yes, but only for RISC-V
+      - No — the ISA is the operating system
+    answer: 1
+    explain: An ISA is a contract; many hardware designs can implement it.

@@ -17,6 +17,9 @@ export const XP = {
   secondStar: 25,
   mastered: 75,
   review: 10,
+  boss: 400,
+  stage: 250,
+  world: 1000,
 } as const;
 
 /** Mastery needs a passed review at least this many days after the level was first cleared. */
@@ -48,13 +51,14 @@ export interface LevelProgress {
   failedBeforeClear: boolean;
 }
 
-export type JournalKind = 'studied' | 'cleared' | 'excellent' | 'mastered' | 'rank' | 'achievement' | 'goal';
+export type JournalKind =
+  'studied' | 'cleared' | 'excellent' | 'mastered' | 'boss' | 'world' | 'rank' | 'achievement' | 'goal';
 export interface JournalEntry {
   at: number;
   day: string;
   kind: JournalKind;
   levelId?: string;
-  /** Rank name, achievement id or goal id. */
+  /** Rank name, achievement id, goal id, stage id (boss) or world id. */
   ref?: string;
   xp: number;
 }
@@ -76,6 +80,10 @@ export interface LearnerState {
   streak: Streak;
   days: ReadonlyMap<string, DayStats>;
   achievements: ReadonlyMap<string, number>;
+  /** Beaten stage bosses: stage id → time first beaten. */
+  bosses: ReadonlyMap<string, number>;
+  /** Completed worlds: world id → time completed. */
+  worlds: ReadonlyMap<string, number>;
   journal: readonly JournalEntry[];
 }
 
@@ -86,7 +94,13 @@ export interface ReplayContext {
   stepsOf: (levelId: string) => readonly string[];
   /** Daily goals award XP only when enabled. */
   dailyGoals: boolean;
+  /** World of a stage, and the stages of a world (for world completion). */
+  worldOfStage: (stageId: string) => string | undefined;
+  stagesOfWorld: (worldId: string) => readonly string[];
 }
+
+/** Achievements tied to beating particular bosses. */
+const BOSS_BADGES: Record<string, string> = { 'number-systems': 'twos-complement', 'boolean-logic': 'gatekeeper' };
 
 export const EMPTY_STATE: LearnerState = {
   xp: 0,
@@ -97,6 +111,8 @@ export const EMPTY_STATE: LearnerState = {
   streak: EMPTY_STREAK,
   days: new Map(),
   achievements: new Map(),
+  bosses: new Map(),
+  worlds: new Map(),
   journal: [],
 };
 
@@ -128,6 +144,8 @@ class Draft {
   streak: Streak;
   days: Map<string, DayStats>;
   achievements: Map<string, number>;
+  bosses: Map<string, number>;
+  worlds: Map<string, number>;
   journal: JournalEntry[];
   added: JournalEntry[] = [];
   constructor(
@@ -141,6 +159,8 @@ class Draft {
     this.streak = s.streak;
     this.days = new Map(s.days);
     this.achievements = new Map(s.achievements);
+    this.bosses = new Map(s.bosses);
+    this.worlds = new Map(s.worlds);
     this.journal = [...s.journal];
   }
   level(id: string) {
@@ -169,6 +189,27 @@ class Draft {
 
 function applyEvent(d: Draft, ctx: ReplayContext) {
   const e = d.e;
+  if (e.t === 'boss') {
+    const passed = e.correct / e.total >= PASS - 1e-9;
+    if (!passed || d.bosses.has(e.stage)) return; // a re-beaten boss earns nothing more
+    d.bosses.set(e.stage, e.at);
+    d.xp += XP.boss + XP.stage;
+    d.note('boss', XP.boss + XP.stage, { ref: e.stage });
+    d.award('first-boss');
+    const badge = BOSS_BADGES[e.stage];
+    if (badge) d.award(badge);
+    const world = ctx.worldOfStage(e.stage);
+    if (world && !d.worlds.has(world)) {
+      const all = ctx.stagesOfWorld(world);
+      if (all.length && all.every((st) => d.bosses.has(st))) {
+        d.worlds.set(world, e.at);
+        d.xp += XP.world;
+        d.note('world', XP.world, { ref: world });
+        d.award('island-hopper');
+      }
+    }
+    return;
+  }
   const lv = d.level(e.level);
   switch (e.t) {
     case 'step': {
@@ -288,10 +329,10 @@ export function reduce(
     if (rank.number >= 3) d.award('byte-sized');
   }
 
-  const lp = d.levels.get(e.level);
   let stars = s.stars;
-  if (lp) {
-    const st = displayStars(lp);
+  if (e.t !== 'boss') {
+    const lp = d.levels.get(e.level);
+    const st = lp ? displayStars(lp) : 0;
     if (st !== (s.stars.get(e.level) ?? 0)) {
       const m = new Map(s.stars);
       if (st) m.set(e.level, st);
@@ -309,6 +350,8 @@ export function reduce(
       streak: d.streak,
       days: d.days,
       achievements: d.achievements,
+      bosses: d.bosses,
+      worlds: d.worlds,
       journal: d.journal,
     },
     added: d.added,

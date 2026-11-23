@@ -65,7 +65,11 @@ async function answerAllRight(page: Page) {
     const item = pool.find((i) => i.prompt === prompt)!;
     const form = page.locator('form');
     if (item.type === 'mcq' || item.type === 'predict-output')
-      await form.locator('label.choice', { hasText: item.options[item.answer]! }).first().click();
+      await form
+        .locator('label.choice')
+        .filter({ has: page.getByText(item.options[item.answer]!, { exact: true }) })
+        .first()
+        .click();
     else if (item.type === 'spot-the-bug') await form.locator('label.bug-line').nth(item.answer).click();
     else if (item.type === 'numeric') await form.getByLabel('YOUR ANSWER').fill(String(item.answer));
     else if (item.type === 'order-steps')

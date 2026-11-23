@@ -1,0 +1,105 @@
+<Step id="hook" section="hook" title="#FF8800 and chmod 755">
+
+Web colours look like `#FF8800`; Unix file permissions look like `755`; memory addresses look like `0x7ffd5e3c`. These are hexadecimal and octal — compact ways of writing binary that people can actually read.
+
+</Step>
+
+<Step id="intuition-nibbles" section="intuition" title="Four bits, one hex digit">
+
+Four bits have exactly 16 patterns, and base 16 has exactly 16 digits. So every **hexadecimal** digit stands for one **nibble** (4 bits). Hex needs six extra digit symbols: A = 10, B = 11, C = 12, D = 13, E = 14, F = 15.
+
+Octal (base 8) does the same with groups of **3** bits.
+
+</Step>
+
+<Step id="formal-table" section="formal" title="The nibble table">
+
+| Hex | Binary | Hex | Binary |
+|---|---|---|---|
+| 0 | 0000 | 8 | 1000 |
+| 1 | 0001 | 9 | 1001 |
+| 2 | 0010 | A | 1010 |
+| 3 | 0011 | B | 1011 |
+| 4 | 0100 | C | 1100 |
+| 5 | 0101 | D | 1101 |
+| 6 | 0110 | E | 1110 |
+| 7 | 0111 | F | 1111 |
+
+Prefixes in code: `0x` for hex (`0xFF`), `0o` or a leading `0` for octal (`0o755`), `0b` for binary.
+
+</Step>
+
+<Step id="formal-why" section="formal" title="Why grouping works">
+
+Because $16 = 2^4$, the binary number $b_7 b_6 \dots b_0$ can be written as
+
+$$
+(b_7 b_6 b_5 b_4)_2 \cdot 16^1 + (b_3 b_2 b_1 b_0)_2 \cdot 16^0
+$$
+
+so each group of four bits *is* one hex digit, with no carries between groups. The same holds for octal with $8 = 2^3$.
+
+</Step>
+
+<Step id="mechanism-grouping" section="mechanism" title="Converting by grouping">
+
+**Binary → hex**: split into groups of 4 from the **right**, pad the left group with zeros, replace each group.
+
+$11111101010_2$ → `0111 1110 1010` → **7EA**.
+
+**Binary → octal**: groups of 3 from the right: `011 111 101 010` → **3752**.
+
+**Hex → binary**: replace each digit by its 4 bits. Try it on the board — the bits are drawn in nibbles:
+
+<Simulation id="binary-board" bits={16} target={65535} goal="Make 0xFFFF — every nibble F." />
+
+</Step>
+
+<Step id="worked-example" section="worked-example" title="Colours and permissions">
+
+**Colour `#FF8800`**: three bytes — red `FF` = 255, green `88` = 136, blue `00` = 0. Bright orange.
+
+**Permissions `755`**: three octal digits, three bits each, for owner/group/others; bit values read=4, write=2, execute=1.
+
+| Digit | Bits | Meaning |
+|---|---|---|
+| 7 | 111 | rwx (owner) |
+| 5 | 101 | r-x (group) |
+| 5 | 101 | r-x (others) |
+
+**Hex to decimal**: $\mathtt{2F}_{16} = 2 \cdot 16 + 15 = 47$.
+
+</Step>
+
+<Step id="tradeoffs" section="tradeoffs" title="Hex or octal?">
+
+| Hex | Octal |
+|---|---|
+| Fits 8-bit bytes exactly: two digits per byte | 3 bits per digit doesn't divide 8 — bytes straddle digits |
+| Standard today for addresses, colours, dumps, hashes | Survives where fields are 3 bits wide (Unix permissions); popular on 12-, 18- and 36-bit machines of the 1960s |
+
+</Step>
+
+<Step id="pitfalls" section="pitfalls" title="Common misconceptions">
+
+<Callout kind="warning">**Grouping from the left.** Always group from the right (the binary point). $10110_2$ is `1 0110` = 16, not `1011 0` .</Callout>
+
+<Callout kind="warning">**"A leading zero is harmless."** In C, Java and JavaScript (non-strict) a literal like `010` is *octal* 8, not ten. Python 3 forbids it and requires `0o10`.</Callout>
+
+<Callout kind="warning">**"Hex is a different kind of number."** It is only notation. `0xFF`, `255` and `0b11111111` are the same value.</Callout>
+
+</Step>
+
+<Step id="context" section="context" title="Where you will see hex">
+
+Memory addresses in debuggers, MAC addresses (`3C:52:82:…`), IPv6 addresses, Unicode code points (`U+1F600`), cryptographic hashes, and every hex dump of a file.
+
+</Step>
+
+<Step id="references" section="references" title="Go deeper">
+
+- Bryant & O'Hallaron, *CS:APP*, 3rd ed., §2.1.1 "Hexadecimal Notation".
+- Patt & Patel, *Introduction to Computing Systems*, 3rd ed., §2.7.
+- W3C, *CSS Color Module Level 4* (hex colour notation); POSIX `chmod` specification.
+
+</Step>

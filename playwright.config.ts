@@ -5,7 +5,7 @@ const executablePath = process.env.CHROME_PATH;
 
 export default defineConfig({
   testDir: 'tests/e2e',
-  timeout: 30_000,
+  timeout: 90_000, // software rendering in CI: full lesson + test flows take ~30 s
   fullyParallel: true,
   reporter: [['list']],
   use: {

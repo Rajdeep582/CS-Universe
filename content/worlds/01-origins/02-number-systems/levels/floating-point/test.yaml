@@ -1,0 +1,116 @@
+items:
+  - id: normalise
+    type: mcq
+    teaches: intuition-sci
+    prompt: How is 110.01 (binary) written in normalised binary scientific notation?
+    options:
+      - 1.1001 × 2^2
+      - 11.001 × 2^1
+      - 0.11001 × 2^3
+      - 1.1001 × 2^−2
+    answer: 0
+    explain: Move the point two places left so exactly one 1 is before it.
+
+  - id: relative
+    type: mcq
+    teaches: intuition-sci
+    prompt: What kind of precision does floating point keep the same across magnitudes?
+    options:
+      - Absolute precision (same step everywhere)
+      - Relative precision (same number of significant bits)
+      - No precision at all
+      - Decimal precision
+    answer: 1
+    explain: The significand has a fixed number of bits; the exponent scales it.
+
+  - id: layout
+    type: match
+    teaches: formal-layout
+    prompt: Match each binary32 field to its width.
+    pairs:
+      - left: Sign
+        right: 1 bit
+      - left: Exponent
+        right: 8 bits
+      - left: Fraction
+        right: 23 bits
+    explain: 1 + 8 + 23 = 32.
+
+  - id: bias
+    type: numeric
+    teaches: formal-layout
+    prompt: A normal binary32 number has exponent field 130. What power of two does it apply?
+    answer: 3
+    explain: 130 − 127 = 3.
+
+  - id: hidden
+    type: mcq
+    teaches: formal-layout
+    prompt: What is the "hidden bit" in a normal IEEE 754 number?
+    options:
+      - The sign bit
+      - The leading 1 of the significand, which is not stored
+      - A parity bit
+      - The last bit of the exponent
+    answer: 1
+    explain: Normal significands always start with 1, so it need not be stored.
+
+  - id: specials
+    type: match
+    teaches: formal-special
+    prompt: Match the exponent/fraction fields to what they encode.
+    pairs:
+      - left: Exponent all 1s, fraction 0
+        right: Infinity
+      - left: Exponent all 1s, fraction non-zero
+        right: NaN
+      - left: Exponent all 0s, fraction 0
+        right: Zero
+      - left: Exponent all 0s, fraction non-zero
+        right: Subnormal number
+    explain: The two extreme exponent values are reserved.
+
+  - id: stored-01
+    type: mcq
+    teaches: mechanism-sim
+    prompt: In the explorer, what exact value does binary32 store when you type 0.1?
+    options:
+      - Exactly 0.1
+      - '0.100000001490116119384765625'
+      - '0.09999999'
+      - '0.1000000000000000055511151231257827…'
+    answer: 1
+    explain: The nearest binary32 to 0.1 is slightly above it. (The last option is the binary64 value.)
+
+  - id: encode
+    type: mcq
+    teaches: worked-example
+    prompt: What is the binary32 exponent field for −6.25?
+    options:
+      - '2'
+      - '127'
+      - '129'
+      - '130'
+    answer: 2
+    explain: −6.25 = −1.1001 × 2^2, and 2 + 127 = 129.
+
+  - id: decode
+    type: numeric
+    teaches: worked-example
+    prompt: A binary32 has sign 0, exponent field 128 and fraction bits 1000…0. What value is it?
+    answer: 3
+    explain: 1.1 (binary) × 2^(128−127) = 1.5 × 2 = 3.
+
+  - id: gaps
+    type: numeric
+    teaches: tradeoffs
+    prompt: What is the smallest positive integer that binary32 cannot represent exactly?
+    answer: 16777217
+    explain: 2^24 + 1 needs 25 significant bits.
+
+  - id: precision-bits
+    type: numeric
+    teaches: pitfalls
+    prompt: How many significant bits does a binary32 float have?
+    answer: 24
+    explain: 23 stored fraction bits plus the hidden 1.

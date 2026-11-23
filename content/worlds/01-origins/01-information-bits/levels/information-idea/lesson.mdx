@@ -1,0 +1,110 @@
+<Step id="hook" section="hook" title="A lantern in a church tower">
+
+In 1775, Boston patriots agreed on a signal: *one lantern if by land, two if by sea*. Two lanterns carried a whole military plan across a river — because both sides had agreed in advance on what each possibility meant.
+
+That is information in its purest form: **telling apart possibilities that were agreed beforehand**.
+
+</Step>
+
+<Step id="intuition-difference" section="intuition" title="Information is a difference">
+
+A light that is always on tells you nothing. A light that can be *on or off* can answer one yes/no question. Information needs at least **two distinguishable states**, and the receiver must be able to tell which one occurred.
+
+The more possibilities you can tell apart, the more information one observation can carry.
+
+</Step>
+
+<Step id="intuition-physical" section="intuition" title="Any physical difference will do">
+
+The states can be anything physical that can be reliably distinguished:
+
+| Medium | Two states |
+|---|---|
+| Wire in a chip | Low voltage / high voltage |
+| Hard-disk surface | Magnetised one way / the other way |
+| Optical fibre | Light pulse / no pulse |
+| CD or DVD | Pit / land (flat area) |
+| Flash memory cell | Little / much trapped charge |
+
+The *meaning* is not in the physics; it is in the agreed **encoding**.
+
+</Step>
+
+<Step id="formal-states" section="formal" title="States, symbols and encodings">
+
+- A **message** selects one possibility out of a set agreed in advance.
+- An **encoding** is the agreed mapping between physical states (or symbols) and meanings.
+- With **n** distinguishable states per symbol and **k** symbols in a row, you can tell apart $n^k$ different messages.
+
+Two lanterns, each lit or unlit, give $2^2 = 4$ combinations — more than the plan needed.
+
+</Step>
+
+<Step id="formal-why-binary" section="formal" title="Why computers use two states">
+
+Real signals are noisy: a "5 V" wire may read 4.6 V or 5.3 V. With only two states, the hardware can leave a wide **noise margin** between "low" and "high", so small disturbances never flip a value. With ten levels on the same wire, the gaps would be much narrower and errors far more likely.
+
+Two-state (binary) signals are also the easiest to build: a transistor switch is either conducting or not.
+
+</Step>
+
+<Step id="mechanism-thresholds" section="mechanism" title="How a circuit decides 0 or 1">
+
+A digital input does not need an exact voltage. The circuit compares the voltage with thresholds:
+
+| Voltage on the wire (example 3.3 V logic) | Read as |
+|---|---|
+| Below about 0.8 V | 0 (low) |
+| Between the thresholds | Not allowed — the forbidden zone |
+| Above about 2.0 V | 1 (high) |
+
+Outputs are driven well beyond the thresholds, so a signal can pick up noise on the way and still be read correctly. Every gate re-creates a clean 0 or 1 — this **restoration** is why digital copies do not degrade the way analogue copies do.
+
+</Step>
+
+<Step id="worked-example" section="worked-example" title="How many possibilities?">
+
+**Traffic light** — red, amber, green: 3 states, one at a time → 3 messages.
+
+**Three switches**, each on or off: $2 \times 2 \times 2 = 2^3 = 8$ combinations.
+
+**A two-character code** using the 10 digits: $10^2 = 100$ messages (00 to 99).
+
+**How many on/off switches to name 50 seats?** 5 switches give $2^5 = 32$ (too few); 6 give $2^6 = 64$ (enough). So 6.
+
+</Step>
+
+<Step id="tradeoffs" section="tradeoffs" title="More levels per symbol?">
+
+| Choice | Benefit | Cost |
+|---|---|---|
+| 2 levels per signal | Large noise margins, simple circuits | More symbols needed for the same message |
+| More levels per signal (e.g. 16 charge levels — 4 bits — per cell in "QLC" flash) | More information in the same space | Levels closer together — more errors, slower and more careful reading, error-correcting codes needed |
+
+Engineers do use more than two levels where density matters most (flash storage, fast network links), and pay for it with heavy error correction.
+
+</Step>
+
+<Step id="pitfalls" section="pitfalls" title="Common misconceptions">
+
+<Callout kind="warning">**"The data means something by itself."** A pattern only has meaning under an agreed encoding. The same states could be a number, a letter, a colour or an instruction.</Callout>
+
+<Callout kind="warning">**"Information is the same as the amount of data."** Sending a message whose content the receiver already knows conveys no new information, however long it is.</Callout>
+
+<Callout kind="warning">**"Digital means perfect."** Digital systems tolerate noise up to a margin; beyond it, values flip. That is why storage and networks add error-detecting and error-correcting codes.</Callout>
+
+</Step>
+
+<Step id="context" section="context" title="From telegraphs to Shannon">
+
+The electric telegraph (1830s–40s) already sent information as on/off pulses. In 1948 Claude Shannon's *A Mathematical Theory of Communication* gave information a precise measure, and named its unit the **bit** (a word he credited to John Tukey). Every later topic — numbers, text, images, network packets — is a choice of encoding on top of distinguishable states.
+
+</Step>
+
+<Step id="references" section="references" title="Go deeper">
+
+- Charles Petzold, *Code*, 2nd ed., ch. 1–2 (codes and combinations).
+- Claude E. Shannon, "A Mathematical Theory of Communication", *Bell System Technical Journal* 27, 1948.
+- Patt & Patel, *Introduction to Computing Systems*, 3rd ed., ch. 2 (bits and data types).
+
+</Step>

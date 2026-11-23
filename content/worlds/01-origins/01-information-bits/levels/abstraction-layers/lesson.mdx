@@ -1,0 +1,111 @@
+<Step id="hook" section="hook" title="Nobody understands the whole machine">
+
+A modern processor has billions of transistors; a web browser has tens of millions of lines of code. No single person understands all of it at once — yet people build, fix and improve these systems every day.
+
+The trick that makes this possible is **abstraction**: working at one level while trusting the levels below.
+
+</Step>
+
+<Step id="intuition-driving" section="intuition" title="Interfaces hide implementations">
+
+To drive a car you use a steering wheel, pedals and a gear selector. You do not need to know how fuel injection timing or the anti-lock braking controller works. The **interface** (wheel and pedals) stays the same while the **implementation** underneath can change completely — a petrol engine or an electric motor.
+
+An **abstraction** is exactly this: a simpler view of something, given by an interface, that hides details you do not need for the task at hand.
+
+</Step>
+
+<Step id="intuition-layers" section="intuition" title="A stack of layers">
+
+Computing stacks abstractions on top of each other. Each layer uses only the interface of the layer directly below and offers a simpler interface to the layer above. A programmer writing a game calls a function to draw a sprite; that function is built from operating-system calls; those run as machine instructions; those are carried out by logic circuits; those are built from transistors.
+
+</Step>
+
+<Step id="formal-levels" section="formal" title="The levels of transformation">
+
+Patt and Patel describe the path from a problem to electrons as a sequence of **levels of transformation**:
+
+| Level | What it is |
+|---|---|
+| Problem | Described in natural language — often ambiguous |
+| Algorithm | A precise, finite, step-by-step procedure |
+| Program | The algorithm written in a programming language |
+| ISA (instruction set architecture) | The machine's instructions, registers and memory model — the hardware/software contract |
+| Microarchitecture | One particular hardware organisation that implements the ISA |
+| Logic circuits | Gates, adders, multiplexers, storage elements |
+| Devices | Transistors and the physics of electrons |
+
+Between the program and the ISA sit translators (compilers, assemblers) and the **operating system**, which manages the hardware for all programs.
+
+</Step>
+
+<Step id="formal-contract" section="formal" title="Interface = contract">
+
+An interface is a **contract**: it states *what* a layer promises, not *how* it does it. The ISA is the most important contract in the stack — x86-64, ARMv8 and RISC-V are ISAs. Many different microarchitectures implement the same ISA, so one compiled program runs on a cheap laptop chip and an expensive server chip alike.
+
+</Step>
+
+<Step id="mechanism-translation" section="mechanism" title="One line, all the way down">
+
+Follow `total = total + price` down the stack:
+
+1. **Program** — a statement in a high-level language.
+2. **Compiler** — translates it into instructions for the ISA, for example a load, an add and a store.
+3. **ISA** — each instruction is a binary pattern with a defined meaning.
+4. **Microarchitecture** — the CPU fetches the pattern, decodes it, sends the operands to its adder.
+5. **Logic** — the adder is a chain of full-adder circuits built from gates.
+6. **Devices** — each gate is a few transistors switching on and off.
+
+At every step the upper layer relies only on the lower layer's contract.
+
+</Step>
+
+<Step id="worked-example" section="worked-example" title="Which layer changed?">
+
+Decide which level each change belongs to:
+
+| Change | Level | Why |
+|---|---|---|
+| Switching from bubble sort to merge sort | Algorithm | A different procedure for the same problem |
+| Rewriting the same algorithm from Python into C | Program | Same algorithm, different language |
+| A new chip with more cache but the same instructions | Microarchitecture | The ISA (contract) is unchanged, so old programs still run |
+| Moving from a 7 nm to a 3 nm manufacturing process | Devices | Smaller transistors; circuits and ISA can stay the same |
+
+Notice the pattern: a change at one level does not force changes at the others, as long as the interfaces stay the same.
+
+</Step>
+
+<Step id="tradeoffs" section="tradeoffs" title="What abstraction costs">
+
+| Gain | Cost |
+|---|---|
+| Each layer can be designed, tested and replaced on its own | Each layer adds overhead: generic interfaces are rarely the fastest possible path |
+| Programs outlive hardware (same ISA, new chips) | Some performance is only available by looking through the layers — e.g. arranging data to suit the cache |
+| Specialists can work in parallel | Bugs that cross layers are hard to find, because no one sees both sides |
+
+High-performance code often "breaks" abstraction on purpose, which is why systems programmers study several layers at once.
+
+</Step>
+
+<Step id="pitfalls" section="pitfalls" title="Leaky abstractions">
+
+<Callout kind="warning">**"An abstraction hides everything below it."** Not quite. Joel Spolsky's *Law of Leaky Abstractions* (2002): all non-trivial abstractions leak to some degree. Example: memory looks like one flat array of bytes, yet reading it in a different order can be ten times slower, because the cache below leaks through as performance.</Callout>
+
+<Callout kind="warning">**"Higher level means slower, so lower is better."** Lower levels give control, not automatic speed. A better algorithm usually beats careful low-level tuning of a worse one.</Callout>
+
+<Callout kind="warning">**"The ISA is the hardware."** The ISA is a *specification*. The microarchitecture is the hardware that implements it — and there can be many.</Callout>
+
+</Step>
+
+<Step id="context" section="context" title="Where you will meet each layer">
+
+This course climbs the same stack: **Origins** (information, numbers, logic), **The Machine** (circuits, ISA, microarchitecture), **Systems** (operating systems, networks), **Programming** and **Languages** (programs and compilers), **Algorithms** (algorithms). When a later topic seems mysterious, ask which layer it lives at and which contract it relies on.
+
+</Step>
+
+<Step id="references" section="references" title="Go deeper">
+
+- Yale Patt & Sanjay Patel, *Introduction to Computing Systems: From Bits & Gates to C/C++ & Beyond*, 3rd ed., ch. 1 (levels of transformation).
+- Patterson & Hennessy, *Computer Organization and Design*, RISC-V ed., ch. 1 (abstraction as a great idea in computer architecture).
+- Joel Spolsky, "The Law of Leaky Abstractions", *Joel on Software*, 2002.
+
+</Step>

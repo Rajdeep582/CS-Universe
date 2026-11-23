@@ -1,5 +1,6 @@
 import { Link, useParams } from '@tanstack/react-router';
-import { BookOpen, Castle, Gift, Lock } from 'lucide-react';
+import { BookOpen, Castle, Gift, Lock, Swords } from 'lucide-react';
+import { useLearner } from '@/engine/progress/learner';
 import { levelById, levelsOfStage, stageById, stageCode, worldById, type Level } from '@/engine/content';
 import { useProgress } from '../useProgress';
 import { stageStatus } from '../derive';
@@ -52,6 +53,7 @@ export function StagePage() {
   const { worldId, stageId } = useParams({ from: '/_atlas/atlas/$worldId/$stageId' });
   const s = stageById.get(stageId);
   const { cleared } = useProgress();
+  const beaten = useLearner((x) => x.bosses.has(stageId));
   if (!s || s.worldId !== worldId) return <NotFound />;
   const w = worldById.get(s.worldId)!;
   const st = stageStatus(s, cleared);
@@ -123,10 +125,20 @@ export function StagePage() {
             <p className="mt-3 text-[13.5px] font-medium leading-relaxed text-ink-2">{s.boss.description}</p>
             <p className="mt-3 flex items-center gap-2 text-[12.5px] font-bold text-rose-3">
               <Lock size={15} aria-hidden />
-              {coreCleared === core.length
-                ? 'Unlocked'
-                : `Clear all ${core.length} road levels to unlock (${coreCleared}/${core.length})`}
+              {beaten
+                ? 'Beaten — the flag flies'
+                : coreCleared === core.length
+                  ? 'Unlocked'
+                  : `Clear all ${core.length} road levels to unlock (${coreCleared}/${core.length})`}
             </p>
+            <Link
+              to="/boss/$stageId"
+              params={{ stageId: s.id }}
+              className={`gem gem-md mt-4 w-full ${coreCleared === core.length ? 'gem-rose' : 'gem-glass'}`}
+            >
+              <Swords size={18} />{' '}
+              {coreCleared === core.length ? (beaten ? 'Fight again' : 'Fight the boss') : 'Boss details'}
+            </Link>
           </GlassPanel>
           <GlassPanel className="rise rounded-[24px] p-5">
             <h2 className="flex items-center gap-2 font-display text-[13px] font-extrabold tracking-[.14em] text-muted">

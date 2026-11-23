@@ -1,0 +1,96 @@
+<Step id="hook" section="hook" title="The cheapest instruction">
+
+Shifting slides all bits of a word left or right. It costs a single cycle, multiplies or divides by powers of two, and pulls fields out of packed data. It also hides two traps: what to put in the vacated bits, and what happens to negative numbers.
+
+</Step>
+
+<Step id="intuition-slide" section="intuition" title="Sliding bits">
+
+**Left shift** by $k$: every bit moves $k$ places towards the MSB; zeros enter at the right; bits pushed off the left end are lost.
+
+**Right shift** by $k$: bits move towards the LSB; bits falling off the right are lost; and something must fill the $k$ empty places at the left.
+
+</Step>
+
+<Step id="formal-kinds" section="formal" title="Logical vs arithmetic right shift">
+
+| Shift | Fills the left with | Meaning |
+|---|---|---|
+| Logical right | Zeros | Unsigned division by $2^k$ (rounding down) |
+| Arithmetic right | Copies of the sign bit | Signed division by $2^k$, rounding toward $-\infty$ |
+| Left (both) | Zeros at the right | Multiplication by $2^k$ (if nothing important falls off) |
+
+In Java, `>>` is arithmetic and `>>>` is logical. In C, `>>` on an unsigned type is logical; on a negative signed value it is implementation-defined (arithmetic on mainstream compilers), and C++20 made it arithmetic.
+
+</Step>
+
+<Step id="formal-masks" section="formal" title="Shifts with masks">
+
+Shifts combine with AND/OR to work on bit fields:
+
+- Bit $k$ alone: `1 << k`.
+- Read bits 4–7 of `x`: `(x >> 4) & 0xF`.
+- Set bit $k$: `x | (1 << k)`. Clear it: `x & ~(1 << k)`.
+
+(Bitwise operators are covered fully in Boolean Logic.)
+
+</Step>
+
+<Step id="mechanism-trace" section="mechanism" title="Three shifts of the same pattern">
+
+Start from the 8-bit pattern `1111 1001` (unsigned 249, signed −7):
+
+| Operation | Result | Unsigned | Signed |
+|---|---|---|---|
+| left by 1 | `1111 0010` | 242 (= 498 mod 256 — a bit was lost) | −14 |
+| logical right by 1 | `0111 1100` | 124 | 124 |
+| arithmetic right by 1 | `1111 1100` | 252 | −4 |
+
+Arithmetic right shift kept the sign: $-7 / 2 = -3.5$, rounded **down** to −4.
+
+</Step>
+
+<Step id="worked-example" section="worked-example" title="Unpacking an RGB colour">
+
+A 24-bit colour is stored as `0xRRGGBB` in an integer `c = 0xFF8800`:
+
+- red `= (c >> 16) & 0xFF` = `0xFF` = 255
+- green `= (c >> 8) & 0xFF` = `0x88` = 136
+- blue `= c & 0xFF` = 0
+
+Packing goes the other way: `c = (r << 16) | (g << 8) | b`.
+
+</Step>
+
+<Step id="tradeoffs" section="tradeoffs" title="Shifts versus arithmetic">
+
+| Use shifts | Prefer ordinary operators |
+|---|---|
+| Packing/unpacking fields, flags, hashes, bit-level protocols | Plain multiplication/division — compilers already turn `x * 8` into a shift |
+| Unsigned division by powers of two | Signed division where you need rounding toward zero (`/`), not toward −∞ |
+
+</Step>
+
+<Step id="pitfalls" section="pitfalls" title="Common misconceptions">
+
+<Callout kind="warning">**"`x >> 1` equals `x / 2` for every int."** For negative odd $x$ they differ: $-7 \gg 1 = -4$ but $-7 / 2 = -3$ in C and Java.</Callout>
+
+<Callout kind="warning">**"Shifting by the width gives 0."** In C, shifting by ≥ the width is undefined behaviour. Java masks the count (for `int`, `x << 32` is `x << 0`), and x86 hardware masks it to 5 bits for 32-bit operands.</Callout>
+
+<Callout kind="warning">**"Left shift is always × 2."** Bits that fall off the top are lost; shifting a 1 into the sign bit of a signed C integer is undefined behaviour.</Callout>
+
+</Step>
+
+<Step id="context" section="context" title="Rotate">
+
+Most ISAs also have **rotate** instructions, where bits falling off one end re-enter at the other. Rotates are common in hash functions and ciphers (SHA-256 uses 32-bit rotations), and C++20 added `std::rotl`/`std::rotr`.
+
+</Step>
+
+<Step id="references" section="references" title="Go deeper">
+
+- Bryant & O'Hallaron, *CS:APP*, 3rd ed., §2.1.9 "Shift Operations in C" and §2.3.7.
+- Henry S. Warren, *Hacker's Delight*, 2nd ed., ch. 2 and 10.
+- *The Java Language Specification*, §15.19 "Shift Operators".
+
+</Step>

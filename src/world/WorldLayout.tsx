@@ -6,6 +6,7 @@ import { Navigate, Outlet, useNavigate, useParams, useSearch } from '@tanstack/r
 import * as THREE from 'three';
 import { stageById, worldById } from '@/engine/content';
 import { useProgress } from '@/app/useProgress';
+import { useLearner } from '@/engine/progress/learner';
 import { ContinueBar } from '@/ui/hud/ContinueBar';
 import { CameraRig } from './CameraRig';
 import { useCamera } from './cameraStore';
@@ -113,6 +114,7 @@ export function WorldLayout() {
         : false,
     [stage, cleared],
   );
+  const bossBeaten = useLearner((st) => (stage ? st.bosses.has(stage.id) : false));
   const homeWorldId = next?.worldId ?? null;
   // World lit by progress: each stage's lantern glows with the share of its levels cleared.
   const stageLight = useMemo(() => {
@@ -164,6 +166,7 @@ export function WorldLayout() {
               stars={starsOf}
               halo={haloOf}
               bossOpen={bossOpen}
+              bossBeaten={bossBeaten}
               onPickLevel={onPickLevel}
             />
           ) : (

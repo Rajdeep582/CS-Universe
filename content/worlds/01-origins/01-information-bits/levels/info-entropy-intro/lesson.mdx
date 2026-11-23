@@ -1,0 +1,89 @@
+<Step id="hook" section="hook" title="Which news tells you more?">
+
+"The sun rose this morning" tells you almost nothing — you were sure of it. "It snowed in the Sahara" tells you a lot. Claude Shannon turned this intuition into a number: **the less likely an outcome, the more information it carries**.
+
+</Step>
+
+<Step id="intuition-surprise" section="intuition" title="Information as surprise">
+
+If an outcome was certain, learning it carries no information. A fair coin's result answers exactly one even yes/no question — one bit. A fair 8-sided die answers three such questions ($8 = 2^3$), so its result is worth 3 bits. Rare outcomes are more surprising and carry more bits; common ones carry fewer.
+
+</Step>
+
+<Step id="formal-self-info" section="formal" title="Self-information">
+
+The information of an outcome with probability $p$ is
+
+$$
+I(p) = \log_2 \frac{1}{p} = -\log_2 p \quad \text{bits.}
+$$
+
+| p | I(p) |
+|---|---|
+| 1 | 0 bits (certain) |
+| 1/2 | 1 bit |
+| 1/8 | 3 bits |
+| 1/1024 | 10 bits |
+
+</Step>
+
+<Step id="formal-entropy" section="formal" title="Entropy: average information">
+
+A source produces outcomes with probabilities $p_1, \dots, p_n$. Its **entropy** is the average information per outcome:
+
+$$
+H = -\sum_{i=1}^{n} p_i \log_2 p_i
+$$
+
+Facts: $H \ge 0$; $H$ is largest — exactly $\log_2 n$ — when all $n$ outcomes are equally likely; and $H = 0$ when one outcome is certain.
+
+</Step>
+
+<Step id="mechanism-coding" section="mechanism" title="Why entropy is the limit of compression">
+
+Shannon's **source coding theorem** says that no lossless code can use fewer than $H$ bits per symbol on average, and that codes can get arbitrarily close to $H$. Intuition: frequent symbols get short codewords, rare symbols long ones. If "e" makes up 12 % of English letters and "z" 0.07 %, giving "e" a short code saves far more than giving "z" a long one costs. Huffman coding (in the compression level) builds such codes.
+
+</Step>
+
+<Step id="worked-example" section="worked-example" title="Computing entropy">
+
+**Fair coin**: $H = -(0.5\log_2 0.5 + 0.5\log_2 0.5) = 1$ bit.
+
+**Fair six-sided die**: $H = \log_2 6 \approx 2.585$ bits. You still need 3 bits to store one roll, but long sequences of rolls can be packed at about 2.585 bits each.
+
+**Biased coin** (heads 90 %): $H = -(0.9\log_2 0.9 + 0.1\log_2 0.1) \approx 0.9 \times 0.152 + 0.1 \times 3.322 \approx 0.469$ bits. Long runs of such tosses compress to under half a bit per toss.
+
+</Step>
+
+<Step id="tradeoffs" section="tradeoffs" title="Fixed-length versus variable-length codes">
+
+| Code | Strength | Weakness |
+|---|---|---|
+| Fixed length ($\lceil \log_2 n \rceil$ bits each) | Simple; any symbol can be found by position | Wastes bits when probabilities are uneven |
+| Variable length (near $H$ bits average) | Close to the theoretical limit | Must be decoded in order; one flipped bit can garble what follows |
+
+</Step>
+
+<Step id="pitfalls" section="pitfalls" title="Common misconceptions">
+
+<Callout kind="warning">**"Entropy is about meaning."** Shannon's information measures uncertainty, not importance or truth. A random string has maximum entropy and no meaning.</Callout>
+
+<Callout kind="warning">**"Any file can be compressed."** Data near maximum entropy — already-compressed files, encrypted data, true random bytes — cannot be shrunk further on average.</Callout>
+
+<Callout kind="warning">**"Entropy is the bits needed for one symbol."** It is an *average* over many symbols; a single die roll still needs a whole number of bits.</Callout>
+
+</Step>
+
+<Step id="context" section="context" title="Where entropy shows up">
+
+Compression formats (ZIP, PNG, MP3's final stage), password strength ("bits of entropy"), machine learning (cross-entropy loss) and cryptography (random-number quality) all use Shannon's measure. Information theory itself is a later subject; this level is the first taste.
+
+</Step>
+
+<Step id="references" section="references" title="Go deeper">
+
+- Claude E. Shannon, "A Mathematical Theory of Communication", *Bell System Technical Journal* 27, 1948, §6.
+- Thomas M. Cover & Joy A. Thomas, *Elements of Information Theory*, 2nd ed., ch. 2 and 5.
+- David J. C. MacKay, *Information Theory, Inference, and Learning Algorithms* (free online), ch. 2 and 4.
+
+</Step>

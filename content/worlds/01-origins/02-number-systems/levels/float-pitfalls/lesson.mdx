@@ -1,0 +1,96 @@
+<Step id="hook" section="hook" title="0.1 + 0.2 = 0.30000000000000004">
+
+Type `0.1 + 0.2` into a JavaScript or Python prompt and you get `0.30000000000000004`. Nothing is broken: this is what IEEE 754 binary64 is *supposed* to do. Knowing why — and how to live with it — separates working numeric code from code that fails in production.
+
+</Step>
+
+<Step id="intuition-rounding" section="intuition" title="Every operation rounds">
+
+Neither 0.1 nor 0.2 is exact in binary; each is stored as the nearest representable double. Their sum is computed exactly and then **rounded** again to the nearest double — which happens to be one step above the double nearest to 0.3. Small errors appear on input and after every operation.
+
+</Step>
+
+<Step id="formal-epsilon" section="formal" title="Machine epsilon and ulp">
+
+**Machine epsilon** $\varepsilon$ is the gap between 1 and the next larger representable number:
+
+| Format | $\varepsilon$ |
+|---|---|
+| binary32 | $2^{-23} \approx 1.19 \times 10^{-7}$ |
+| binary64 | $2^{-52} \approx 2.22 \times 10^{-16}$ |
+
+With round-to-nearest, one operation's relative error is at most $\varepsilon / 2$. The gap between neighbours near $x$ — one **ulp** (unit in the last place) — grows with $|x|$: near $10^{16}$ neighbouring doubles are 2 apart.
+
+</Step>
+
+<Step id="formal-laws" section="formal" title="Algebra that no longer holds">
+
+- **Not associative**: $(a + b) + c$ may differ from $a + (b + c)$.
+- **Cancellation**: subtracting nearly equal numbers wipes out the significant digits they shared, leaving mostly rounding error.
+- **NaN is unequal to everything, including itself**: `NaN == NaN` is false.
+- **Two zeros**: $+0 = -0$ compares true, yet $1/{+0} = +\infty$ and $1/{-0} = -\infty$.
+
+</Step>
+
+<Step id="mechanism-trace" section="mechanism" title="Watching information disappear">
+
+In binary64, near $10^{16}$ the spacing is 2, so adding 1 is lost:
+
+| Expression | Result |
+|---|---|
+| `(1e16 + 1) - 1e16` | 0 — the 1 was rounded away |
+| `(1e16 - 1e16) + 1` | 1 |
+
+Summing many small numbers into a large total loses them the same way. **Kahan summation** keeps a running compensation term for the lost low-order bits and makes long sums dramatically more accurate.
+
+</Step>
+
+<Step id="worked-example" section="worked-example" title="Comparing floats safely">
+
+Never test `x == 0.3`. Compare with a tolerance that scales with the values:
+
+```js
+function nearlyEqual(a, b, rel = 1e-9, abs = 1e-12) {
+  return Math.abs(a - b) <= Math.max(rel * Math.max(Math.abs(a), Math.abs(b)), abs);
+}
+nearlyEqual(0.1 + 0.2, 0.3); // true
+```
+
+The absolute floor `abs` handles values near zero, where a relative test alone would fail. Choose the tolerances from the accuracy your problem actually needs.
+
+</Step>
+
+<Step id="tradeoffs" section="tradeoffs" title="Choosing a number type">
+
+| Need | Use |
+|---|---|
+| Money, prices, legal amounts | Integers in the smallest unit (cents), or a **decimal** type (`BigDecimal`, Python `decimal`) |
+| Science, graphics, ML | binary64 / binary32, with error-aware algorithms |
+| Counting, IDs, indices | Integers — never floats |
+| Exact rationals | A rational or big-number library — slower, but exact |
+
+</Step>
+
+<Step id="pitfalls" section="pitfalls" title="Common misconceptions">
+
+<Callout kind="warning">**"Floating point is random or buggy."** It is deterministic and precisely specified: the same operations in the same order give the same bits.</Callout>
+
+<Callout kind="warning">**"Use `x == NaN` to detect NaN."** Always false. Use `Number.isNaN(x)`, `math.isnan(x)` or `x != x`.</Callout>
+
+<Callout kind="warning">**"A fixed epsilon like 1e-9 always works."** For values around $10^{12}$, neighbouring doubles are already more than $10^{-4}$ apart. Tolerances must be relative to the magnitudes.</Callout>
+
+</Step>
+
+<Step id="context" section="context" title="When it matters">
+
+The Vancouver Stock Exchange index, created in 1982 at 1,000, was recalculated thousands of times a day and **truncated** to three decimals each time; by November 1983 it read about 524 when it should have been about 1,099. Rounding policy is not a detail.
+
+</Step>
+
+<Step id="references" section="references" title="Go deeper">
+
+- David Goldberg, "What Every Computer Scientist Should Know About Floating-Point Arithmetic", *ACM Computing Surveys* 23(1), 1991.
+- Nicholas J. Higham, *Accuracy and Stability of Numerical Algorithms*, 2nd ed., ch. 2 and §4.3 (compensated summation).
+- Bryant & O'Hallaron, *CS:APP*, 3rd ed., §2.4.5 "Floating-Point Operations".
+
+</Step>

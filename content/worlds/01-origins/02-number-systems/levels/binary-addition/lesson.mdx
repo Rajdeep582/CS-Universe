@@ -1,0 +1,103 @@
+<Step id="hook" section="hook" title="The whole addition table fits on a sticky note">
+
+Decimal addition needs a 10 × 10 table you memorised as a child. Binary addition needs four facts. Because it is so small, it can be built from a handful of switches — and every adder in every processor is.
+
+</Step>
+
+<Step id="intuition-columns" section="intuition" title="Same column method, smaller table">
+
+Add column by column from the right, carrying when a column overflows — exactly like decimal. In binary a column overflows as soon as it reaches 2:
+
+| a + b (+ carry in) | sum bit | carry out |
+|---|---|---|
+| 0 + 0 | 0 | 0 |
+| 0 + 1 | 1 | 0 |
+| 1 + 1 | 0 | 1 (because 1 + 1 = $10_2$) |
+| 1 + 1 + 1 | 1 | 1 (because 3 = $11_2$) |
+
+</Step>
+
+<Step id="formal-full-adder" section="formal" title="The full adder">
+
+One column takes three input bits $a$, $b$, $c_{in}$ and produces two output bits:
+
+$$
+s = a \oplus b \oplus c_{in}, \qquad c_{out} = ab + c_{in}(a \oplus b)
+$$
+
+$\oplus$ is exclusive-or (1 when an odd number of inputs are 1); $c_{out}$ is 1 when at least two of the three inputs are 1 (the **majority**). A circuit computing this is a **full adder**; one without the carry input is a **half adder**.
+
+</Step>
+
+<Step id="formal-ripple" section="formal" title="Chaining columns: the ripple-carry adder">
+
+Connect $n$ full adders so each one's $c_{out}$ feeds the next one's $c_{in}$: an $n$-bit **ripple-carry adder**. Its result has $n$ bits plus a final carry out. The carry may have to travel ("ripple") through every column, so the delay grows in proportion to $n$.
+
+</Step>
+
+<Step id="mechanism-trace" section="mechanism" title="Watching carries ripple">
+
+Add $1011_2$ (11) and $0110_2$ (6):
+
+| Column | 3 | 2 | 1 | 0 |
+|---|---|---|---|---|
+| carry in | 1 | 1 | 1 | 0 |
+| a | 1 | 0 | 1 | 1 |
+| b | 0 | 1 | 1 | 0 |
+| sum | 0 | 0 | 0 | 1 |
+| carry out | 1 | 1 | 1 | 0 |
+
+Column 0: 1 + 0 = 1. Column 1: 1 + 1 = 10 → write 0, carry 1. Column 2: 0 + 1 + 1 = 10 → 0, carry 1. Column 3: 1 + 0 + 1 = 10 → 0, carry 1. Final carry out 1 becomes the fifth bit: $10001_2 = 17$ ✓.
+
+</Step>
+
+<Step id="worked-example" section="worked-example" title="Two more sums">
+
+$$
+\begin{aligned}
+&\phantom{+}\ 0110\,1101 \quad (109)\\
+&+\ 0011\,0110 \quad (54)\\
+&=\ 1010\,0011 \quad (163)
+\end{aligned}
+$$
+
+Check: $128 + 32 + 2 + 1 = 163$ ✓.
+
+$1111_2 + 0001_2 = 1\,0000_2$: every column carries — the worst case for a ripple adder, since the carry must travel the full width.
+
+</Step>
+
+<Step id="tradeoffs" section="tradeoffs" title="Fast adders">
+
+| Adder | Delay | Size |
+|---|---|---|
+| Ripple-carry | Grows linearly with width — slow for 64 bits | Smallest: n full adders |
+| Carry-lookahead / prefix adders | Grows with $\log n$ | More gates and wires to compute carries in parallel |
+
+Processors use lookahead-style adders because addition sits on the critical path of almost every instruction.
+
+</Step>
+
+<Step id="pitfalls" section="pitfalls" title="Common misconceptions">
+
+<Callout kind="warning">**"1 + 1 = 2 in binary."** There is no digit 2: $1 + 1 = 10_2$, write 0 and carry 1.</Callout>
+
+<Callout kind="warning">**Forgetting the carry into a column with 1 + 1.** $1 + 1 + 1 = 11_2$: write 1, carry 1.</Callout>
+
+<Callout kind="warning">**"The carry out is an error."** For unsigned numbers it is the next bit of the true sum; it signals overflow only when there is no room to store it (see the overflow level).</Callout>
+
+</Step>
+
+<Step id="context" section="context" title="From adder to ALU">
+
+The adder is the heart of the ALU: subtraction, comparison, address calculation and even multiplication are built on it. You will build a full adder from gates in **The Machine** world.
+
+</Step>
+
+<Step id="references" section="references" title="Go deeper">
+
+- Patt & Patel, *Introduction to Computing Systems*, 3rd ed., §2.5 and §3.3.
+- Patterson & Hennessy, *COD* RISC-V ed., Appendix A.5 (adders, carry lookahead).
+- Harris & Harris, *Digital Design and Computer Architecture*, §5.2.1 (ripple-carry, lookahead and prefix adders).
+
+</Step>

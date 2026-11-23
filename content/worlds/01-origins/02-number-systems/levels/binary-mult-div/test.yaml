@@ -1,0 +1,107 @@
+items:
+  - id: shift-left
+    type: numeric
+    teaches: intuition-shift
+    prompt: Shifting the unsigned binary number 0000 0110 left by 2 places gives which decimal value?
+    answer: 24
+    explain: 6 × 2^2 = 24.
+
+  - id: shift-right
+    type: numeric
+    teaches: intuition-shift
+    prompt: Shifting the unsigned binary number 0001 0111 (23) right by 1 place gives which decimal value?
+    answer: 11
+    explain: 23 ÷ 2 = 11, remainder dropped.
+
+  - id: partials
+    type: mcq
+    teaches: formal-mult
+    prompt: In binary shift-and-add multiplication, each partial product is…
+    options:
+      - Any digit 0–9 times the multiplicand
+      - Either zero or the multiplicand shifted left
+      - Always the multiplier
+      - A random guess corrected later
+    answer: 1
+    explain: Multiplier bits are only 0 or 1.
+
+  - id: width
+    type: numeric
+    teaches: formal-mult
+    prompt: Two 16-bit unsigned numbers are multiplied. How many bits can the full product need?
+    answer: 32
+    explain: n × n bits → up to 2n bits.
+
+  - id: div-identity
+    type: mcq
+    teaches: formal-div
+    prompt: Division of a by d gives quotient q and remainder r. Which must hold?
+    options:
+      - a = q + d·r
+      - a = q·d + r with 0 ≤ r < d
+      - a = q·r + d
+      - r > d
+    answer: 1
+    explain: The division identity.
+
+  - id: mult
+    type: mcq
+    teaches: mechanism-trace
+    prompt: What is 1011 × 101 in binary?
+    options:
+      - '110111'
+      - '101111'
+      - '111011'
+      - '100111'
+    answer: 0
+    explain: 1011 + 101100 = 110111 (11 × 5 = 55).
+
+  - id: mult-dec
+    type: numeric
+    teaches: mechanism-trace
+    prompt: Multiply 111 × 11 (binary). What is the product in decimal?
+    answer: 21
+    explain: 7 × 3 = 21 (111 + 1110 = 10101).
+
+  - id: divide
+    type: mcq
+    teaches: worked-example
+    prompt: What are the quotient and remainder of 1101 ÷ 11 (binary)?
+    options:
+      - quotient 100, remainder 1
+      - quotient 101, remainder 0
+      - quotient 11, remainder 10
+      - quotient 100, remainder 0
+    answer: 0
+    explain: 13 = 4 × 3 + 1.
+
+  - id: cost
+    type: mcq
+    teaches: tradeoffs
+    prompt: Why do compilers turn x * 8 into x << 3?
+    options:
+      - Shifts are faster than general multiplication
+      - Multiplication is not exact
+      - Shifts use less memory
+      - Multiplication only works on even numbers
+    answer: 0
+    explain: A shift takes one cycle; it gives the same result for multiplication by a power of two.
+
+  - id: low-bits
+    type: mcq
+    teaches: pitfalls
+    prompt: A program multiplies two 32-bit unsigned values and keeps only 32 bits of the result. What can go wrong?
+    options:
+      - Nothing; the product always fits
+      - The high half of the product is lost — a silent overflow
+      - The result becomes negative
+      - The CPU refuses
+    answer: 1
+    explain: The full product can need 64 bits.
+
+  - id: neg-shift
+    type: numeric
+    teaches: pitfalls
+    prompt: What is −7 arithmetically shifted right by 1 (two's complement)?
+    answer: -4
+    explain: Arithmetic right shift rounds toward −∞.

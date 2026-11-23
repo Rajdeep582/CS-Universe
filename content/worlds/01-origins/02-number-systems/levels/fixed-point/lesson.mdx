@@ -1,0 +1,99 @@
+<Step id="hook" section="hook" title="Fractions with integer hardware">
+
+Your bank stores £12.34 as **1234 pence** — an integer with an agreed, fixed scale. Many games, audio codecs and microcontrollers do the same in binary. This is **fixed-point**: fractions computed with nothing but integer circuits.
+
+</Step>
+
+<Step id="intuition-point" section="intuition" title="An imaginary binary point">
+
+Pick a place in the bit pattern and *pretend* the binary point is there. Bits to its right have weights $\tfrac12, \tfrac14, \tfrac18, \dots$
+
+$$
+0101.1000_2 = 4 + 1 + \tfrac12 = 5.5
+$$
+
+The hardware never sees the point; only the program knows where it is.
+
+</Step>
+
+<Step id="formal-q" section="formal" title="Q format">
+
+A **Q$m$.$n$** number has $m$ integer bits and $n$ fraction bits. Its value is the stored integer divided by $2^n$:
+
+$$
+v = \frac{\text{stored integer}}{2^{n}}
+$$
+
+- **Resolution** (smallest step): $2^{-n}$.
+- **Range**, unsigned: $0$ to $2^m - 2^{-n}$; two's complement: $-2^{m-1}$ to $2^{m-1} - 2^{-n}$.
+
+Q4.4 in 8 bits: step $1/16 = 0.0625$, unsigned range 0 to 15.9375.
+
+</Step>
+
+<Step id="formal-ops" section="formal" title="Arithmetic rules">
+
+- **Add/subtract**: same Q format in, same out — ordinary integer addition.
+- **Multiply**: Q$m$.$n$ × Q$m$.$n$ gives Q$2m$.$2n$; shift right by $n$ (and check the range) to return to Q$m$.$n$.
+- **Divide**: shift the dividend left by $n$ first so the quotient keeps $n$ fraction bits.
+
+</Step>
+
+<Step id="mechanism-trace" section="mechanism" title="Multiplying 2.5 × 1.75 in Q4.4">
+
+| Quantity | Stored integer | Meaning |
+|---|---|---|
+| 2.5 | 40 (= 2.5 × 16) | Q4.4 |
+| 1.75 | 28 | Q4.4 |
+| 40 × 28 | 1120 | Q8.8 → 1120 / 256 = 4.375 |
+| 1120 >> 4 | 70 | Q4.4 → 70 / 16 = 4.375 ✓ |
+
+The shift by 4 removes the extra fraction bits the multiplication created.
+
+</Step>
+
+<Step id="worked-example" section="worked-example" title="Choosing a format">
+
+A sensor reports temperatures from −40 °C to +125 °C, and you need steps of at least 0.1 °C, in 16 bits.
+
+- Range needs a signed integer part reaching 125 → 8 integer bits (−128 … 127).
+- That leaves 8 fraction bits → step $1/256 \approx 0.0039$ °C ✓.
+
+So **Q8.8** (signed). 23.5 °C is stored as $23.5 \times 256 = 6016$.
+
+</Step>
+
+<Step id="tradeoffs" section="tradeoffs" title="Fixed versus floating point">
+
+| Fixed point | Floating point (next level) |
+|---|---|
+| Uses integer hardware — fast and cheap, deterministic | Needs an FPU (or slow software) |
+| Same absolute precision everywhere | Same *relative* precision everywhere |
+| Small range for the bits used; programmer must track scales | Huge range; scaling is automatic |
+| Exact for decimal money if the scale is decimal (cents) | Binary floats cannot store 0.10 exactly |
+
+</Step>
+
+<Step id="pitfalls" section="pitfalls" title="Common misconceptions">
+
+<Callout kind="warning">**"Fixed point is exact."** Only values that are multiples of the step are exact. In binary fixed point, 0.1 is still a repeating fraction and gets chopped.</Callout>
+
+<Callout kind="warning">**Mixing scales.** Adding a Q8.8 value to a Q4.12 value without aligning them first gives nonsense — the hardware does not know where either point is.</Callout>
+
+<Callout kind="warning">**Forgetting to rescale after multiplying.** Without the shift by $n$, the result is $2^n$ times too large.</Callout>
+
+</Step>
+
+<Step id="context" section="context" title="The Patriot missile clock">
+
+In the 1991 Gulf War, a Patriot battery counted time in tenths of a second and converted it using 1/10 stored in a **24-bit fixed-point register**, chopped. The error was about 0.000000095 s per tick. After 100 hours of continuous operation the clock was off by about **0.34 s** — enough for an incoming Scud to travel more than half a kilometre. On 25 February 1991 the system failed to intercept a missile at Dhahran; 28 soldiers were killed (US GAO report IMTEC-92-26).
+
+</Step>
+
+<Step id="references" section="references" title="Go deeper">
+
+- Bryant & O'Hallaron, *CS:APP*, 3rd ed., §2.4.1 "Fractional Binary Numbers".
+- US General Accounting Office, *Patriot Missile Defense: Software Problem Led to System Failure at Dhahran*, GAO/IMTEC-92-26, 1992.
+- Randy Yates, *Fixed-Point Arithmetic: An Introduction* (Digital Signal Labs technical note).
+
+</Step>

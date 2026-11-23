@@ -1,0 +1,118 @@
+items:
+  - id: two-zeros
+    type: mcq
+    teaches: intuition-sign-bit
+    prompt: What is a drawback of sign-magnitude?
+    options:
+      - It cannot represent negative numbers
+      - It has two zeros and needs special logic to add numbers of different signs
+      - It needs twice as many bits
+      - It cannot represent 0
+    answer: 1
+    explain: 0000 0000 and 1000 0000 are both zero.
+
+  - id: odometer
+    type: mcq
+    teaches: intuition-odometer
+    prompt: In 8-bit two's complement, which pattern is −1?
+    options:
+      - '1000 0001'
+      - '1111 1111'
+      - '1111 1110'
+      - '0000 0001'
+    answer: 1
+    explain: One step below 0000 0000 wraps to all ones.
+
+  - id: range
+    type: mcq
+    teaches: formal-twos
+    prompt: What is the range of 8-bit two's complement?
+    options:
+      - −127 to 127
+      - −128 to 127
+      - −128 to 128
+      - 0 to 255
+    answer: 1
+    explain: −2^7 to 2^7 − 1.
+
+  - id: msb-weight
+    type: numeric
+    teaches: formal-twos
+    prompt: In 8-bit two's complement, what is the weight of the MSB?
+    answer: -128
+    explain: The MSB weighs −2^(n−1).
+
+  - id: readings
+    type: match
+    teaches: formal-others
+    prompt: How does the 4-bit pattern 1011 read under each scheme?
+    pairs:
+      - left: Unsigned
+        right: '11'
+      - left: Sign-magnitude
+        right: '−3'
+      - left: One's complement
+        right: '−4'
+      - left: Two's complement
+        right: '−5'
+    explain: Same bits, four interpretations.
+
+  - id: negate-steps
+    type: order-steps
+    teaches: mechanism-sim
+    prompt: Put the steps for negating a two's-complement number in order.
+    steps:
+      - Start from the bit pattern of x
+      - Invert every bit
+      - Add 1, ignoring any carry out of the top bit
+    explain: −x = (NOT x) + 1.
+
+  - id: minus100
+    type: mcq
+    teaches: worked-example
+    prompt: What is −100 in 8-bit two's complement?
+    options:
+      - '1110 0100'
+      - '1001 1011'
+      - '1001 1100'
+      - '0110 0100'
+    answer: 2
+    explain: Invert 0110 0100 → 1001 1011, add 1 → 1001 1100.
+
+  - id: read-neg
+    type: numeric
+    teaches: worked-example
+    prompt: What value does the 8-bit two's-complement pattern 1111 1011 represent?
+    answer: -5
+    explain: −128 + 64 + 32 + 16 + 8 + 2 + 1 = −5.
+
+  - id: sign-ext
+    type: mcq
+    teaches: worked-example
+    prompt: Widen the 4-bit two's-complement value 1010 (−6) to 8 bits.
+    options:
+      - '0000 1010'
+      - '1111 1010'
+      - '1000 1010'
+      - '1010 0000'
+    answer: 1
+    explain: Sign extension copies the MSB (1) into the new bits.
+
+  - id: why-won
+    type: mcq
+    teaches: tradeoffs
+    prompt: What is the main reason two's complement won?
+    options:
+      - It is easiest for people to read
+      - One ordinary adder handles signed and unsigned addition and subtraction
+      - It has a symmetric range
+      - It uses fewer bits
+    answer: 1
+    explain: No special signed logic is needed.
+
+  - id: neg-128
+    type: numeric
+    teaches: pitfalls
+    prompt: In 8-bit two's complement, what do you get if you negate −128 (invert and add 1)?
+    answer: -128
+    explain: +128 does not fit; the pattern 1000 0000 comes back.

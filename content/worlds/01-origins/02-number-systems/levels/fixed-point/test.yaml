@@ -1,0 +1,101 @@
+items:
+  - id: read
+    type: numeric
+    teaches: intuition-point
+    prompt: With the binary point after the fourth bit, what is 0101.1000?
+    answer: 5.5
+    explain: 4 + 1 + 1/2.
+
+  - id: weights
+    type: mcq
+    teaches: intuition-point
+    prompt: What are the weights of the first three bits after the binary point?
+    options:
+      - 1/10, 1/100, 1/1000
+      - 1/2, 1/4, 1/8
+      - 2, 4, 8
+      - 1/2, 1/3, 1/4
+    answer: 1
+    explain: Each place to the right halves the weight.
+
+  - id: q-value
+    type: numeric
+    teaches: formal-q
+    prompt: A Q4.4 number stores the integer 88. What value does it represent?
+    answer: 5.5
+    explain: 88 / 16 = 5.5.
+
+  - id: resolution
+    type: mcq
+    teaches: formal-q
+    prompt: What is the resolution (smallest step) of Q8.8?
+    options:
+      - 1/8
+      - 1/256
+      - 1/16
+      - '0.01'
+    answer: 1
+    explain: 2^−8 = 1/256.
+
+  - id: mul-format
+    type: mcq
+    teaches: formal-ops
+    prompt: Multiplying two Q4.4 numbers as integers gives a result in which format?
+    options:
+      - Q4.4
+      - Q8.8
+      - Q4.8
+      - Q16.16
+    answer: 1
+    explain: Integer and fraction bits both add up.
+
+  - id: trace
+    type: numeric
+    teaches: mechanism-trace
+    prompt: In Q4.4, 2.5 is stored as 40 and 1.75 as 28. Their integer product is 1120. What integer is stored after rescaling back to Q4.4?
+    answer: 70
+    explain: 1120 >> 4 = 70, which is 4.375.
+
+  - id: choose
+    type: mcq
+    teaches: worked-example
+    prompt: You need a signed 16-bit format covering −40 to +125 with steps finer than 0.01. Which works?
+    options:
+      - Q8.8
+      - Q12.4
+      - Q4.12
+      - Q16.0
+    answer: 0
+    explain: 8 signed integer bits reach ±127; 8 fraction bits give a 1/256 ≈ 0.0039 step. Q12.4's step (1/16) is too coarse; Q4.12 cannot reach 125.
+
+  - id: store
+    type: numeric
+    teaches: worked-example
+    prompt: In Q8.8, what integer stores 23.5?
+    answer: 6016
+    explain: 23.5 × 256 = 6016.
+
+  - id: vs-float
+    type: mcq
+    teaches: tradeoffs
+    prompt: What is an advantage of fixed point over floating point?
+    options:
+      - Much larger range
+      - Runs on simple integer hardware and gives deterministic results
+      - Automatic scaling
+      - It can store any real number exactly
+    answer: 1
+    explain: Microcontrollers without an FPU rely on it.
+
+  - id: rescale-bug
+    type: spot-the-bug
+    teaches: pitfalls
+    prompt: This function multiplies two Q8.8 values held in 32-bit ints. Which line is the bug?
+    language: c
+    lines:
+      - 'int32_t q8_mul(int32_t a, int32_t b) {'
+      - '  int32_t p = a * b;'
+      - '  return p;'
+      - '}'
+    answer: 2
+    explain: The product is Q16.16; it must be shifted right by 8 before returning.

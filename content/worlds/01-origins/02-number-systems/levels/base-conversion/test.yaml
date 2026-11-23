@@ -1,0 +1,131 @@
+items:
+  - id: remainder-meaning
+    type: mcq
+    teaches: intuition-division
+    prompt: When you divide a number by base b, what is the remainder?
+    options:
+      - The first digit in base b
+      - The last (least significant) digit in base b
+      - The number of digits
+      - Always 0 or 1
+    answer: 1
+    explain: n mod b is the units digit in base b.
+
+  - id: horner-binary
+    type: mcq
+    teaches: intuition-doubling
+    prompt: In Horner's rule for binary, what do you do for each new bit?
+    options:
+      - Halve the value and subtract the bit
+      - Double the value and add the bit
+      - Add the bit's position
+      - Multiply by ten
+    answer: 1
+    explain: v ← 2v + bit.
+
+  - id: algorithm-order
+    type: order-steps
+    teaches: formal-algorithms
+    prompt: Put one round of the decimal → base-b algorithm in order.
+    steps:
+      - Divide n by b
+      - Write down the remainder as the next digit (from the right)
+      - Replace n by the quotient
+      - Stop when n reaches 0, then read the digits last to first
+    explain: Remainders give digits from least to most significant.
+
+  - id: fraction
+    type: mcq
+    teaches: formal-fractions
+    prompt: What is 0.625 in binary?
+    options:
+      - '0.111'
+      - '0.101'
+      - '0.011'
+      - '0.625'
+    answer: 1
+    explain: 0.625 = 1/2 + 1/8.
+
+  - id: point-one
+    type: mcq
+    teaches: formal-fractions
+    prompt: Why can 0.1 not be written exactly in binary with finitely many digits?
+    options:
+      - Because it is irrational
+      - Because 1/10 has the factor 5 in its denominator, and binary fractions only have powers of 2
+      - Because binary cannot represent fractions
+      - It can — it is 0.1 in binary too
+    answer: 1
+    explain: Terminating binary fractions have denominators that are powers of two.
+
+  - id: sim-hex
+    type: mcq
+    teaches: mechanism-sim
+    prompt: Repeated division of 2026 by 16 gives remainders 10, 14, 7 (in that order). What is 2026 in hexadecimal?
+    options:
+      - AE7
+      - 7EA
+      - '10147'
+      - EA7
+    answer: 1
+    explain: Read the remainders bottom up — 7, E (14), A (10).
+
+  - id: to-binary
+    type: mcq
+    teaches: worked-example
+    prompt: What is 156 in binary?
+    options:
+      - '10011100'
+      - '10011010'
+      - '11001100'
+      - '10111000'
+    answer: 0
+    explain: Remainders 0,0,1,1,1,0,0,1 read bottom-up.
+
+  - id: to-binary-45
+    type: mcq
+    teaches: worked-example
+    prompt: What is 45 in binary?
+    options:
+      - '101101'
+      - '110101'
+      - '101011'
+      - '100101'
+    answer: 0
+    explain: 45 = 32 + 8 + 4 + 1.
+
+  - id: base-3
+    type: mcq
+    teaches: worked-example
+    prompt: Convert 17 to base 3.
+    options:
+      - '122'
+      - '212'
+      - '221'
+      - '102'
+    answer: 0
+    explain: 17 ÷ 3 = 5 r 2; 5 ÷ 3 = 1 r 2; 1 ÷ 3 = 0 r 1 → 122.
+
+  - id: grouping
+    type: mcq
+    teaches: tradeoffs
+    prompt: Which conversion needs no arithmetic at all?
+    options:
+      - Decimal to binary
+      - Binary to hexadecimal, by grouping bits in fours
+      - Decimal to hexadecimal
+      - Base 3 to base 5
+    answer: 1
+    explain: 16 = 2^4, so each hex digit is exactly four bits.
+
+  - id: read-order
+    type: mcq
+    teaches: pitfalls
+    prompt: Repeated division of 6 by 2 gives remainders 0, 1, 1 in that order. What is 6 in binary?
+    options:
+      - '011'
+      - '110'
+      - '101'
+      - '100'
+    answer: 1
+    explain: Read the remainders bottom to top.

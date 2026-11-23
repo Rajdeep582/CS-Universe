@@ -1,0 +1,96 @@
+<Step id="hook" section="hook" title="The rocket that overflowed">
+
+On 4 June 1996, 37 seconds after launch, the first Ariane 5 rocket veered off course and was destroyed. A 64-bit floating-point value for horizontal velocity had been converted into a **16-bit signed integer**. It was too big to fit. The resulting exception shut down the guidance computers — and the backup, which ran the same code.
+
+</Step>
+
+<Step id="intuition-wheel" section="intuition" title="Fixed width is a wheel">
+
+With $n$ bits there are only $2^n$ patterns, arranged like a clock face: counting past the largest value wraps around to the smallest. For unsigned 8-bit numbers, $255 + 1 = 0$. For signed 8-bit numbers, $127 + 1 = -128$. When the true result does not fit, it is an **overflow**.
+
+</Step>
+
+<Step id="formal-unsigned" section="formal" title="Unsigned overflow">
+
+$n$-bit unsigned addition computes $(a + b) \bmod 2^n$. The true sum did not fit exactly when the adder produces a **carry out** of the top bit.
+
+Example (8 bits): $200 + 100 = 300$, stored as $300 - 256 = 44$, carry out = 1.
+
+</Step>
+
+<Step id="formal-signed" section="formal" title="Signed (two's-complement) overflow">
+
+Signed overflow happens when the true result lies outside $[-2^{n-1}, 2^{n-1}-1]$. A simple test:
+
+- Adding two numbers **of different signs never overflows**.
+- Adding two numbers **of the same sign overflows exactly when the result has the other sign**.
+
+Example: $100 + 50 = 150$, but the 8-bit pattern `1001 0110` reads as $-106$. Both operands positive, result negative → overflow. Note the carry out here is 0: **carry and overflow are different signals**.
+
+</Step>
+
+<Step id="mechanism-flags" section="mechanism" title="How the CPU reports it">
+
+One adder computes the bits; the processor then sets status **flags** so software can react:
+
+| Flag | Meaning | Matters for |
+|---|---|---|
+| C (carry) | Carry out of the top bit | Unsigned arithmetic |
+| V or O (overflow) | Operands same sign, result different | Signed arithmetic |
+| N/S (negative/sign) | Top bit of result | Signed results |
+| Z (zero) | Result is all zeros | Comparisons |
+
+Try both meanings with the adder in the simulation:
+
+<Simulation id="twos-complement" bits={8} />
+
+</Step>
+
+<Step id="worked-example" section="worked-example" title="Four 8-bit additions">
+
+| Bits | Unsigned | Signed | C | V |
+|---|---|---|---|---|
+| 0110 0100 + 0011 0010 = 1001 0110 | 100 + 50 = 150 ✓ | 100 + 50 → −106 ✗ | 0 | 1 |
+| 1100 1000 + 0110 0100 = 0010 1100 | 200 + 100 → 44 ✗ | −56 + 100 = 44 ✓ | 1 | 0 |
+| 1111 1111 + 0000 0001 = 0000 0000 | 255 + 1 → 0 ✗ | −1 + 1 = 0 ✓ | 1 | 0 |
+| 1000 0000 + 1000 0000 = 0000 0000 | 128 + 128 → 0 ✗ | −128 + −128 → 0 ✗ | 1 | 1 |
+
+</Step>
+
+<Step id="tradeoffs" section="tradeoffs" title="What should happen on overflow?">
+
+| Policy | Example | Trade-off |
+|---|---|---|
+| Wrap around silently | C unsigned, Java `int` | Fast, predictable; bugs go unnoticed |
+| Undefined behaviour | C/C++ signed `int` | Lets compilers optimise; overflow can make a program do anything |
+| Trap / exception | Ada (Ariane 5), Rust in debug builds, C# `checked` | Catches bugs; the exception must be handled |
+| Saturate at the limit | Audio and image processing (DSP instructions) | No wrap-around artefacts; result is wrong but close |
+| Grow the number | Python `int`, big-integer libraries | Never overflows; slower and variable size |
+
+</Step>
+
+<Step id="pitfalls" section="pitfalls" title="Common misconceptions">
+
+<Callout kind="warning">**"A carry out means signed overflow."** No: −1 + 1 carries out but is correct as a signed result; 100 + 50 overflows without a carry.</Callout>
+
+<Callout kind="warning">**"Check overflow afterwards with `if (a + b > INT_MAX)`."** In C the sum has already overflowed (undefined behaviour) before the comparison. Check beforehand: `if (a > INT_MAX - b)`.</Callout>
+
+<Callout kind="warning">**"32 bits is plenty."** Signed 32-bit time counters (seconds since 1 January 1970) run out at **03:14:07 UTC on 19 January 2038**.</Callout>
+
+</Step>
+
+<Step id="context" section="context" title="Famous overflows">
+
+- **Ariane 5 Flight 501** (1996): 64-bit float → 16-bit integer conversion overflowed.
+- **YouTube, 2014**: the view counter of a music video approached $2^{31} - 1 = 2{,}147{,}483{,}647$; YouTube had already moved it to 64 bits.
+- **Year 2038**: systems still using signed 32-bit `time_t` will wrap to 1901.
+
+</Step>
+
+<Step id="references" section="references" title="Go deeper">
+
+- Bryant & O'Hallaron, *CS:APP*, 3rd ed., §2.3.1–2.3.2 (unsigned and two's-complement addition, overflow detection).
+- Patterson & Hennessy, *COD* RISC-V ed., §3.2 "Addition and Subtraction".
+- J. L. Lions et al., *ARIANE 5 Flight 501 Failure — Report by the Inquiry Board*, 1996.
+
+</Step>

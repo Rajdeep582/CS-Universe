@@ -1,0 +1,100 @@
+items:
+  - id: weights
+    type: numeric
+    teaches: intuition-weights
+    prompt: What is 1011 (binary) in decimal?
+    answer: 11
+    explain: 8 + 2 + 1.
+
+  - id: next-count
+    type: mcq
+    teaches: intuition-counting
+    prompt: What comes after 0111 when counting in binary?
+    options:
+      - '1110'
+      - '1000'
+      - '0112'
+      - '1111'
+    answer: 1
+    explain: The three 1s reset to 0 and carry into the next bit.
+
+  - id: max-10bits
+    type: numeric
+    teaches: formal-range
+    prompt: What is the largest unsigned value that fits in 10 bits?
+    answer: 1023
+    explain: 2^10 − 1 = 1,023.
+
+  - id: odd
+    type: mcq
+    teaches: formal-parity
+    prompt: How can you tell from its binary form that a number is odd?
+    options:
+      - Its MSB is 1
+      - Its LSB is 1
+      - It has an odd number of 1s
+      - It ends in 01
+    answer: 1
+    explain: All other weights are even; only bit 0 adds 1.
+
+  - id: pow2
+    type: mcq
+    teaches: formal-parity
+    prompt: Which of these binary numbers is a power of two?
+    options:
+      - '0110'
+      - '1000'
+      - '1001'
+      - '1111'
+    answer: 1
+    explain: A power of two has exactly one bit set.
+
+  - id: board
+    type: mcq
+    teaches: mechanism-board
+    prompt: On the bit board, which bits must be on to show 37?
+    options:
+      - 32, 4 and 1
+      - 32, 5
+      - 16, 16, 4, 1
+      - 30, 7
+    answer: 0
+    explain: 37 = 32 + 4 + 1 — each weight is a power of two used at most once.
+
+  - id: read
+    type: numeric
+    teaches: worked-example
+    prompt: What is 11010110 (binary) in decimal?
+    answer: 214
+    explain: 128 + 64 + 16 + 4 + 2.
+
+  - id: write
+    type: mcq
+    teaches: worked-example
+    prompt: What is 100 in binary?
+    options:
+      - '1100100'
+      - '1010100'
+      - '1100010'
+      - '1000100'
+    answer: 0
+    explain: 100 = 64 + 32 + 4.
+
+  - id: readable
+    type: mcq
+    teaches: tradeoffs
+    prompt: Why do programmers rarely write long binary numbers by hand?
+    options:
+      - Binary is slow
+      - Binary numerals are long and easy to misread
+      - Binary cannot express large numbers
+      - Compilers reject binary
+    answer: 1
+    explain: That is why hexadecimal is used as shorthand.
+
+  - id: max8
+    type: numeric
+    teaches: pitfalls
+    prompt: What is the largest unsigned value of an 8-bit number?
+    answer: 255
+    explain: 256 patterns, from 0 to 255.

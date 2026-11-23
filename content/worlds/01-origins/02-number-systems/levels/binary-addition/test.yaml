@@ -1,0 +1,111 @@
+items:
+  - id: one-plus-one
+    type: mcq
+    teaches: intuition-columns
+    prompt: In a binary column, 1 + 1 gives…
+    options:
+      - sum 2, carry 0
+      - sum 0, carry 1
+      - sum 1, carry 1
+      - sum 1, carry 0
+    answer: 1
+    explain: 1 + 1 = 10 in binary.
+
+  - id: three-ones
+    type: mcq
+    teaches: intuition-columns
+    prompt: A column has a = 1, b = 1 and carry in = 1. What are the sum and carry out?
+    options:
+      - sum 1, carry 1
+      - sum 0, carry 1
+      - sum 1, carry 0
+      - sum 3, carry 0
+    answer: 0
+    explain: 3 = 11 in binary.
+
+  - id: sum-formula
+    type: mcq
+    teaches: formal-full-adder
+    prompt: Which expression gives the sum bit of a full adder?
+    options:
+      - a AND b AND c
+      - a XOR b XOR c
+      - a OR b OR c
+      - NOT (a AND b)
+    answer: 1
+    explain: The sum is 1 when an odd number of inputs are 1.
+
+  - id: carry-majority
+    type: mcq
+    teaches: formal-full-adder
+    prompt: When is the carry out of a full adder 1?
+    options:
+      - When exactly one input is 1
+      - When at least two of the three inputs are 1
+      - Only when all three inputs are 1
+      - When a is 1
+    answer: 1
+    explain: The carry out is the majority function.
+
+  - id: ripple-delay
+    type: mcq
+    teaches: formal-ripple
+    prompt: Why is a ripple-carry adder slow for wide numbers?
+    options:
+      - It uses floating point
+      - The carry may have to pass through every column in turn
+      - It needs memory
+      - It only works on 4 bits
+    answer: 1
+    explain: Delay grows linearly with the width.
+
+  - id: trace
+    type: mcq
+    teaches: mechanism-trace
+    prompt: What is 1011 + 0110 in binary?
+    options:
+      - '10001'
+      - '1101'
+      - '10101'
+      - '1111'
+    answer: 0
+    explain: 11 + 6 = 17 = 10001.
+
+  - id: sum-8bit
+    type: numeric
+    teaches: worked-example
+    prompt: Add 01101101 and 00110110. What is the result in decimal?
+    answer: 163
+    explain: 109 + 54 = 163 = 10100011.
+
+  - id: carries-count
+    type: numeric
+    teaches: worked-example
+    prompt: Adding 1111 + 0001, how many columns produce a carry out?
+    answer: 4
+    explain: Every column carries — the worst case for a ripple adder.
+
+  - id: lookahead
+    type: mcq
+    teaches: tradeoffs
+    prompt: What does a carry-lookahead adder trade for speed?
+    options:
+      - Accuracy
+      - Extra gates and wiring to compute carries in parallel
+      - It only adds even numbers
+      - It needs a clock twice as fast
+    answer: 1
+    explain: Its delay grows like log n, at the cost of more hardware.
+
+  - id: bug
+    type: spot-the-bug
+    teaches: pitfalls
+    prompt: A student adds 0111 + 0011 column by column. Which line is wrong?
+    language: text
+    lines:
+      - 'column 0: 1 + 1 = 0, carry 1'
+      - 'column 1: 1 + 1 + 1 = 0, carry 1'
+      - 'column 2: 1 + 0 + 1 = 0, carry 1'
+      - 'column 3: 0 + 0 + 1 = 1, carry 0'
+    answer: 1
+    explain: 1 + 1 + 1 = 11 in binary — the sum bit is 1, not 0. (0111 + 0011 = 1010.)

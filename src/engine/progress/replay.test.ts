@@ -8,6 +8,8 @@ const ctx: ReplayContext = {
   retention: 0.9,
   stepsOf: (l) => (l === 'lv' || l === 'lv2' ? STEPS : []),
   dailyGoals: false,
+  worldOfStage: (s) => (s === 's1' || s === 's2' ? 'w1' : undefined),
+  stagesOfWorld: (w) => (w === 'w1' ? ['s1', 's2'] : []),
 };
 const T0 = Date.UTC(2026, 0, 5, 10); // Monday 5 Jan 2026, 10:00 UTC
 const DAY = 86_400_000;
@@ -201,5 +203,28 @@ describe('event schema', () => {
   it('reduce reports the journal entries an event added', () => {
     const r = reduce(EMPTY_STATE, test(0, 10, 'zz', true), ctx);
     expect(r.added.map((j) => j.kind)).toEqual(expect.arrayContaining(['excellent', 'achievement', 'rank']));
+  });
+});
+
+describe('bosses and world completion (03 §2, §7)', () => {
+  const boss = (d: number, stage: string, correct: number) => ev(d, { t: 'boss', stage, correct, total: 10, ms: 1 });
+  it('a failed boss gives nothing; beating it gives +400 +250 once', () => {
+    expect(replay([boss(0, 's1', 6)], ctx).xp).toBe(0);
+    const s = replay([boss(0, 's1', 6), boss(0, 's1', 8), boss(1, 's1', 10)], ctx);
+    expect(s.xp).toBe(650);
+    expect(s.bosses.has('s1')).toBe(true);
+    expect(s.journal.filter((j) => j.kind === 'boss')).toHaveLength(1);
+    expect(s.achievements.has('first-boss')).toBe(true);
+  });
+  it('the last stage boss of a world completes it (+1,000) exactly once', () => {
+    const s = replay([boss(0, 's1', 8), boss(1, 's2', 9), boss(2, 's2', 9)], ctx);
+    expect(s.worlds.has('w1')).toBe(true);
+    expect(s.xp).toBe(650 * 2 + 1000);
+    expect(s.journal.filter((j) => j.kind === 'world').map((j) => j.ref)).toEqual(['w1']);
+    expect(s.achievements.has('island-hopper')).toBe(true);
+  });
+  it('named bosses award their badges', () => {
+    const s = replay([boss(0, 'number-systems', 7)], ctx);
+    expect(s.achievements.has('twos-complement')).toBe(true);
   });
 });

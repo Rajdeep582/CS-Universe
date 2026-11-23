@@ -1,0 +1,95 @@
+items:
+  - id: bit-def
+    type: mcq
+    teaches: intuition-bit
+    prompt: What does one bit represent?
+    options:
+      - One decimal digit
+      - One choice between two possibilities
+      - Eight on/off switches
+      - One letter of text
+    answer: 1
+    explain: A bit is a single binary choice, written 0 or 1.
+
+  - id: doubling
+    type: mcq
+    teaches: intuition-doubling
+    prompt: You add one more bit to a code. What happens to the number of possible patterns?
+    options:
+      - It grows by one
+      - It doubles
+      - It stays the same
+      - It grows by eight
+    answer: 1
+    explain: Each old pattern can be followed by either 0 or 1.
+
+  - id: patterns-8
+    type: numeric
+    teaches: formal-count
+    prompt: How many distinct patterns do 8 bits have?
+    answer: 256
+    explain: 2^8 = 256.
+
+  - id: letters
+    type: numeric
+    teaches: formal-count
+    prompt: What is the smallest number of bits that gives each of the 26 letters of the English alphabet its own pattern?
+    answer: 5
+    explain: 2^4 = 16 is too few; 2^5 = 32 is enough.
+
+  - id: msb
+    type: mcq
+    teaches: formal-msb
+    prompt: In the pattern 1000 0001, which bit is the most significant bit (MSB)?
+    options:
+      - The leftmost 1
+      - The rightmost 1
+      - The second bit from the right
+      - All bits are equally significant
+    answer: 0
+    explain: By convention the MSB is written on the left, the LSB on the right.
+
+  - id: board-6
+    type: numeric
+    teaches: mechanism-board
+    prompt: On a board of 6 bits, how many different patterns can you set?
+    answer: 64
+    explain: 2^6 = 64, from all zeros to all ones.
+
+  - id: school
+    type: numeric
+    teaches: worked-example
+    prompt: How many bits are needed to give each of 1,200 students a different ID?
+    answer: 11
+    explain: 2^10 = 1024 is too few; 2^11 = 2048 is enough.
+
+  - id: weekdays
+    type: mcq
+    teaches: worked-example
+    prompt: Days of the week are coded in 3 bits. How many patterns are left unused?
+    options:
+      - '0'
+      - '1'
+      - '3'
+      - '7'
+    answer: 1
+    explain: 3 bits give 8 patterns; 7 are used.
+
+  - id: wrap
+    type: numeric
+    teaches: tradeoffs
+    prompt: What is the largest value a 16-bit unsigned counter can hold before it wraps?
+    answer: 65535
+    explain: 2^16 - 1 = 65,535.
+
+  - id: count-to-n
+    type: mcq
+    teaches: pitfalls
+    prompt: '"With 8 bits you can count up to 8." What is wrong?'
+    options:
+      - Nothing
+      - 8 bits give 2^8 = 256 patterns, so values 0–255
+      - 8 bits give 16 patterns
+      - 8 bits can only count to 7
+    answer: 1
+    explain: The number of patterns is exponential in the number of bits.
