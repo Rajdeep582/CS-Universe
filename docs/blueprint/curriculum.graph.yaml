@@ -1,0 +1,1247 @@
+# CS Universe — Curriculum Knowledge Graph (Phase 0 blueprint draft)
+#
+# Hierarchy:  Universe → Domain (region) → Subject → Unit (cluster, not a camera level) → Topic (lesson)
+# Topic line format:  "[*]id | Title | prereq-id, prereq-id"
+#   *        = topic is on the Core Path (the recommended zero-to-foundations route)
+#   id       = globally unique kebab-case id (becomes the URL slug)
+#   prereqs  = hard prerequisite edges (DAG). May point into any subject/domain.
+# Subject-level dependencies are DERIVED from topic edges (never hand-written).
+# core_path_subjects = global order in which a beginner visits subjects; each core topic's
+#   prereqs must be core topics in the same or an earlier subject (checked by validator).
+# refs = canonical book-level sources for the subject; chapter/section refs are added per lesson in Phase 5+.
+# This file migrates to content/graph/ in Phase 1 under a Zod schema.
+
+version: 0.1.0
+
+core_path_subjects:
+  - information-bits
+  - number-systems
+  - boolean-logic
+  - data-representation
+  - programming-fundamentals
+  - logic-proof
+  - discrete-structures
+  - memory-types
+  - combinatorics-probability
+  - graph-theory
+  - paradigms
+  - digital-logic
+  - computer-architecture
+  - source-to-process
+  - algorithm-analysis
+  - data-structures
+  - algorithm-design
+  - graph-algorithms
+  - automata
+  - computability
+  - complexity-theory
+  - operating-systems
+  - computer-networks
+  - database-systems
+  - compilers
+  - pl-theory
+  - software-design
+  - version-control
+  - testing-quality
+  - software-architecture
+  - distributed-foundations
+  - distributed-data
+  - consensus
+  - security-foundations
+  - cryptography
+  - applied-security
+  - linear-algebra
+  - calculus-computing
+  - ai-foundations
+  - machine-learning
+  - deep-learning
+
+domains:
+  # ───────────────────────────────────────── TIER 0
+  - id: origins
+    title: Origins
+    tagline: How computers think
+    color: "#F2C46D"
+    subjects:
+      - id: information-bits
+        title: Information & Bits
+        tier: 0
+        refs: ["Petzold — Code, 2nd ed.", "Bryant & O'Hallaron — CS:APP 3e, ch. 2"]
+        boss: "Signal Decoder — turn a raw mystery bitstream into a message by choosing the right unit and grouping."
+        units:
+          - title: The Big Picture
+            topics:
+              - "*what-is-computer | What Is a Computer? |"
+              - "*abstraction-layers | Layers of Abstraction | what-is-computer"
+          - title: Information
+            topics:
+              - "*information-idea | Information as Distinguishable States | what-is-computer"
+              - "*bits | The Bit | information-idea"
+              - "*bytes-words | Bytes, Words & Units (kB vs KiB) | bits"
+              - "info-entropy-intro | Measuring Information (Shannon, intro) | bits"
+
+      - id: number-systems
+        title: Number Systems & Arithmetic
+        tier: 0
+        refs: ["Bryant & O'Hallaron — CS:APP 3e, ch. 2", "Patterson & Hennessy — COD RISC-V 2e, ch. 3"]
+        boss: "The Calculator Core — predict results and overflow flags for a mixed run of two's-complement and IEEE 754 operations."
+        units:
+          - title: Positional Systems
+            topics:
+              - "*positional-notation | Positional Number Systems | bits"
+              - "*binary-numbers | Binary Numbers | positional-notation"
+              - "*base-conversion | Converting Between Bases | binary-numbers"
+              - "*hex-octal | Hexadecimal & Octal | base-conversion"
+          - title: Integer Arithmetic
+            topics:
+              - "*binary-addition | Binary Addition & Carries | binary-numbers"
+              - "*signed-numbers | Sign-Magnitude, One's & Two's Complement | binary-addition"
+              - "*overflow | Fixed Width & Overflow | signed-numbers"
+              - "binary-mult-div | Binary Multiplication & Division | binary-addition"
+              - "shifts | Logical & Arithmetic Shifts | signed-numbers"
+          - title: Real Numbers
+            topics:
+              - "*fixed-point | Fixed-Point Numbers | signed-numbers"
+              - "*floating-point | IEEE 754 Floating Point | fixed-point, overflow"
+              - "float-pitfalls | Floating-Point Pitfalls: Rounding, NaN, Epsilon | floating-point"
+
+      - id: boolean-logic
+        title: Boolean Logic
+        tier: 0
+        refs: ["Harris & Harris — Digital Design and Computer Architecture, RISC-V ed., ch. 2", "Petzold — Code, 2nd ed."]
+        boss: "Gatekeeper — derive and minimize an expression from a truth table, then build it from NAND gates only."
+        units:
+          - title: Truth
+            topics:
+              - "*truth-values | Truth Values & Logical Operators | bits"
+              - "*truth-tables | Truth Tables | truth-values"
+              - "*boolean-algebra | Boolean Algebra Laws | truth-tables"
+              - "*de-morgan | De Morgan's Laws | boolean-algebra"
+              - "*bitwise-ops | Bitwise Operations & Masks | truth-tables, binary-numbers"
+          - title: Simplification
+            topics:
+              - "*normal-forms | Sum-of-Products & Product-of-Sums | boolean-algebra"
+              - "*karnaugh-maps | Karnaugh Map Simplification | normal-forms"
+              - "*universal-gates | NAND & NOR Universality | de-morgan"
+
+      - id: data-representation
+        title: Encoding Text & Media
+        tier: 0
+        refs: ["The Unicode Standard (current version), ch. 2–3", "RFC 3629 — UTF-8", "Bryant & O'Hallaron — CS:APP 3e, ch. 2"]
+        boss: "Babel Packet — decode a byte dump holding UTF-8 text, a little-endian integer and a parity-checked header."
+        units:
+          - title: Text
+            topics:
+              - "*char-encoding | Characters as Numbers: ASCII | binary-numbers, bytes-words"
+              - "*unicode | Unicode Code Points | char-encoding"
+              - "*utf8 | UTF-8, UTF-16 & Byte Order | unicode, hex-octal"
+              - "*endianness | Endianness | bytes-words, hex-octal"
+          - title: Media & Integrity
+            topics:
+              - "*images-pixels | Images: Pixels & Color Models | bytes-words"
+              - "sound-sampling | Sound: Sampling & Quantization | bytes-words"
+              - "compression-intro | Compression Basics: RLE & the Huffman Idea | info-entropy-intro"
+              - "*error-detection-intro | Parity & Checksums | bits"
+
+  # ───────────────────────────────────────── TIER 1
+  - id: mathematics
+    title: Mathematics
+    tagline: The language of rigor
+    color: "#6EC1FF"
+    subjects:
+      - id: logic-proof
+        title: Logic & Proof
+        tier: 1
+        refs: ["Rosen — Discrete Mathematics and Its Applications 8e, ch. 1, 5", "Lehman, Leighton & Meyer — Mathematics for Computer Science, ch. 1–5"]
+        boss: "Proof Forge — assemble an induction proof from shuffled steps and find the flaw in a bogus one."
+        units:
+          - title: Logic
+            topics:
+              - "*propositional-logic | Propositional Logic | boolean-algebra"
+              - "*logical-equivalence | Logical Equivalence & Implication | propositional-logic"
+              - "*predicate-logic | Predicates & Quantifiers | logical-equivalence"
+              - "nested-quantifiers | Nested Quantifiers | predicate-logic"
+              - "inference-rules | Rules of Inference | predicate-logic"
+          - title: Proof
+            topics:
+              - "*proof-direct | Direct Proof | logical-equivalence"
+              - "*proof-contradiction | Contradiction & Contrapositive | proof-direct"
+              - "*induction | Mathematical Induction | proof-direct"
+              - "strong-induction | Strong Induction & Well-Ordering | induction"
+
+      - id: discrete-structures
+        title: Discrete Structures
+        tier: 1
+        refs: ["Rosen — Discrete Mathematics and Its Applications 8e, ch. 2, 4, 9", "Lehman, Leighton & Meyer — Mathematics for Computer Science"]
+        boss: "Structure Atlas — classify relations and functions by their properties and solve a system of congruences."
+        units:
+          - title: Sets & Functions
+            topics:
+              - "*sets | Sets & Set Operations | predicate-logic"
+              - "*functions | Functions: Injective, Surjective, Bijective | sets"
+              - "*log-exp | Exponentials & Logarithms | functions"
+              - "*sequences-sums | Sequences & Summations | functions"
+              - "*recursive-definitions | Recursive Definitions | sequences-sums, induction"
+              - "structural-induction | Structural Induction | strong-induction, recursive-definitions"
+              - "*cardinality | Cardinality & Countability | functions"
+          - title: Relations
+            topics:
+              - "*relations | Relations & Their Properties | sets"
+              - "equivalence-relations | Equivalence Relations & Partitions | relations"
+              - "*partial-orders | Partial Orders & Hasse Diagrams | relations"
+          - title: Number Theory
+            topics:
+              - "*modular-arithmetic | Divisibility & Modular Arithmetic | proof-direct"
+              - "*gcd-euclid | GCD & the Euclidean Algorithm | modular-arithmetic"
+              - "*primes | Primes & Factorization | modular-arithmetic"
+              - "*modular-inverse | Modular Inverses & Fermat's Little Theorem | gcd-euclid, primes"
+              - "crt | Chinese Remainder Theorem | modular-inverse"
+
+      - id: combinatorics-probability
+        title: Counting & Probability
+        tier: 1
+        refs: ["Rosen — Discrete Mathematics and Its Applications 8e, ch. 6–8", "Blitzstein & Hwang — Introduction to Probability 2e"]
+        boss: "Monte Carlo Casino — predict outcomes analytically, then confirm them with your own simulation."
+        units:
+          - title: Counting
+            topics:
+              - "*counting-rules | Sum & Product Rules | sets"
+              - "*permutations-combinations | Permutations & Combinations | counting-rules"
+              - "*pigeonhole | The Pigeonhole Principle | counting-rules"
+              - "binomial-theorem | Binomial Theorem & Pascal's Triangle | permutations-combinations"
+              - "inclusion-exclusion | Inclusion–Exclusion | permutations-combinations"
+              - "recurrence-relations | Solving Linear Recurrences | recursive-definitions"
+          - title: Probability
+            topics:
+              - "*probability-basics | Sample Spaces & Events | permutations-combinations"
+              - "*conditional-probability | Conditional Probability & Independence | probability-basics"
+              - "*bayes | Bayes' Theorem | conditional-probability"
+              - "*random-variables | Random Variables & Expectation | probability-basics"
+              - "linearity-expectation | Linearity of Expectation | random-variables"
+              - "*variance | Variance & Standard Deviation | random-variables"
+              - "*distributions | Common Distributions | variance"
+              - "tail-bounds | Markov & Chebyshev Bounds | variance"
+
+      - id: graph-theory
+        title: Graph Theory
+        tier: 1
+        refs: ["Rosen — Discrete Mathematics and Its Applications 8e, ch. 10–11", "West — Introduction to Graph Theory 2e"]
+        boss: "Königsberg+ — decide Eulerian, Hamiltonian and colorability for generated graphs, with proof sketches."
+        units:
+          - title: Graphs
+            topics:
+              - "*graph-basics | Graphs, Vertices, Edges & Degree | relations"
+              - "*graph-types | Directed, Weighted, Bipartite & Complete Graphs | graph-basics"
+              - "*paths-connectivity | Paths, Cycles & Connectivity | graph-basics"
+              - "*trees-math | Trees & Their Properties | paths-connectivity, induction"
+              - "dags-toposort-math | DAGs & Partial Orders | graph-types, partial-orders"
+          - title: Classic Problems
+            topics:
+              - "euler-hamilton | Euler & Hamilton Paths | paths-connectivity"
+              - "planarity | Planar Graphs & Euler's Formula | paths-connectivity"
+              - "graph-coloring | Graph Coloring | graph-types"
+              - "isomorphism | Graph Isomorphism | graph-types"
+
+      - id: linear-algebra
+        title: Linear Algebra Essentials
+        tier: 1
+        refs: ["Strang — Introduction to Linear Algebra 6e", "Axler — Linear Algebra Done Right 4e (open access)"]
+        boss: "Transform Lab — find matrices that map a 2D/3D shape onto a target shape."
+        units:
+          - title: Vectors & Matrices
+            topics:
+              - "*vectors | Vectors & Vector Operations | functions"
+              - "*dot-product | Dot Product, Norms & Angles | vectors"
+              - "*matrices | Matrices & Matrix Multiplication | vectors"
+              - "*linear-transformations | Matrices as Linear Transformations | matrices"
+          - title: Structure
+            topics:
+              - "linear-systems | Linear Systems & Gaussian Elimination | matrices"
+              - "span-basis | Span, Independence, Basis & Rank | linear-systems"
+              - "determinants | Determinants | linear-transformations"
+              - "inverse-matrices | Matrix Inverses | determinants, linear-systems"
+              - "eigen | Eigenvalues & Eigenvectors | determinants, span-basis"
+              - "projections | Orthogonality & Projections | dot-product, span-basis"
+              - "svd-intro | Singular Value Decomposition (intuition) | eigen, projections"
+
+      - id: calculus-computing
+        title: Calculus for Computing
+        tier: 1
+        refs: ["Strang — Calculus 3e (MIT OpenCourseWare, free)", "Deisenroth, Faisal & Ong — Mathematics for Machine Learning, ch. 5"]
+        boss: "Descent — reach the minimum of a 2D loss surface by computing every gradient yourself."
+        units:
+          - title: Change
+            topics:
+              - "*functions-limits | Limits & Continuity (intuition) | functions"
+              - "*derivatives | Derivatives & Rates of Change | functions-limits"
+              - "*chain-rule | The Chain Rule | derivatives"
+              - "*partial-derivatives | Partial Derivatives & Gradients | chain-rule, vectors"
+          - title: Applications
+            topics:
+              - "optimization-calc | Finding Minima & Maxima | derivatives"
+              - "integrals | Integrals as Accumulation | derivatives"
+              - "series-approx | Taylor Approximations | derivatives"
+
+  - id: programming
+    title: Programming
+    tagline: Thinking in code
+    color: "#6FE3B4"
+    subjects:
+      - id: programming-fundamentals
+        title: Programming Fundamentals
+        tier: 1
+        refs: ["Abelson & Sussman — SICP 2e, ch. 1", "Downey — Think Python 3e (open access)"]
+        boss: "Text Adventure Engine — implement a tiny command interpreter that passes hidden tests."
+        units:
+          - title: First Programs
+            topics:
+              - "*what-is-program | Programs, Instructions & Execution | abstraction-layers"
+              - "*values-types-basic | Values, Expressions & Basic Types | what-is-program, binary-numbers"
+              - "*variables | Variables & Assignment | values-types-basic"
+          - title: Control
+            topics:
+              - "*conditionals | Conditionals | variables, truth-values"
+              - "*loops | Loops & Iteration | conditionals"
+              - "*functions-prog | Functions, Parameters & Return Values | loops"
+              - "*scope | Scope & Lifetime | functions-prog"
+              - "*recursion | Recursion | functions-prog"
+              - "recursion-vs-iteration | Recursion vs Iteration & Tail Calls | recursion"
+          - title: Data
+            topics:
+              - "*strings | Strings & Text Processing | loops, char-encoding"
+              - "*arrays-lists | Arrays & Lists | loops"
+              - "*maps-sets-prog | Maps, Dictionaries & Sets | arrays-lists"
+              - "io-basics | Input, Output & Files | strings"
+          - title: When Things Break
+            topics:
+              - "*errors-exceptions | Errors & Exceptions | functions-prog"
+              - "*debugging | Debugging: Reading Errors & Tracing | errors-exceptions"
+
+      - id: memory-types
+        title: Memory, Types & Data
+        tier: 1
+        refs: ["Bryant & O'Hallaron — CS:APP 3e, ch. 3, 9", "Kernighan & Ritchie — The C Programming Language 2e, ch. 5–6"]
+        boss: "Memory Detective — trace a program's stack/heap diagram and find the aliasing and dangling-pointer bugs."
+        units:
+          - title: Memory
+            topics:
+              - "*memory-model | The Memory Model: Addresses & Cells | variables, bytes-words"
+              - "*stack-heap | Stack vs Heap | memory-model, functions-prog"
+              - "*call-stack | The Call Stack & Stack Frames | stack-heap, recursion"
+              - "*references-pointers | References & Pointers | stack-heap"
+              - "pointer-arithmetic | Pointer Arithmetic & Arrays in Memory | references-pointers, arrays-lists"
+              - "value-vs-reference | Value vs Reference Semantics & Aliasing | references-pointers"
+              - "mutability | Mutability & Immutability | value-vs-reference"
+              - "*manual-memory | Manual Memory Management: malloc & free | references-pointers"
+              - "*memory-bugs | Memory Bugs: Leaks, Dangling Pointers, Overflows | manual-memory"
+          - title: Types
+            topics:
+              - "*static-dynamic-types | Static vs Dynamic Typing | values-types-basic"
+              - "type-conversion | Type Conversion & Coercion | static-dynamic-types"
+              - "*composite-types | Structs, Records & Enums | static-dynamic-types"
+              - "generics-intro | Generics & Parametric Types | composite-types"
+
+      - id: paradigms
+        title: Programming Paradigms
+        tier: 1
+        refs: ["Abelson & Sussman — SICP 2e, ch. 2–3", "Van Roy & Haridi — Concepts, Techniques, and Models of Computer Programming"]
+        boss: "Paradigm Shift — rewrite one imperative program in OO and functional styles that pass the same tests."
+        units:
+          - title: Objects
+            topics:
+              - "*oop-objects | Objects & Classes | composite-types, functions-prog"
+              - "*encapsulation | Encapsulation & Interfaces | oop-objects"
+              - "*inheritance | Inheritance & Its Costs | encapsulation"
+              - "*polymorphism | Polymorphism & Dynamic Dispatch | inheritance"
+              - "composition | Composition over Inheritance | polymorphism"
+          - title: Functions
+            topics:
+              - "*first-class-functions | First-Class & Higher-Order Functions | functions-prog"
+              - "*closures | Closures | first-class-functions, scope"
+              - "map-filter-reduce | Map, Filter & Reduce | first-class-functions, arrays-lists"
+              - "pure-functions | Purity & Side Effects | mutability, first-class-functions"
+              - "immutable-data | Persistent Data Structures (idea) | pure-functions"
+              - "declarative | Declarative vs Imperative | map-filter-reduce"
+          - title: Concurrency Preview
+            topics:
+              - "concurrency-intro | Concurrency vs Parallelism | functions-prog"
+
+  # ───────────────────────────────────────── TIER 2
+  - id: machine
+    title: The Machine
+    tagline: From transistors to running programs
+    color: "#FF8A65"
+    subjects:
+      - id: digital-logic
+        title: Digital Logic
+        tier: 2
+        refs: ["Harris & Harris — Digital Design and Computer Architecture, RISC-V ed., ch. 1–5", "Nisan & Schocken — The Elements of Computing Systems 2e, ch. 1–3"]
+        boss: "Build an ALU — wire a 4-bit ALU in the circuit sandbox that meets its truth specification."
+        units:
+          - title: Combinational
+            topics:
+              - "*logic-gates | Logic Gates & Transistors (CMOS idea) | universal-gates"
+              - "*combinational-circuits | Combinational Circuits | logic-gates, karnaugh-maps"
+              - "*multiplexers-decoders | Multiplexers, Decoders & Encoders | combinational-circuits"
+              - "*adders | Half Adders, Full Adders & Ripple Carry | combinational-circuits, binary-addition"
+              - "carry-lookahead | Carry-Lookahead Adders | adders"
+              - "*alu | The Arithmetic Logic Unit | adders, multiplexers-decoders, signed-numbers"
+          - title: Sequential
+            topics:
+              - "*latches-flipflops | Latches & Flip-Flops | combinational-circuits"
+              - "*clocks-timing | Clocks & Timing | latches-flipflops"
+              - "*registers | Registers & Register Files | latches-flipflops, multiplexers-decoders"
+              - "counters | Counters & Shift Registers | registers"
+              - "*fsm-hardware | Finite State Machines in Hardware | clocks-timing"
+              - "*memory-cells | SRAM & DRAM Cells | latches-flipflops"
+
+      - id: computer-architecture
+        title: Computer Architecture
+        tier: 2
+        refs: ["Patterson & Hennessy — Computer Organization and Design, RISC-V ed. 2e", "Hennessy & Patterson — Computer Architecture: A Quantitative Approach 6e", "RISC-V ISA Specification (Unprivileged)"]
+        boss: "Cycle Hunter — predict stalls and cache hits for a program, then tune it to reach a target CPI."
+        units:
+          - title: Organization
+            topics:
+              - "*von-neumann | The Von Neumann Architecture | registers, alu"
+              - "*instruction-cycle | Fetch–Decode–Execute | von-neumann"
+              - "*interrupts-hw | Interrupts & Exceptions in Hardware | instruction-cycle"
+              - "*performance-metrics | Performance: CPI, Clock Rate & Amdahl's Law | instruction-cycle"
+          - title: Instruction Set
+            topics:
+              - "*isa-concepts | Instruction Set Architecture | instruction-cycle"
+              - "risc-cisc | RISC vs CISC | isa-concepts"
+              - "*riscv-assembly | RISC-V Assembly Basics | isa-concepts, hex-octal"
+              - "addressing-modes | Addressing Modes | riscv-assembly"
+              - "*procedures-assembly | Procedure Calls & Calling Conventions | riscv-assembly, call-stack"
+              - "*instruction-encoding | Instruction Encoding | riscv-assembly"
+          - title: Pipeline
+            topics:
+              - "*single-cycle-datapath | The Single-Cycle Datapath | instruction-cycle, fsm-hardware"
+              - "*pipelining | Pipelining | single-cycle-datapath"
+              - "*hazards | Data & Control Hazards | pipelining"
+              - "forwarding-stalls | Forwarding & Stalls | hazards"
+              - "branch-prediction | Branch Prediction | hazards"
+          - title: Memory Hierarchy
+            topics:
+              - "*memory-hierarchy | The Memory Hierarchy & Locality | memory-cells, performance-metrics"
+              - "*cache-basics | Caches: Direct-Mapped | memory-hierarchy"
+              - "cache-associativity | Set-Associative Caches & Replacement | cache-basics"
+              - "cache-writes | Write-Through vs Write-Back | cache-basics"
+              - "cache-performance | AMAT & Cache-Friendly Code | cache-associativity"
+              - "*virtual-memory-hw | Address Translation Hardware: TLB & Page Tables | cache-basics"
+          - title: Parallel Hardware
+            topics:
+              - "multicore | Multicore & Cache Coherence | cache-writes"
+              - "simd-gpu | SIMD & GPUs (overview) | multicore"
+
+      - id: source-to-process
+        title: From Source to Running Process
+        tier: 2
+        refs: ["Bryant & O'Hallaron — CS:APP 3e, ch. 7", "Levine — Linkers and Loaders", "System V ABI / ELF specification"]
+        boss: "Link Map — resolve symbols and relocations by hand for three object files and predict the loaded memory layout."
+        units:
+          - title: Build
+            topics:
+              - "*compilation-overview | The Compilation Pipeline (overview) | what-is-program, riscv-assembly"
+              - "*preprocess-compile | Preprocessing & Compiling to Assembly | compilation-overview"
+              - "*object-files | Assembling & Object Files | preprocess-compile, instruction-encoding"
+              - "executable-formats | Executable Formats: ELF & PE | object-files"
+          - title: Link & Load
+            topics:
+              - "*symbols-relocation | Symbols & Relocation | object-files"
+              - "*linking | Static Linking | symbols-relocation"
+              - "dynamic-linking | Dynamic Linking & Shared Libraries | linking"
+              - "*loading | Loading & Process Memory Layout | linking, stack-heap"
+              - "interpreters-jit | Interpreters, Bytecode & JIT (overview) | compilation-overview"
+
+  - id: algorithms
+    title: Algorithms & Data
+    tagline: The core of computer science
+    color: "#B79CFF"
+    subjects:
+      - id: algorithm-analysis
+        title: Algorithm Analysis
+        tier: 2
+        refs: ["Cormen, Leiserson, Rivest & Stein — Introduction to Algorithms 4e (CLRS), ch. 1–4, 16", "Sedgewick & Wayne — Algorithms 4e, ch. 1.4"]
+        boss: "Complexity Court — rank and justify the complexity of ten code snippets and solve their recurrences."
+        units:
+          - title: Measuring
+            topics:
+              - "*what-is-algorithm | What Is an Algorithm? Correctness & Efficiency | functions-prog"
+              - "*counting-steps | Counting Operations & Cost Models | what-is-algorithm"
+              - "*asymptotic | Asymptotic Notation: O, Ω, Θ | counting-steps, log-exp"
+              - "growth-rates | Comparing Growth Rates | asymptotic"
+              - "best-worst-average | Best, Worst & Average Case | asymptotic, random-variables"
+              - "space-complexity | Space Complexity | asymptotic"
+          - title: Reasoning
+            topics:
+              - "*loop-invariants | Loop Invariants & Correctness | what-is-algorithm, induction"
+              - "*recurrences-analysis | Recurrences for Recursive Algorithms | asymptotic, recursion"
+              - "master-theorem | The Master Theorem | recurrences-analysis"
+              - "recursion-trees | The Recursion-Tree Method | recurrences-analysis"
+              - "amortized | Amortized Analysis | asymptotic"
+
+      - id: data-structures
+        title: Data Structures
+        tier: 2
+        refs: ["CLRS 4e, ch. 10–14, 17–19", "Sedgewick & Wayne — Algorithms 4e, ch. 1.3, 2.4, 3"]
+        boss: "Structure Architect — pick and implement the right structure for five workloads under time limits."
+        units:
+          - title: Linear
+            topics:
+              - "*adt-concept | Abstract Data Types | asymptotic"
+              - "*dynamic-arrays | Dynamic Arrays | adt-concept, arrays-lists"
+              - "*linked-lists | Linked Lists | adt-concept, references-pointers"
+              - "*stacks | Stacks | adt-concept"
+              - "*queues | Queues & Deques | linked-lists"
+              - "circular-buffers | Circular Buffers | queues"
+              - "skip-lists | Skip Lists | linked-lists, random-variables"
+          - title: Trees
+            topics:
+              - "*trees-ds | Trees & Tree Traversals | linked-lists, recursion, trees-math"
+              - "*bst | Binary Search Trees | trees-ds"
+              - "avl-trees | AVL Trees & Rotations | bst"
+              - "red-black-trees | Red-Black Trees | avl-trees"
+              - "b-trees | B-Trees | bst"
+              - "tries | Tries | trees-ds, strings"
+              - "segment-trees | Segment & Fenwick Trees | trees-ds"
+          - title: Heaps
+            topics:
+              - "*heaps | Binary Heaps | trees-ds, dynamic-arrays"
+              - "*priority-queues | Priority Queues | heaps"
+          - title: Hashing
+            topics:
+              - "*hash-functions | Hash Functions | adt-concept, modular-arithmetic"
+              - "*hash-collisions | Collision Resolution: Chaining & Open Addressing | hash-functions, linked-lists"
+              - "load-factor | Load Factor & Rehashing | hash-collisions, amortized"
+              - "bloom-filters | Bloom Filters | hash-functions, probability-basics"
+          - title: Graphs & Sets
+            topics:
+              - "*graph-representations | Graph Representations | graph-types, dynamic-arrays, linked-lists"
+              - "union-find | Disjoint Sets: Union–Find | trees-ds, amortized"
+
+      - id: algorithm-design
+        title: Algorithm Design
+        tier: 2
+        refs: ["CLRS 4e, ch. 2, 4, 6–9, 14–15, 32", "Kleinberg & Tardos — Algorithm Design, ch. 4–6"]
+        boss: "Strategy Gauntlet — identify the paradigm for six unseen problems and implement two of them."
+        units:
+          - title: Search & Sort
+            topics:
+              - "*linear-search | Linear Search | what-is-algorithm, arrays-lists"
+              - "*binary-search | Binary Search | linear-search, loop-invariants"
+              - "*elementary-sorts | Selection, Insertion & Bubble Sort | loop-invariants, asymptotic"
+              - "*merge-sort | Merge Sort | elementary-sorts, recurrences-analysis"
+              - "*quicksort | Quicksort & Partitioning | merge-sort"
+              - "randomized-quicksort | Randomized Quicksort Analysis | quicksort, linearity-expectation"
+              - "*heapsort | Heapsort | heaps, elementary-sorts"
+              - "sorting-lower-bound | The Comparison-Sorting Lower Bound | merge-sort, trees-ds"
+              - "linear-time-sorts | Counting, Radix & Bucket Sort | sorting-lower-bound"
+              - "selection-algorithms | Order Statistics & Quickselect | quicksort"
+          - title: Divide & Conquer
+            topics:
+              - "*divide-conquer | The Divide-and-Conquer Strategy | merge-sort"
+              - "karatsuba | Karatsuba Multiplication | divide-conquer, master-theorem"
+              - "closest-pair | Closest Pair of Points | divide-conquer"
+          - title: Greedy
+            topics:
+              - "*greedy-method | The Greedy Method & Exchange Arguments | elementary-sorts, proof-contradiction"
+              - "activity-selection | Activity Selection & Interval Scheduling | greedy-method"
+              - "huffman-coding | Huffman Coding | greedy-method, priority-queues"
+          - title: Dynamic Programming
+            topics:
+              - "*dp-intro | Dynamic Programming: Overlapping Subproblems | divide-conquer"
+              - "*memo-tabulation | Memoization vs Tabulation | dp-intro, maps-sets-prog"
+              - "knapsack | 0/1 Knapsack | memo-tabulation"
+              - "lcs-edit-distance | LCS & Edit Distance | memo-tabulation, strings"
+              - "lis | Longest Increasing Subsequence | memo-tabulation"
+              - "matrix-chain | Matrix-Chain Multiplication | memo-tabulation, matrices"
+          - title: Exhaustive & Strings
+            topics:
+              - "backtracking | Backtracking: N-Queens & Sudoku | recursion"
+              - "branch-bound | Branch & Bound | backtracking, priority-queues"
+              - "string-matching | String Matching: KMP & Rabin–Karp | linear-search, strings, hash-functions"
+
+      - id: graph-algorithms
+        title: Graph Algorithms
+        tier: 2
+        refs: ["CLRS 4e, ch. 20–25", "Sedgewick & Wayne — Algorithms 4e, ch. 4"]
+        boss: "Route Planner — implement shortest paths and a minimum spanning tree for a city map with constraints."
+        units:
+          - title: Traversal
+            topics:
+              - "*bfs | Breadth-First Search | graph-representations, queues"
+              - "*dfs | Depth-First Search | graph-representations, stacks, recursion"
+              - "*topological-sort | Topological Sort | dfs"
+              - "connected-components | Connected Components | bfs, dfs"
+              - "scc | Strongly Connected Components | topological-sort"
+              - "cycle-detection | Cycle Detection | dfs"
+              - "bipartite-check | Bipartiteness Testing | bfs"
+          - title: Shortest Paths
+            topics:
+              - "*dijkstra | Dijkstra's Algorithm | bfs, priority-queues, greedy-method"
+              - "bellman-ford | Bellman–Ford & Negative Cycles | dijkstra, memo-tabulation"
+              - "floyd-warshall | Floyd–Warshall All-Pairs | memo-tabulation, graph-representations"
+              - "a-star | A* Search | dijkstra"
+          - title: Spanning Trees & Flow
+            topics:
+              - "*mst-prim | MST: The Cut Property & Prim's Algorithm | greedy-method, priority-queues"
+              - "mst-kruskal | Kruskal's Algorithm | mst-prim, union-find"
+              - "max-flow | Maximum Flow: Ford–Fulkerson | bfs, dfs"
+              - "min-cut | The Max-Flow Min-Cut Theorem | max-flow"
+              - "bipartite-matching | Bipartite Matching | max-flow, bipartite-check"
+
+  # ───────────────────────────────────────── TIER 3
+  - id: theory
+    title: Theory of Computation
+    tagline: The limits of what can be computed
+    color: "#D9DCE8"
+    subjects:
+      - id: automata
+        title: Automata & Formal Languages
+        tier: 3
+        refs: ["Sipser — Introduction to the Theory of Computation 3e, ch. 0–2", "Hopcroft, Motwani & Ullman — Introduction to Automata Theory 3e"]
+        boss: "Language Lab — build automata and grammars for five languages and prove one of them non-regular."
+        units:
+          - title: Regular Languages
+            topics:
+              - "*alphabets-languages | Alphabets, Strings & Languages | sequences-sums"
+              - "*dfa | Deterministic Finite Automata | alphabets-languages"
+              - "*nfa | Nondeterministic Finite Automata | dfa"
+              - "*subset-construction | NFA → DFA: The Subset Construction | nfa"
+              - "*regular-expressions | Regular Expressions | nfa"
+              - "regex-to-nfa | Regex → NFA: Thompson's Construction | regular-expressions"
+              - "dfa-minimization | DFA Minimization | subset-construction, equivalence-relations"
+              - "closure-properties | Closure Properties of Regular Languages | subset-construction"
+              - "*pumping-lemma-regular | The Pumping Lemma for Regular Languages | dfa, proof-contradiction, pigeonhole"
+          - title: Context-Free Languages
+            topics:
+              - "*cfg | Context-Free Grammars | regular-expressions, recursive-definitions"
+              - "*derivations-parse-trees | Derivations, Parse Trees & Ambiguity | cfg"
+              - "chomsky-normal-form | Chomsky Normal Form | derivations-parse-trees"
+              - "*pda | Pushdown Automata | cfg, stacks"
+              - "cfg-pda-equivalence | CFG ⇔ PDA Equivalence | pda"
+              - "pumping-lemma-cf | The Pumping Lemma for Context-Free Languages | pda, pumping-lemma-regular"
+              - "cyk | CYK Parsing | chomsky-normal-form, memo-tabulation"
+
+      - id: computability
+        title: Computability
+        tier: 3
+        refs: ["Sipser — Introduction to the Theory of Computation 3e, ch. 3–5", "Turing (1936) — On Computable Numbers"]
+        boss: "The Undecidable — build a reduction chain that proves a new problem undecidable."
+        units:
+          - title: Machines
+            topics:
+              - "*turing-machines | Turing Machines | pda"
+              - "tm-variants | TM Variants: Multi-Tape & Nondeterministic | turing-machines"
+              - "*church-turing | The Church–Turing Thesis | turing-machines"
+              - "lambda-calculus-comp | Lambda Calculus as a Model of Computation | church-turing, first-class-functions"
+          - title: Limits
+            topics:
+              - "*decidability | Decidable & Recognizable Languages | church-turing"
+              - "*diagonalization | Diagonalization | cardinality, decidability"
+              - "*halting-problem | The Halting Problem | diagonalization"
+              - "*reductions-computability | Reductions & Undecidability | halting-problem"
+              - "rice-theorem | Rice's Theorem | reductions-computability"
+
+      - id: complexity-theory
+        title: Computational Complexity
+        tier: 3
+        refs: ["Sipser — Introduction to the Theory of Computation 3e, ch. 7–8, 10", "Garey & Johnson — Computers and Intractability", "Cook (1971) — The Complexity of Theorem-Proving Procedures"]
+        boss: "Reduction Relay — chain reductions from 3-SAT to a target problem and verify gadgets in the visualizer."
+        units:
+          - title: Classes
+            topics:
+              - "*time-complexity-classes | Time Complexity & the Class P | decidability"
+              - "*np | The Class NP & Verifiers | time-complexity-classes"
+              - "space-complexity-classes | PSPACE & Space Classes | time-complexity-classes"
+              - "randomized-complexity | Randomized Classes: RP & BPP (overview) | time-complexity-classes, probability-basics"
+          - title: Hardness
+            topics:
+              - "*poly-reductions | Polynomial-Time Reductions | np, reductions-computability"
+              - "*np-completeness | NP-Completeness & Cook–Levin | poly-reductions"
+              - "classic-npc | Classic NP-Complete Problems | np-completeness"
+              - "*p-vs-np | P vs NP | np-completeness"
+              - "approximation | Approximation Algorithms | classic-npc, greedy-method"
+
+  - id: systems
+    title: Systems
+    tagline: Software that runs the machine and connects the world
+    color: "#4FD1E0"
+    subjects:
+      - id: operating-systems
+        title: Operating Systems
+        tier: 3
+        refs: ["Silberschatz, Galvin & Gagne — Operating System Concepts 10e", "Arpaci-Dusseau & Arpaci-Dusseau — Operating Systems: Three Easy Pieces (free)", "Tanenbaum & Bos — Modern Operating Systems"]
+        boss: "Kernel Day — keep a simulated OS alive: choose a scheduler, break a deadlock and pick a page-replacement policy under load."
+        units:
+          - title: Foundations
+            topics:
+              - "*os-role | What an Operating System Does | abstraction-layers, von-neumann"
+              - "*dual-mode | Kernel Mode vs User Mode | os-role, interrupts-hw"
+              - "*system-calls | System Calls | dual-mode, procedures-assembly"
+              - "os-structures | OS Structures: Monolithic, Micro & Hybrid Kernels | system-calls"
+          - title: Processes & Threads
+            topics:
+              - "*processes | The Process Abstraction | system-calls, loading"
+              - "*process-states | Process States & the PCB | processes"
+              - "*context-switch | Context Switching | process-states"
+              - "*process-creation | Process Creation: fork, exec, wait | processes"
+              - "*ipc | Inter-Process Communication | process-creation"
+              - "*threads | Threads & Threading Models | processes"
+          - title: CPU Scheduling
+            topics:
+              - "*scheduling-basics | Scheduling Criteria | context-switch"
+              - "*fcfs-sjf | FCFS, SJF & SRTF | scheduling-basics"
+              - "*round-robin | Round Robin | fcfs-sjf"
+              - "priority-scheduling | Priority Scheduling & Aging | fcfs-sjf"
+              - "mlfq | Multilevel Feedback Queues | round-robin, priority-scheduling"
+              - "multiprocessor-scheduling | Multiprocessor & Real-Time Scheduling | mlfq, multicore"
+          - title: Synchronization
+            topics:
+              - "*race-conditions | Race Conditions & Critical Sections | threads"
+              - "peterson | Peterson's Solution | race-conditions"
+              - "*locks-hardware | Atomic Instructions & Spinlocks | race-conditions"
+              - "*mutex-semaphores | Mutexes & Semaphores | locks-hardware"
+              - "monitors-condvars | Monitors & Condition Variables | mutex-semaphores"
+              - "*classic-sync-problems | Bounded Buffer, Readers–Writers & Dining Philosophers | mutex-semaphores"
+          - title: Deadlocks
+            topics:
+              - "*deadlock-conditions | Deadlock & Its Four Conditions | classic-sync-problems, paths-connectivity"
+              - "deadlock-prevention | Deadlock Prevention | deadlock-conditions"
+              - "*bankers-algorithm | Deadlock Avoidance: The Banker's Algorithm | deadlock-conditions"
+              - "deadlock-detection | Deadlock Detection & Recovery | deadlock-conditions, cycle-detection"
+          - title: Memory Management
+            topics:
+              - "*address-binding | Address Spaces & Binding | loading"
+              - "contiguous-allocation | Contiguous Allocation & Fragmentation | address-binding"
+              - "segmentation | Segmentation | contiguous-allocation"
+              - "*paging | Paging | address-binding, virtual-memory-hw"
+              - "page-table-structures | Multi-Level & Inverted Page Tables | paging"
+          - title: Virtual Memory
+            topics:
+              - "*demand-paging | Demand Paging & Page Faults | paging"
+              - "*page-replacement | Page Replacement: FIFO, OPT & LRU | demand-paging"
+              - "lru-approximation | Clock & LRU Approximations | page-replacement"
+              - "frame-allocation | Frame Allocation & Thrashing | page-replacement"
+              - "copy-on-write | Copy-on-Write & Memory-Mapped Files | demand-paging, process-creation"
+          - title: Storage
+            topics:
+              - "*file-concept | Files, Directories & the File API | system-calls"
+              - "*fs-implementation | File-System Implementation: Allocation & Inodes | file-concept, linked-lists"
+              - "free-space | Free-Space Management | fs-implementation"
+              - "journaling | Crash Consistency & Journaling | fs-implementation"
+              - "*io-systems | I/O: Polling, Interrupts & DMA | system-calls"
+              - "disk-scheduling | HDD Scheduling | io-systems"
+              - "ssd-raid | SSDs & RAID | io-systems"
+          - title: Virtualization
+            topics:
+              - "virtualization | Virtual Machines & Hypervisors | dual-mode, paging"
+              - "containers | Containers & Namespaces | virtualization, processes"
+
+      - id: computer-networks
+        title: Computer Networks
+        tier: 3
+        refs: ["Kurose & Ross — Computer Networking: A Top-Down Approach 8e", "Peterson & Davie — Computer Networks: A Systems Approach (open edition)", "RFC 9293 — TCP", "RFC 791 — IPv4"]
+        boss: "Packet's Journey — trace one URL fetch end to end (DNS, ARP, NAT, handshake, congestion window, HTTP) and predict every step."
+        units:
+          - title: Foundations
+            topics:
+              - "*network-intro | Hosts, Links & Packets | abstraction-layers"
+              - "*packet-switching | Packet vs Circuit Switching | network-intro"
+              - "*delay-throughput | Delay, Loss & Throughput | packet-switching"
+              - "*layering | Protocol Layering: OSI & TCP/IP | network-intro"
+          - title: Physical & Link
+            topics:
+              - "*physical-signals | The Physical Layer: Signals & Encoding | layering, bits"
+              - "*framing-errors | Framing & Error Detection (CRC) | physical-signals, error-detection-intro"
+              - "*mac-protocols | Multiple Access: ALOHA, CSMA/CD & CSMA/CA | framing-errors"
+              - "*ethernet-switching | Ethernet, MAC Addresses & Switches | mac-protocols"
+              - "arp | ARP | ethernet-switching, ip-addressing"
+              - "vlans | VLANs | ethernet-switching"
+              - "wireless-lan | Wi-Fi Basics (802.11) | mac-protocols"
+          - title: Network Layer
+            topics:
+              - "*ip-datagram | IPv4 Datagrams & Forwarding | layering, binary-numbers"
+              - "*ip-addressing | IP Addressing & Subnetting (CIDR) | ip-datagram, bitwise-ops"
+              - "dhcp | DHCP | ip-addressing"
+              - "*nat | NAT | ip-addressing"
+              - "icmp | ICMP, ping & traceroute | ip-datagram"
+              - "ipv6 | IPv6 | ip-addressing"
+              - "*routing-algorithms | Routing: Link-State vs Distance-Vector | ip-datagram, dijkstra"
+              - "ospf | Intra-Domain Routing: OSPF | routing-algorithms"
+              - "bgp | Inter-Domain Routing: BGP | routing-algorithms"
+          - title: Transport Layer
+            topics:
+              - "*transport-services | Transport Services & Port Multiplexing | ip-datagram"
+              - "*udp | UDP | transport-services"
+              - "*reliable-transfer | Principles of Reliable Transfer (ARQ) | transport-services, framing-errors"
+              - "*sliding-window | Go-Back-N & Selective Repeat | reliable-transfer"
+              - "*tcp-connection | TCP Segments & the Three-Way Handshake | reliable-transfer"
+              - "tcp-state-machine | The TCP Connection State Machine | tcp-connection"
+              - "*tcp-reliability | TCP Reliability, RTT Estimation & Flow Control | tcp-connection, sliding-window"
+              - "*congestion-principles | Congestion Control Principles | tcp-reliability, delay-throughput"
+              - "*tcp-congestion | TCP Reno: Slow Start, AIMD & Fast Recovery | congestion-principles"
+              - "cubic-bbr | CUBIC & BBR | tcp-congestion"
+          - title: Application Layer
+            topics:
+              - "*dns | DNS | udp"
+              - "*http | HTTP/1.1 & the Web | tcp-connection, dns"
+              - "http2-3 | HTTP/2, HTTP/3 & QUIC | http, tcp-congestion"
+              - "tls | TLS: Secure Channels | http, certificates-pki, diffie-hellman, authenticated-encryption"
+              - "email-protocols | Email: SMTP & IMAP | tcp-connection, dns"
+              - "cdn-p2p | CDNs & Peer-to-Peer | http"
+          - title: Sockets
+            topics:
+              - "*sockets-api | The Sockets API | tcp-connection, udp, system-calls"
+              - "socket-servers | Concurrent Servers: Threads, select & epoll | sockets-api, threads"
+
+      - id: database-systems
+        title: Database Systems
+        tier: 3
+        refs: ["Silberschatz, Korth & Sudarshan — Database System Concepts 7e", "Ramakrishnan & Gehrke — Database Management Systems 3e", "Mohan et al. (1992) — ARIES"]
+        boss: "Bank on It — design the schema, write queries, choose indexes and an isolation level for a banking workload, then survive a crash."
+        units:
+          - title: The Relational Model
+            topics:
+              - "*why-databases | Why Databases? Data Models & the DBMS | file-concept, sets"
+              - "*relational-model | Relations, Keys & Schemas | why-databases, relations"
+              - "*relational-algebra | Relational Algebra | relational-model"
+          - title: SQL
+            topics:
+              - "*sql-basics | SQL: SELECT, WHERE, ORDER BY | relational-algebra"
+              - "*sql-joins | SQL Joins | sql-basics"
+              - "*sql-aggregation | Aggregation & GROUP BY | sql-basics"
+              - "sql-subqueries | Subqueries & Set Operations | sql-joins"
+              - "sql-nulls | NULLs & Three-Valued Logic | sql-basics"
+              - "sql-ddl-constraints | DDL & Integrity Constraints | sql-basics"
+              - "sql-window | Window Functions | sql-aggregation"
+              - "views | Views | sql-subqueries"
+          - title: Design
+            topics:
+              - "*er-modeling | Entity–Relationship Modeling | relational-model"
+              - "*functional-dependencies | Functional Dependencies | relational-model, functions"
+              - "*normalization | Normal Forms: 1NF to BCNF | functional-dependencies"
+              - "decomposition | Lossless Decomposition & Dependency Preservation | normalization"
+          - title: Storage & Indexing
+            topics:
+              - "*storage-pages | Disk Storage, Pages & Records | why-databases, memory-hierarchy"
+              - "buffer-pool | Buffer Pool Management | storage-pages, page-replacement"
+              - "*indexing-basics | Indexing: Primary, Secondary & Clustered | storage-pages"
+              - "*bplus-trees | B+-Trees | indexing-basics, bst"
+              - "hash-indexes | Hash Indexes: Static, Extendible & Linear | indexing-basics, hash-collisions"
+              - "lsm-trees | LSM Trees | indexing-basics"
+          - title: Query Processing
+            topics:
+              - "*query-processing | The Query Processing Pipeline | relational-algebra, indexing-basics"
+              - "external-sorting | External Merge Sort | merge-sort, storage-pages"
+              - "*join-algorithms | Join Algorithms: Nested-Loop, Hash & Sort-Merge | query-processing, merge-sort"
+              - "query-optimization | Query Optimization & Cost Estimation | join-algorithms"
+          - title: Transactions
+            topics:
+              - "*transactions-acid | Transactions & ACID | sql-basics"
+              - "*schedules-serializability | Schedules & Conflict Serializability | transactions-acid, paths-connectivity"
+              - "*two-phase-locking | Two-Phase Locking | schedules-serializability, mutex-semaphores"
+              - "isolation-levels | Isolation Levels & Anomalies | two-phase-locking"
+              - "mvcc | MVCC & Snapshot Isolation | isolation-levels"
+              - "timestamp-ordering | Timestamp Ordering & Optimistic Concurrency | schedules-serializability"
+          - title: Recovery
+            topics:
+              - "*logging-recovery | Logging & Write-Ahead Logging | transactions-acid, storage-pages"
+              - "aries | ARIES Recovery | logging-recovery"
+          - title: Beyond Relational
+            topics:
+              - "nosql-models | Key-Value, Document & Wide-Column Stores | relational-model"
+
+  # ───────────────────────────────────────── TIER 4
+  - id: languages
+    title: Languages
+    tagline: How code becomes meaning
+    color: "#FF7EB0"
+    subjects:
+      - id: compilers
+        title: Compilers
+        tier: 4
+        refs: ["Aho, Lam, Sethi & Ullman — Compilers: Principles, Techniques, and Tools 2e (Dragon Book)", "Cooper & Torczon — Engineering a Compiler 3e", "Appel — Modern Compiler Implementation"]
+        boss: "Mini-Compiler — finish a compiler for a tiny language: lexer, parser, type checker and code generator, all tests green."
+        units:
+          - title: Front End
+            topics:
+              - "*compiler-structure | The Structure of a Compiler | compilation-overview"
+              - "*tokens-lexemes | Tokens, Lexemes & Patterns | compiler-structure, regular-expressions"
+              - "*lexer-construction | Building a Lexer from Regexes & DFAs | tokens-lexemes, subset-construction"
+              - "*grammars-for-parsing | Grammars for Programming Languages | derivations-parse-trees"
+              - "*recursive-descent | Recursive-Descent Parsing | grammars-for-parsing, recursion"
+              - "first-follow | FIRST & FOLLOW Sets | grammars-for-parsing"
+              - "ll1 | LL(1) Parsing Tables | first-follow"
+              - "*shift-reduce | Bottom-Up & Shift–Reduce Parsing | grammars-for-parsing, pda"
+              - "lr-parsing | LR(0), SLR & LALR Parsing | shift-reduce, first-follow"
+          - title: Middle
+            topics:
+              - "*ast | Abstract Syntax Trees | recursive-descent"
+              - "*symbol-tables | Scopes & Symbol Tables | ast, scope, maps-sets-prog"
+              - "*type-checking | Type Checking | symbol-tables, static-dynamic-types"
+              - "*three-address-code | Intermediate Representation: Three-Address Code | ast"
+              - "control-flow-graphs | Basic Blocks & Control-Flow Graphs | three-address-code, graph-representations"
+              - "ssa | Static Single Assignment Form | control-flow-graphs"
+          - title: Optimization
+            topics:
+              - "local-optimization | Local Optimization: Constant Folding & CSE | three-address-code"
+              - "dataflow-analysis | Dataflow Analysis: Liveness & Reaching Definitions | control-flow-graphs"
+              - "loop-optimization | Loop Optimizations | dataflow-analysis"
+          - title: Back End & Runtime
+            topics:
+              - "*instruction-selection | Instruction Selection | three-address-code, riscv-assembly"
+              - "register-allocation | Register Allocation by Graph Coloring | dataflow-analysis, graph-coloring"
+              - "*activation-records | Activation Records | procedures-assembly, symbol-tables"
+              - "*garbage-collection | Garbage Collection: Ref-Counting, Mark–Sweep & Copying | activation-records, references-pointers"
+              - "generational-gc | Generational & Incremental GC | garbage-collection"
+
+      - id: pl-theory
+        title: Programming Language Theory
+        tier: 4
+        refs: ["Pierce — Types and Programming Languages", "Krishnamurthi — Programming Languages: Application and Interpretation (free)", "Nystrom — Crafting Interpreters (free online)"]
+        boss: "Interpreter Forge — write an evaluator and type checker for a small lambda language."
+        units:
+          - title: Meaning
+            topics:
+              - "*syntax-semantics | Syntax vs Semantics | ast"
+              - "*tree-walk-interpreter | Tree-Walking Interpreters | ast"
+              - "bytecode-vm | Bytecode & Stack-Based VMs | tree-walk-interpreter, stacks"
+              - "operational-semantics | Operational Semantics | syntax-semantics, inference-rules"
+          - title: Lambda Calculus
+            topics:
+              - "*lambda-calculus | The Untyped Lambda Calculus | closures"
+              - "evaluation-strategies | Evaluation Strategies: Strict, Lazy & Call-by-Name | lambda-calculus"
+              - "continuations | Continuations | lambda-calculus"
+          - title: Types
+            topics:
+              - "*type-systems | Type Systems & Soundness | type-checking, syntax-semantics"
+              - "simply-typed-lambda | The Simply Typed Lambda Calculus | type-systems, lambda-calculus"
+              - "type-inference | Hindley–Milner Type Inference | simply-typed-lambda"
+              - "subtyping | Subtyping & Variance | type-systems, polymorphism"
+              - "parametric-polymorphism | Parametric Polymorphism | type-systems, generics-intro"
+              - "algebraic-data-types | Algebraic Data Types & Pattern Matching | composite-types, type-systems"
+
+  - id: craft
+    title: Building Software
+    tagline: Engineering that lasts
+    color: "#B8E06A"
+    subjects:
+      - id: software-design
+        title: Software Design
+        tier: 4
+        refs: ["Ousterhout — A Philosophy of Software Design 2e", "Gamma, Helm, Johnson & Vlissides — Design Patterns", "Fowler — Refactoring 2e"]
+        boss: "Refactor Rescue — untangle a messy module with the right patterns without breaking a single test."
+        units:
+          - title: Principles
+            topics:
+              - "*complexity-in-software | Managing Complexity: Modularity & Abstraction | encapsulation"
+              - "*coupling-cohesion | Coupling & Cohesion | complexity-in-software"
+              - "*solid | The SOLID Principles | coupling-cohesion, polymorphism"
+              - "dry-kiss-yagni | DRY, KISS, YAGNI & Their Limits | coupling-cohesion"
+              - "api-design | API Design | coupling-cohesion"
+          - title: Patterns
+            topics:
+              - "*patterns-creational | Creational Patterns | solid"
+              - "*patterns-structural | Structural Patterns | solid"
+              - "*patterns-behavioral | Behavioral Patterns | solid, first-class-functions"
+              - "refactoring | Refactoring & Code Smells | coupling-cohesion"
+
+      - id: version-control
+        title: Version Control & Git Internals
+        tier: 4
+        refs: ["Chacon & Straub — Pro Git 2e (free), ch. 2–3, 10", "Git documentation — gitglossary, git-merge"]
+        boss: "Time Travel — repair a broken repository history by predicting its object graph step by step."
+        units:
+          - title: Model
+            topics:
+              - "*vcs-concepts | Why Version Control | file-concept"
+              - "*git-objects | Git Objects: Blobs, Trees & Commits | vcs-concepts, hash-functions"
+              - "git-index | The Index (Staging Area) | git-objects"
+              - "*git-dag | The Commit DAG & Refs | git-objects, graph-types"
+              - "packfiles | Packfiles & Delta Compression | git-objects, compression-intro"
+          - title: Collaboration
+            topics:
+              - "*branching-merging | Branching & Three-Way Merge | git-dag"
+              - "rebase | Rebase vs Merge | branching-merging"
+              - "distributed-workflows | Remotes, Fetch, Push & Workflows | branching-merging"
+
+      - id: testing-quality
+        title: Testing & Quality
+        tier: 4
+        refs: ["Ammann & Offutt — Introduction to Software Testing 2e", "Beck — Test-Driven Development: By Example"]
+        boss: "Bug Bounty — write tests that kill every mutant in the mutation-testing arena."
+        units:
+          - title: Tests
+            topics:
+              - "*why-test | Why Test? Verification vs Validation | debugging"
+              - "*unit-tests | Unit Testing | why-test"
+              - "test-doubles | Test Doubles: Mocks, Stubs & Fakes | unit-tests, encapsulation"
+              - "*integration-e2e | Integration & End-to-End Tests | unit-tests"
+              - "*coverage | Coverage & Its Limits | unit-tests"
+              - "property-testing | Property-Based Testing | unit-tests, predicate-logic"
+              - "tdd | Test-Driven Development | unit-tests"
+          - title: Quality Systems
+            topics:
+              - "static-analysis | Static Analysis & Linting | unit-tests"
+              - "ci | Continuous Integration | integration-e2e, distributed-workflows"
+
+      - id: software-architecture
+        title: Software Architecture
+        tier: 4
+        refs: ["Bass, Clements & Kazman — Software Architecture in Practice 4e", "Richards & Ford — Fundamentals of Software Architecture"]
+        boss: "Scale the Startup — choose how an architecture evolves under growing load and defend every trade-off."
+        units:
+          - title: Structures
+            topics:
+              - "*architecture-intro | What Is Software Architecture? Quality Attributes | coupling-cohesion"
+              - "*layered-architecture | Layered & Hexagonal Architecture | architecture-intro"
+              - "*client-server | Client–Server & Request/Response | architecture-intro, http"
+              - "*monolith-microservices | Monoliths vs Microservices | layered-architecture, client-server"
+              - "event-driven | Event-Driven Architecture & Message Queues | monolith-microservices, queues"
+              - "caching-strategies | Caching Strategies | client-server, cache-basics"
+              - "rest-rpc | REST vs RPC vs GraphQL | client-server, api-design"
+
+  - id: scale
+    title: Distributed Systems
+    tagline: Many machines, one system
+    color: "#8C9EFF"
+    subjects:
+      - id: distributed-foundations
+        title: Distributed Systems Foundations
+        tier: 4
+        refs: ["van Steen & Tanenbaum — Distributed Systems 4e (free)", "Lamport (1978) — Time, Clocks, and the Ordering of Events", "Fischer, Lynch & Paterson (1985) — Impossibility of Distributed Consensus"]
+        boss: "Clockwork — order events from logs across four nodes with vector clocks and flag every concurrent pair."
+        units:
+          - title: Models
+            topics:
+              - "*why-distributed | Why Distribute? Goals & Fallacies | network-intro, processes"
+              - "*system-models | System Models: Synchronous, Asynchronous & Partial | why-distributed"
+              - "*failure-models | Failure Models: Crash, Omission & Byzantine | system-models"
+              - "*rpc | Remote Procedure Calls & Idempotency | why-distributed, tcp-connection"
+              - "*impossibility | Two Generals & FLP Impossibility | failure-models, proof-contradiction"
+          - title: Time
+            topics:
+              - "*physical-clocks | Physical Clocks & Clock Synchronization | system-models"
+              - "*lamport-clocks | Lamport Logical Clocks | physical-clocks, partial-orders"
+              - "*vector-clocks | Vector Clocks | lamport-clocks"
+          - title: Failure Handling
+            topics:
+              - "failure-detectors | Failure Detection & Heartbeats | failure-models"
+              - "*fault-tolerance-patterns | Timeouts, Retries, Backoff & Circuit Breakers | rpc, failure-models"
+
+      - id: distributed-data
+        title: Distributed Data
+        tier: 4
+        refs: ["Kleppmann — Designing Data-Intensive Applications, ch. 5–9", "DeCandia et al. (2007) — Dynamo", "Shapiro et al. (2011) — CRDTs"]
+        boss: "Global Store — configure replication, quorums and partitioning for a geo-distributed store under injected failures."
+        units:
+          - title: Replication
+            topics:
+              - "*replication-intro | Replication: Why & How | why-distributed, logging-recovery"
+              - "*leader-replication | Single-Leader Replication | replication-intro"
+              - "multi-leader | Multi-Leader Replication & Conflicts | leader-replication, vector-clocks"
+              - "leaderless | Leaderless Replication & Quorums | leader-replication"
+              - "crdts | CRDTs | multi-leader"
+          - title: Consistency
+            topics:
+              - "*consistency-models | Consistency Models: Linearizability to Eventual | leader-replication, schedules-serializability"
+              - "causal-consistency | Causal Consistency | consistency-models, vector-clocks"
+              - "*cap-pacelc | CAP & PACELC | consistency-models"
+          - title: Partitioning
+            topics:
+              - "*partitioning | Partitioning by Key Range & Hash | replication-intro, hash-functions"
+              - "consistent-hashing | Consistent Hashing | partitioning"
+              - "rebalancing | Rebalancing & Request Routing | consistent-hashing"
+          - title: Transactions & Processing
+            topics:
+              - "*two-phase-commit | Distributed Transactions: Two-Phase Commit | transactions-acid, failure-models"
+              - "sagas | Sagas & Compensation | two-phase-commit"
+              - "batch-stream | Batch (MapReduce) & Stream Processing | partitioning"
+
+      - id: consensus
+        title: Consensus & Coordination
+        tier: 4
+        refs: ["Ongaro & Ousterhout (2014) — In Search of an Understandable Consensus Algorithm (Raft)", "Lamport (2001) — Paxos Made Simple", "Castro & Liskov (1999) — Practical Byzantine Fault Tolerance"]
+        boss: "Split Brain — keep the replicated log safe through a network partition in the Raft simulator."
+        units:
+          - title: Agreement
+            topics:
+              - "*consensus-problem | The Consensus Problem | impossibility"
+              - "*leader-election | Leader Election | consensus-problem"
+              - "*raft | Raft: Leader Election & Log Replication | leader-election, leader-replication"
+              - "raft-safety | Raft Safety & Membership Changes | raft"
+              - "paxos | Paxos | consensus-problem"
+              - "multi-paxos | Multi-Paxos | paxos"
+              - "byzantine-ft | Byzantine Fault Tolerance: PBFT (overview) | paxos"
+          - title: Coordination
+            topics:
+              - "coordination-services | Coordination Services: ZooKeeper & etcd | raft"
+              - "distributed-locks | Distributed Locks & Fencing Tokens | coordination-services"
+
+  - id: trust
+    title: Security & Cryptography
+    tagline: Building systems worth trusting
+    color: "#6FD67A"
+    subjects:
+      - id: security-foundations
+        title: Security Foundations
+        tier: 4
+        refs: ["Anderson — Security Engineering 3e (free chapters)", "Saltzer & Schroeder (1975) — The Protection of Information in Computer Systems"]
+        boss: "Threat Map — threat-model a small app and assign a mitigation to every attack path."
+        units:
+          - title: Thinking Securely
+            topics:
+              - "*security-goals | The CIA Triad & Security Goals | abstraction-layers"
+              - "*threat-models | Threat Modeling & Attack Surfaces | security-goals"
+              - "*principles-secure-design | Saltzer & Schroeder's Design Principles | threat-models"
+              - "access-control | Access Control: DAC, MAC & RBAC | principles-secure-design"
+              - "*authentication-concepts | Authentication Factors | security-goals"
+              - "human-factors | Human Factors & Social Engineering | threat-models"
+
+      - id: cryptography
+        title: Cryptography
+        tier: 4
+        refs: ["Katz & Lindell — Introduction to Modern Cryptography 3e", "Boneh & Shoup — A Graduate Course in Applied Cryptography (free)", "FIPS 197 — AES", "RFC 8446 — TLS 1.3"]
+        boss: "Cipher Breaker — break toy systems (ECB images, a reused one-time pad, tiny RSA) and explain each flaw."
+        units:
+          - title: Symmetric
+            topics:
+              - "*crypto-intro | Classical Ciphers & Kerckhoffs's Principle | security-goals, modular-arithmetic"
+              - "*one-time-pad | Perfect Secrecy & the One-Time Pad | crypto-intro, bitwise-ops, probability-basics"
+              - "stream-ciphers | Stream Ciphers | one-time-pad"
+              - "*block-ciphers | Block Ciphers & AES Structure | one-time-pad"
+              - "*modes-of-operation | Modes of Operation: ECB, CBC, CTR & GCM | block-ciphers"
+          - title: Integrity
+            topics:
+              - "*crypto-hash | Cryptographic Hash Functions | hash-functions, security-goals"
+              - "*mac | Message Authentication Codes & HMAC | crypto-hash"
+              - "authenticated-encryption | Authenticated Encryption | modes-of-operation, mac"
+          - title: Public Key
+            topics:
+              - "*public-key-crypto | The Public-Key Idea | crypto-intro"
+              - "*rsa | RSA | public-key-crypto, modular-inverse"
+              - "*diffie-hellman | Diffie–Hellman Key Exchange | public-key-crypto"
+              - "elliptic-curves | Elliptic-Curve Cryptography (overview) | diffie-hellman"
+              - "*digital-signatures | Digital Signatures | rsa, crypto-hash"
+              - "*certificates-pki | Certificates & PKI | digital-signatures"
+              - "key-management | Key Management & Randomness | public-key-crypto"
+
+      - id: applied-security
+        title: Systems & Software Security
+        tier: 4
+        refs: ["OWASP Top 10 (current edition)", "Anderson — Security Engineering 3e", "Erickson — Hacking: The Art of Exploitation 2e"]
+        boss: "Red Team / Blue Team — find and patch five vulnerabilities in a sandboxed app."
+        units:
+          - title: Identity
+            topics:
+              - "*password-storage | Password Storage: Salts & Slow Hashes | authentication-concepts, crypto-hash"
+              - "sessions-tokens | Sessions, Cookies & Tokens | authentication-concepts, http"
+              - "oauth-oidc | OAuth 2.0 & OpenID Connect | sessions-tokens, digital-signatures"
+              - "mfa | Multi-Factor Authentication | authentication-concepts"
+          - title: Vulnerabilities
+            topics:
+              - "*memory-safety-vulns | Buffer Overflows & Memory-Safety Bugs | memory-bugs, call-stack"
+              - "exploit-mitigations | Mitigations: ASLR, NX & Stack Canaries | memory-safety-vulns"
+              - "*injection | Injection: SQL & Command Injection | sql-basics, strings"
+              - "*xss | Cross-Site Scripting | http, injection"
+              - "csrf | Cross-Site Request Forgery | sessions-tokens"
+          - title: Defense
+            topics:
+              - "*secure-coding | Input Validation & Secure Coding | injection, principles-secure-design"
+              - "sandboxing | Sandboxing & Isolation | dual-mode, principles-secure-design"
+              - "network-security | Firewalls, VPNs & Intrusion Detection | nat, principles-secure-design"
+
+  # ───────────────────────────────────────── TIER 5
+  - id: intelligence
+    title: Intelligence
+    tagline: Machines that search, reason and learn
+    color: "#E58CF2"
+    subjects:
+      - id: ai-foundations
+        title: AI Foundations
+        tier: 5
+        refs: ["Russell & Norvig — Artificial Intelligence: A Modern Approach 4e, ch. 2–6, 13"]
+        boss: "Game Mind — write an alpha–beta agent that beats the baseline bot."
+        units:
+          - title: Search
+            topics:
+              - "*what-is-ai | What Is AI? Agents & Environments | what-is-algorithm"
+              - "*state-space-search | Problem Solving as State-Space Search | what-is-ai, bfs, dfs"
+              - "uniform-cost | Uniform-Cost Search | state-space-search, dijkstra"
+              - "*heuristic-search | Informed Search & A* Heuristics | state-space-search, dijkstra"
+              - "local-search | Local Search: Hill Climbing & Simulated Annealing | state-space-search"
+              - "*adversarial-search | Minimax & Alpha–Beta Pruning | state-space-search"
+              - "csp | Constraint Satisfaction Problems | backtracking"
+          - title: Reasoning
+            topics:
+              - "knowledge-representation | Logic-Based Knowledge Representation | predicate-logic, what-is-ai"
+              - "bayesian-networks | Bayesian Networks | bayes, dags-toposort-math"
+
+      - id: machine-learning
+        title: Machine Learning
+        tier: 5
+        refs: ["James, Witten, Hastie & Tibshirani — An Introduction to Statistical Learning 2e (free)", "Bishop — Pattern Recognition and Machine Learning", "Sutton & Barto — Reinforcement Learning 2e (free)"]
+        boss: "Honest Model — build, regularize and evaluate a classifier on a held-out set and beat the baseline without leakage."
+        units:
+          - title: Learning from Data
+            topics:
+              - "*what-is-ml | What Is Learning from Data? | what-is-ai, random-variables"
+              - "*mle | Likelihood & Maximum Likelihood | what-is-ml, distributions"
+              - "*linear-regression | Linear Regression | what-is-ml, matrices, derivatives"
+              - "*loss-functions | Loss Functions | linear-regression"
+              - "*gradient-descent | Gradient Descent | loss-functions, partial-derivatives"
+              - "*logistic-regression | Logistic Regression & Classification | gradient-descent, log-exp, mle"
+          - title: Generalization
+            topics:
+              - "*generalization | Overfitting, Bias–Variance & Regularization | logistic-regression"
+              - "*evaluation | Train/Validation/Test Splits & Metrics | generalization"
+              - "cross-validation | Cross-Validation | evaluation"
+          - title: Model Families
+            topics:
+              - "knn | k-Nearest Neighbors | what-is-ml, dot-product"
+              - "naive-bayes | Naive Bayes | bayes, what-is-ml"
+              - "decision-trees | Decision Trees & Ensembles | evaluation, info-entropy-intro"
+              - "svm | Support Vector Machines (intuition) | logistic-regression, dot-product"
+          - title: Beyond Supervised
+            topics:
+              - "*clustering | k-Means Clustering | what-is-ml, dot-product"
+              - "pca | Principal Component Analysis | eigen, clustering"
+              - "rl-intro | Reinforcement Learning: MDPs & Q-Learning | what-is-ml, memo-tabulation"
+
+      - id: deep-learning
+        title: Neural Networks & Deep Learning
+        tier: 5
+        refs: ["Goodfellow, Bengio & Courville — Deep Learning (free online)", "Bishop & Bishop — Deep Learning: Foundations and Concepts", "Vaswani et al. (2017) — Attention Is All You Need"]
+        boss: "Backprop by Hand — compute every gradient of a tiny network, then train an MLP in the browser to a target accuracy."
+        units:
+          - title: Networks
+            topics:
+              - "*perceptron | The Perceptron | logistic-regression"
+              - "*mlp | Multi-Layer Networks & Activations | perceptron"
+              - "*backprop | Backpropagation & Computational Graphs | mlp"
+          - title: Training
+            topics:
+              - "*training-dynamics | Initialization & Optimizers: SGD, Momentum, Adam | backprop"
+              - "*regularization-dl | Dropout, Batch Norm & Early Stopping | training-dynamics, generalization"
+          - title: Architectures
+            topics:
+              - "*cnn | Convolutional Neural Networks | mlp, images-pixels"
+              - "rnn | Recurrent Networks & LSTMs | mlp, sequences-sums"
+              - "*embeddings | Embeddings & Representation Learning | mlp, dot-product"
+              - "*attention | Attention | embeddings"
+              - "*transformers | Transformers (overview) | attention"
+              - "language-models | Language Models & Pretraining (overview) | transformers"
+              - "generative-models | Generative Models: VAEs, GANs & Diffusion (overview) | mlp"
+          - title: Responsibility
+            topics:
+              - "ml-ethics | Fairness, Bias & Responsible ML | evaluation"
+
+# Reserved expansion regions (Phase 8+). No topics until authored; rendered as dim, unlabeled nebulae.
+planned_domains:
+  - { id: frontiers-graphics, title: "Computer Graphics" }
+  - { id: frontiers-hci, title: "Human–Computer Interaction" }
+  - { id: frontiers-quantum, title: "Quantum Computing" }
+  - { id: frontiers-robotics, title: "Robotics & Embedded Systems" }
