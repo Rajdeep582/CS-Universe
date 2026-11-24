@@ -1,0 +1,99 @@
+<Step id="hook" section="hook" title="Checking every case">
+
+With two yes/no inputs there are only four situations. With three, eight. A **truth table** simply lists them all — which means any Boolean question about a small circuit can be settled by checking every row, with no cleverness at all.
+
+</Step>
+
+<Step id="intuition-rows" section="intuition" title="One row per input combination">
+
+Write the input columns, list every combination of 0s and 1s, and fill in the output for each. Listing rows in binary counting order (000, 001, 010 …) guarantees none is missed.
+
+</Step>
+
+<Step id="formal-def" section="formal" title="Truth tables as functions">
+
+A Boolean function of $n$ inputs, $f: \lbrace 0,1 \rbrace^n \to \lbrace 0,1 \rbrace$, is fully described by its truth table of $2^n$ rows. Since each row's output can be 0 or 1 independently, there are
+
+$$
+2^{2^n}
+$$
+
+different functions of $n$ inputs: 4 of one input, 16 of two, 256 of three.
+
+</Step>
+
+<Step id="formal-basic" section="formal" title="The tables of the basic operators">
+
+| A | B | AND | OR | XOR | NAND | NOR |
+|---|---|---|---|---|---|---|
+| 0 | 0 | 0 | 0 | 0 | 1 | 1 |
+| 0 | 1 | 0 | 1 | 1 | 1 | 0 |
+| 1 | 0 | 0 | 1 | 1 | 1 | 0 |
+| 1 | 1 | 1 | 1 | 0 | 0 | 0 |
+
+Two expressions are **equivalent** exactly when their truth tables are identical.
+
+</Step>
+
+<Step id="mechanism-lab" section="mechanism" title="Building a table column by column">
+
+For a larger expression, add a column for each sub-expression and work left to right. For $F = A\overline{B} + C$: compute $\overline{B}$, then $A\overline{B}$, then OR with $C$. The lab does this for you — write an expression whose table matches the target.
+
+<Simulation id="logic-lab" expr="A & B" target="(A & B) | (A & C) | (B & C)" goal="Write the 3-input majority function (true when at least two inputs are 1)." />
+
+</Step>
+
+<Step id="worked-example" section="worked-example" title="The majority function">
+
+$M(A,B,C)$ is 1 when at least two inputs are 1:
+
+| A | B | C | M |
+|---|---|---|---|
+| 0 | 0 | 0 | 0 |
+| 0 | 0 | 1 | 0 |
+| 0 | 1 | 0 | 0 |
+| 0 | 1 | 1 | 1 |
+| 1 | 0 | 0 | 0 |
+| 1 | 0 | 1 | 1 |
+| 1 | 1 | 0 | 1 |
+| 1 | 1 | 1 | 1 |
+
+An expression that matches: $M = AB + AC + BC$. You met this function already — it is the **carry out** of a full adder.
+
+</Step>
+
+<Step id="tradeoffs" section="tradeoffs" title="Tables grow fast">
+
+| Inputs | Rows |
+|---|---|
+| 3 | 8 |
+| 10 | 1,024 |
+| 32 | about 4.3 billion |
+| 64 | $1.8 \times 10^{19}$ — impossible to list |
+
+Truth tables are perfect for small circuits and for *defining* functions; large designs are verified with algebra, decision diagrams and SAT solvers instead.
+
+</Step>
+
+<Step id="pitfalls" section="pitfalls" title="Common misconceptions">
+
+<Callout kind="warning">**Skipping rows.** Always list rows in binary counting order; with 3 inputs you must have exactly 8.</Callout>
+
+<Callout kind="warning">**"Two different-looking expressions must be different functions."** $A + AB$ and $A$ look different but have identical tables, so they are the same function.</Callout>
+
+<Callout kind="warning">**"There are $2^n$ functions of n inputs."** There are $2^n$ *rows*; the number of functions is $2^{2^n}$.</Callout>
+
+</Step>
+
+<Step id="context" section="context" title="Lookup tables in real chips">
+
+FPGAs (reprogrammable chips) implement logic with small memories called **lookup tables**: a 6-input LUT simply stores the 64-row truth table of any 6-input function. Changing the stored bits changes the function.
+
+</Step>
+
+<Step id="references" section="references" title="Go deeper">
+
+- Harris & Harris, *DDCA* RISC-V ed., §1.5 (logic gates) and §2.2.
+- Patt & Patel, *Introduction to Computing Systems*, 3rd ed., §2.6 and §3.3.
+
+</Step>

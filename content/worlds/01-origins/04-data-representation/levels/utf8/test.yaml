@@ -1,0 +1,130 @@
+items:
+  - id: ascii-same
+    type: mcq
+    teaches: intuition-variable
+    prompt: How does UTF-8 encode plain ASCII characters?
+    options:
+      - As one byte, identical to ASCII
+      - As two bytes
+      - As four bytes
+      - With a BOM before each character
+    answer: 0
+    explain: Every ASCII file is already valid UTF-8.
+
+  - id: lengths
+    type: match
+    teaches: formal-utf8
+    prompt: Match each code point to its UTF-8 length.
+    pairs:
+      - left: U+0041 (A)
+        right: 1 byte
+      - left: U+00E9 (é)
+        right: 2 bytes
+      - left: U+20AC (€)
+        right: 3 bytes
+      - left: U+1F600 (😀)
+        right: 4 bytes
+    explain: The ranges are 7F, 7FF, FFFF and 10FFFF.
+
+  - id: continuation
+    type: mcq
+    teaches: formal-utf8
+    prompt: What bit pattern begins every UTF-8 continuation byte?
+    options:
+      - '0'
+      - '10'
+      - '110'
+      - '1110'
+    answer: 1
+    explain: This makes UTF-8 self-synchronising.
+
+  - id: bom
+    type: mcq
+    teaches: formal-utf16
+    prompt: A UTF-16 file starts with the bytes FF FE. What does that tell you?
+    options:
+      - It is big-endian
+      - It is little-endian
+      - It is UTF-8
+      - It is corrupted
+    answer: 1
+    explain: The BOM U+FEFF stored little-endian is FF FE.
+
+  - id: surrogate-count
+    type: numeric
+    teaches: formal-utf16
+    prompt: How many 16-bit units does UTF-16 use for U+1F600?
+    answer: 2
+    explain: Code points above U+FFFF need a surrogate pair.
+
+  - id: euro-bytes
+    type: mcq
+    teaches: mechanism-encoder
+    prompt: What are the UTF-8 bytes of € (U+20AC)?
+    options:
+      - 20 AC
+      - E2 82 AC
+      - C2 AC
+      - F0 82 AC
+    answer: 1
+    explain: 1110 0010, 10 000010, 10 101100.
+
+  - id: e-acute
+    type: mcq
+    teaches: worked-example
+    prompt: What are the UTF-8 bytes of é (U+00E9)?
+    options:
+      - E9
+      - C3 A9
+      - 00 E9
+      - E2 80 A9
+    answer: 1
+    explain: 0xE9 = 000 1110 1001 → 110 00011, 10 101001.
+
+  - id: decode
+    type: mcq
+    teaches: worked-example
+    prompt: The bytes F0 9F 98 80 decode to which code point?
+    options:
+      - U+F09F
+      - U+1F600
+      - U+9880
+      - They are invalid
+    answer: 1
+    explain: Payload bits 000 011111 011000 000000 = 0x1F600.
+
+  - id: which
+    type: mcq
+    teaches: tradeoffs
+    prompt: Which encoding has no byte-order problem?
+    options:
+      - UTF-8
+      - UTF-16
+      - UTF-32
+      - None of them
+    answer: 0
+    explain: UTF-8 is a sequence of single bytes.
+
+  - id: mojibake
+    type: mcq
+    teaches: pitfalls
+    prompt: A web page shows "Ã©" where "é" should be. What most likely happened?
+    options:
+      - The file is corrupted
+      - UTF-8 bytes were decoded as Windows-1252 or Latin-1
+      - The font is missing
+      - The page uses UTF-32
+    answer: 1
+    explain: C3 A9 read one byte at a time is "Ã" and "©".
+
+  - id: truncate
+    type: spot-the-bug
+    teaches: pitfalls
+    prompt: A function must cut UTF-8 text to at most 10 bytes. Which line can produce invalid UTF-8?
+    language: python
+    lines:
+      - 'def clip(s: str) -> bytes:'
+      - "    data = s.encode('utf-8')"
+      - '    return data[:10]'
+    answer: 2
+    explain: Slicing bytes can split a multi-byte character; back up to a character boundary.

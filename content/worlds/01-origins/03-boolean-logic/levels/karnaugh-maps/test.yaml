@@ -1,0 +1,114 @@
+items:
+  - id: why-adjacent
+    type: mcq
+    teaches: intuition-adjacent
+    prompt: What makes two touching K-map cells combinable?
+    options:
+      - They have the same row number
+      - Their minterms differ in exactly one variable
+      - They are both 0
+      - They are in the same quadrant
+    answer: 1
+    explain: AB + AB' = A — the differing variable drops out.
+
+  - id: gray
+    type: mcq
+    teaches: formal-layout
+    prompt: In what order are 2-bit K-map labels written?
+    options:
+      - 00, 01, 10, 11
+      - 00, 01, 11, 10
+      - 00, 10, 01, 11
+      - 11, 10, 01, 00
+    answer: 1
+    explain: Gray code keeps neighbours one bit apart.
+
+  - id: wrap
+    type: mcq
+    teaches: formal-layout
+    prompt: In a 4-variable K-map, which cells are adjacent to the top-left cell (m0)?
+    options:
+      - Only the cells to its right and below
+      - The cells to its right and below, plus the far-right cell in its row and the bottom cell in its column
+      - All 15 other cells
+      - None
+    answer: 1
+    explain: The map wraps around on both axes.
+
+  - id: group-sizes
+    type: mcq
+    teaches: formal-rules
+    prompt: Which group size is NOT allowed?
+    options:
+      - '2'
+      - '4'
+      - '6'
+      - '8'
+    answer: 2
+    explain: Groups must have a power-of-two number of cells.
+
+  - id: literals
+    type: numeric
+    teaches: formal-rules
+    prompt: In a 4-variable K-map, how many literals does a group of 4 cells produce?
+    answer: 2
+    explain: A group of 2^k cells removes k variables; 4 − 2 = 2.
+
+  - id: corners
+    type: mcq
+    teaches: mechanism-sim
+    prompt: What is the minimal expression for Σm(0, 2, 8, 10) over A, B, C, D?
+    options:
+      - A'B'C'D'
+      - B'D'
+      - A'C'
+      - BD
+    answer: 1
+    explain: The four corners form one wrapped group where B = 0 and D = 0.
+
+  - id: column
+    type: mcq
+    teaches: worked-example
+    prompt: The cells m3, m7, m15 and m11 form the column CD = 11. What term do they give?
+    options:
+      - CD
+      - AB
+      - C'D'
+      - ABCD
+    answer: 0
+    explain: Only C = 1 and D = 1 are constant across the column.
+
+  - id: dont-care
+    type: mcq
+    teaches: worked-example
+    prompt: How do don't-care cells help?
+    options:
+      - They must always be included
+      - They can be treated as 1 when that makes a group larger, otherwise ignored
+      - They count as 0
+      - They are removed from the map
+    answer: 1
+    explain: In the example they let m1 join a group of four.
+
+  - id: limits
+    type: mcq
+    teaches: tradeoffs
+    prompt: Why don't synthesis tools use K-maps for 20-input functions?
+    options:
+      - K-maps only work for AND gates
+      - The map grows to 2^20 cells and visual grouping breaks down; tabular and heuristic methods are used
+      - 20-input functions cannot be minimised
+      - K-maps give wrong answers above 4 inputs
+    answer: 1
+    explain: K-maps are practical up to about 4–6 variables.
+
+  - id: binary-axes
+    type: spot-the-bug
+    teaches: pitfalls
+    prompt: Which K-map column labelling is wrong?
+    language: text
+    lines:
+      - 'CD: 00  01  11  10'
+      - 'CD: 00  01  10  11'
+    answer: 1
+    explain: Binary order puts 01 next to 10, which differ in two bits.

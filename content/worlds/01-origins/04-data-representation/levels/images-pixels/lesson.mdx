@@ -1,0 +1,83 @@
+<Step id="hook" section="hook" title="Millions of tiny numbers">
+
+Zoom far enough into any photo on your screen and it dissolves into a grid of coloured squares. Each square — a **pixel** — is just three numbers. A 4K screen shows over 8 million of them, about 60 times a second.
+
+</Step>
+
+<Step id="intuition-grid" section="intuition" title="A grid of samples">
+
+A digital (raster) image is a rectangle of pixels, each storing one colour. More pixels (**resolution**) capture finer detail; more bits per pixel (**colour depth**) capture finer shades. Displays light up red, green and blue sub-pixels; your eye blends them.
+
+</Step>
+
+<Step id="formal-rgb" section="formal" title="RGB colour">
+
+Most screens use **additive RGB**: each pixel is a mix of red, green and blue light.
+
+- With 8 bits per channel ("24-bit colour"), each channel is 0–255, giving $2^{24} \approx 16.7$ million colours.
+- Written in hex as `#RRGGBB`: `#FF0000` red, `#00FF00` green, `#FFFFFF` white (all at full), `#000000` black.
+- A fourth **alpha** channel (RGBA, 32 bits per pixel) stores opacity for blending.
+
+</Step>
+
+<Step id="formal-size" section="formal" title="How big is an image?">
+
+Uncompressed size $=$ width $\times$ height $\times$ bytes per pixel.
+
+A 1920 × 1080 image in 24-bit colour: $1920 \times 1080 \times 3 = 6{,}220{,}800$ bytes ≈ 5.93 MiB. A single uncompressed second of 60 fps video at that size is about 356 MiB — which is why images and video are always compressed.
+
+</Step>
+
+<Step id="mechanism-mixer" section="mechanism" title="Mixing light">
+
+Move the sliders to mix colours. Notice that red + green light makes **yellow** — additive mixing behaves differently from mixing paint.
+
+<Simulation id="rgb-mixer" target="#FFFF00" goal="Mix pure yellow (#FFFF00) from light." />
+
+</Step>
+
+<Step id="worked-example" section="worked-example" title="Reading and sizing">
+
+- `#8000FF`: red 128, green 0, blue 255 → a violet.
+- Grey always has R = G = B: `#808080` is mid-grey.
+- An 800 × 600 image with 8-bit **greyscale** (1 byte per pixel) is $480{,}000$ bytes; the same image in RGBA is $800 \times 600 \times 4 = 1{,}920{,}000$ bytes.
+- A palette image (GIF-style) stores up to 256 colours in a table and one 8-bit index per pixel.
+
+</Step>
+
+<Step id="tradeoffs" section="tradeoffs" title="Choosing a representation">
+
+| Choice | Gains | Costs |
+|---|---|---|
+| Higher resolution | Sharper detail | Size grows with width × height |
+| More bits per channel (10, 16 bits — HDR) | Smoother gradients, no banding | Larger files, needs capable displays |
+| Raster (pixels) | Photos, any detail | Blurry or blocky when enlarged |
+| Vector (SVG shapes) | Scales perfectly, small for diagrams | Cannot represent photographs efficiently |
+
+Printing uses **subtractive CMYK** (cyan, magenta, yellow, black inks) instead of RGB.
+
+</Step>
+
+<Step id="pitfalls" section="pitfalls" title="Common misconceptions">
+
+<Callout kind="warning">**"RGB values are proportional to brightness."** Standard sRGB values are gamma-encoded: 128 is only about 22 % of the light of 255, not 50 %. Correct blending converts to linear light first.</Callout>
+
+<Callout kind="warning">**"Red + green = brown."** That is paint (subtractive). With light (additive), red + green = yellow.</Callout>
+
+<Callout kind="warning">**"File size = width × height × 3."** That is the *uncompressed* size; PNG and JPEG files are usually far smaller.</Callout>
+
+</Step>
+
+<Step id="context" section="context" title="Beyond RGB">
+
+Video formats store **YCbCr** (brightness plus two colour-difference channels) and keep colour at lower resolution, because human eyes are more sensitive to brightness than to colour. Image editors also offer **HSV/HSL** (hue, saturation, value), which matches how people describe colour.
+
+</Step>
+
+<Step id="references" section="references" title="Go deeper">
+
+- IEC 61966-2-1:1999, the sRGB standard.
+- Charles Poynton, *Digital Video and HD: Algorithms and Interfaces*, 2nd ed., ch. on colour and gamma.
+- W3C, *CSS Color Module Level 4*.
+
+</Step>

@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { join } from 'node:path';
 import { loadContent } from './load';
 import { compileContent } from '../../src/engine/content/validate';
+import { loadLessons } from './lessons';
 
 describe('real content/', () => {
   const loaded = loadContent(join(__dirname, '../../content'));
@@ -11,6 +12,12 @@ describe('real content/', () => {
     expect(loaded.errors).toEqual([]);
     expect(res!.errors).toEqual([]);
     expect(res!.warnings).toEqual([]);
+  });
+  it('has valid lessons, and every World 1 level is playable', () => {
+    const l = loadLessons(join(__dirname, '../../content'), loaded.raw!, res!.curriculum!);
+    expect(l.errors).toEqual([]);
+    const origins = res!.curriculum!.levels.filter((x) => x.worldId === 'origins');
+    expect(origins.filter((x) => !l.lessons[x.id]).map((x) => x.id)).toEqual([]);
   });
   it('keeps the Phase 0 totals', () => {
     expect(res!.curriculum!.stats).toMatchObject({ worlds: 12, stages: 41, levels: 581, coreLevels: 337, edges: 806, crossStageEdges: 260 });

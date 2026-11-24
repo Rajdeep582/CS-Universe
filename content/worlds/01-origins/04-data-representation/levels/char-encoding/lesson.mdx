@@ -1,0 +1,86 @@
+<Step id="hook" section="hook" title="Every letter is a number">
+
+When you type the letter **A**, the keyboard does not send a letter. It sends a number, and every program that displays your text agrees that this number means "A". That agreement is a **character encoding**, and the first one to spread everywhere was ASCII.
+
+</Step>
+
+<Step id="intuition-table" section="intuition" title="A shared lookup table">
+
+A character encoding is simply a table: number ↔ character. The sender stores numbers; the receiver looks them up. If both use the same table the text survives; if not, you get gibberish ("mojibake").
+
+</Step>
+
+<Step id="formal-ascii" section="formal" title="ASCII">
+
+**ASCII** (American Standard Code for Information Interchange, 1963) uses **7 bits**: 128 codes.
+
+| Range | Contents |
+|---|---|
+| 0–31 and 127 | Control codes: 10 = line feed (LF), 13 = carriage return (CR), 9 = tab, 0 = NUL |
+| 32 | Space |
+| 48–57 (0x30–0x39) | Digits 0–9 |
+| 65–90 (0x41–0x5A) | A–Z |
+| 97–122 (0x61–0x7A) | a–z |
+
+The rest are punctuation and symbols. In an 8-bit byte the top bit of ASCII is 0.
+
+</Step>
+
+<Step id="formal-structure" section="formal" title="Patterns designed into the table">
+
+- Upper and lower case differ only in **bit 5** (value 32): `A` = 0100 0001, `a` = 0110 0001. Toggling one bit changes case.
+- A digit's value is its code minus 48: `'7'` is 55, and $55 - 48 = 7$.
+- Letters are in alphabetical order, so comparing codes sorts English words (upper case before lower case).
+
+</Step>
+
+<Step id="mechanism-encode" section="mechanism" title="Text to bytes">
+
+Type some English text: each character becomes one code, stored in one byte. (The encoder also shows UTF-8, which for plain ASCII text is byte-for-byte identical.)
+
+<Simulation id="utf8-encoder" text="Hi!" target="ASCII" goal="Type the word ASCII and read its five codes." />
+
+</Step>
+
+<Step id="worked-example" section="worked-example" title="Decoding bytes by hand">
+
+Bytes `48 65 6C 6C 6F` (hex): 0x48 = 72 = **H**, 0x65 = 101 = **e**, 0x6C = 108 = **l**, 0x6F = 111 = **o** → "Hello".
+
+The *number* 42 stored as text is two bytes, `'4' '2'` = 52, 50 (0x34 0x32); stored as an integer it is the single byte 0x2A. Text and numbers are different encodings of "42".
+
+</Step>
+
+<Step id="tradeoffs" section="tradeoffs" title="Seven bits, one language">
+
+| ASCII strengths | ASCII limits |
+|---|---|
+| Tiny, simple, universal for English and code | No é, ñ, ü, no Greek, Cyrillic, Arabic, Devanagari, Chinese … |
+| One byte per character; easy indexing | Dozens of incompatible 8-bit "code pages" (ISO 8859-1, Windows-1252, KOI8-R …) filled the upper 128 values differently |
+
+That mess is what Unicode was created to end.
+
+</Step>
+
+<Step id="pitfalls" section="pitfalls" title="Common misconceptions">
+
+<Callout kind="warning">**"ASCII is 8 bits."** ASCII is a 7-bit code. "Extended ASCII" is not one standard but many different code pages.</Callout>
+
+<Callout kind="warning">**"'0' is stored as 0."** The character '0' is code 48; the byte value 0 is the NUL control character.</Callout>
+
+<Callout kind="warning">**"A line ending is one character everywhere."** Unix uses LF (10); Windows uses CR LF (13 10); classic Mac OS used CR alone.</Callout>
+
+</Step>
+
+<Step id="context" section="context" title="Where ASCII lives on">
+
+ASCII is the first 128 code points of Unicode, so every valid ASCII file is also valid UTF-8. Protocols such as HTTP and SMTP still use ASCII for their headers, and source code is overwhelmingly ASCII.
+
+</Step>
+
+<Step id="references" section="references" title="Go deeper">
+
+- Bryant & O'Hallaron, *CS:APP*, 3rd ed., §2.1.5 "Representing Strings".
+- Petzold, *Code*, 2nd ed., ch. 13 "From ASCII to Unicode".
+- ANSI X3.4-1986 (ASCII); RFC 20, "ASCII format for Network Interchange" (1969).
+
+</Step>

@@ -1,0 +1,115 @@
+items:
+  - id: true-rows
+    type: mcq
+    teaches: intuition-minterm
+    prompt: To build a sum of products from a truth table, which rows do you use?
+    options:
+      - The rows where F = 0
+      - The rows where F = 1
+      - All rows
+      - Only the first and last rows
+    answer: 1
+    explain: One AND term per true row, ORed together.
+
+  - id: minterm-5
+    type: mcq
+    teaches: formal-sop
+    prompt: Over A, B, C, which is minterm m5?
+    options:
+      - AB'C
+      - A'BC'
+      - A + B' + C
+      - ABC'
+    answer: 0
+    explain: 5 = 101 → A, B', C.
+
+  - id: sop
+    type: mcq
+    teaches: formal-sop
+    prompt: What is the canonical SOP of Σm(3, 5) over A, B, C?
+    options:
+      - A'BC + AB'C
+      - AB + C
+      - (A + B' + C')(A' + B + C')
+      - A'B'C + ABC'
+    answer: 0
+    explain: 3 = 011 → A'BC; 5 = 101 → AB'C.
+
+  - id: maxterm-0
+    type: mcq
+    teaches: formal-pos
+    prompt: Which maxterm is 0 only in row 000 (A = B = C = 0)?
+    options:
+      - A'B'C'
+      - (A + B + C)
+      - (A' + B' + C')
+      - ABC
+    answer: 1
+    explain: An OR of plain variables is 0 only when all are 0.
+
+  - id: lab-minimal
+    type: mcq
+    teaches: mechanism-lab
+    prompt: What is a minimal SOP for the majority function Σm(3, 5, 6, 7)?
+    options:
+      - AB + AC + BC
+      - A'BC + AB'C + ABC' + ABC
+      - A + B + C
+      - ABC
+    answer: 0
+    explain: Each pair of inputs being 1 is enough.
+
+  - id: count-terms
+    type: numeric
+    teaches: worked-example
+    prompt: How many minterms are in the canonical SOP of 3-input XOR?
+    answer: 4
+    explain: XOR of three bits is 1 in rows 1, 2, 4 and 7.
+
+  - id: two-level
+    type: mcq
+    teaches: worked-example
+    prompt: Why is a sum of products called a two-level circuit?
+    options:
+      - It has two inputs
+      - A layer of AND gates feeds a single OR gate (after input inverters)
+      - It needs two clock cycles
+      - It uses two kinds of wire
+    answer: 1
+    explain: AND level, then OR level.
+
+  - id: pos-xor
+    type: mcq
+    teaches: worked-example
+    prompt: Which rows give the maxterms of 3-input XOR's canonical POS?
+    options:
+      - 1, 2, 4, 7
+      - 0, 3, 5, 6
+      - 0 and 7
+      - All eight
+    answer: 1
+    explain: POS uses the rows where F = 0.
+
+  - id: choose
+    type: mcq
+    teaches: tradeoffs
+    prompt: A function is 1 in 7 of 8 rows. Which canonical form is shorter?
+    options:
+      - SOP (7 terms)
+      - POS (1 term)
+      - They are the same length
+      - Neither exists
+    answer: 1
+    explain: POS has one maxterm per false row.
+
+  - id: canonical-minimal
+    type: mcq
+    teaches: pitfalls
+    prompt: Is the canonical SOP the smallest expression of a function?
+    options:
+      - Yes, always
+      - No — it is unique, but usually much larger than a minimal form
+      - Only for 2 variables
+      - Only when the function is XOR
+    answer: 1
+    explain: Minimisation is a separate step.

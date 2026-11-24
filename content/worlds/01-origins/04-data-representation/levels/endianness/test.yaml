@@ -1,0 +1,111 @@
+items:
+  - id: big-first
+    type: mcq
+    teaches: intuition-order
+    prompt: In big-endian order, which byte of 0x01234567 is at the lowest address?
+    options:
+      - '01'
+      - '67'
+      - '23'
+      - '45'
+    answer: 0
+    explain: Most significant byte first.
+
+  - id: little-layout
+    type: mcq
+    teaches: intuition-order
+    prompt: How is 0x01234567 laid out little-endian at addresses a … a+3?
+    options:
+      - 01 23 45 67
+      - 67 45 23 01
+      - 10 32 54 76
+      - 76 54 32 10
+    answer: 1
+    explain: Least significant byte first; the bits inside each byte do not change.
+
+  - id: what-changes
+    type: mcq
+    teaches: formal-def
+    prompt: What does endianness change?
+    options:
+      - The order of bits inside each byte
+      - The order of bytes within a multi-byte value
+      - The order of characters in a string
+      - The order of array elements
+    answer: 1
+    explain: Only bytes within one value are reordered.
+
+  - id: who
+    type: match
+    teaches: formal-who
+    prompt: Match each system to its byte order.
+    pairs:
+      - left: x86-64 processors
+        right: Little-endian
+      - left: TCP/IP headers
+        right: Big-endian
+      - left: UTF-8 text
+        right: No byte order — it is a sequence of single bytes
+    explain: Network byte order is big-endian; PCs are little-endian; UTF-8 has no byte-order question.
+
+  - id: htonl
+    type: mcq
+    teaches: formal-who
+    prompt: What does htonl() do in C?
+    options:
+      - Converts a 32-bit value from host order to network (big-endian) order
+      - Hashes a string
+      - Converts text to a number
+      - Opens a network socket
+    answer: 0
+    explain: '"Host to network long".'
+
+  - id: sim-16
+    type: mcq
+    teaches: mechanism-sim
+    prompt: A 16-bit value 0x1234 is stored little-endian at address 0x100. Which byte is at 0x101?
+    options:
+      - '12'
+      - '34'
+      - '00'
+      - '21'
+    answer: 0
+    explain: 0x100 holds 34 (low byte), 0x101 holds 12.
+
+  - id: dump
+    type: numeric
+    teaches: worked-example
+    prompt: The little-endian 32-bit bytes are 2C 01 00 00. What is the value in decimal?
+    answer: 300
+    explain: 0x0000012C = 300.
+
+  - id: dump16
+    type: numeric
+    teaches: worked-example
+    prompt: The bytes 00 01 hold a 16-bit little-endian value. What is it?
+    answer: 256
+    explain: 0x0100 = 256.
+
+  - id: le-advantage
+    type: mcq
+    teaches: tradeoffs
+    prompt: What is an advantage of little-endian?
+    options:
+      - Hex dumps are easier to read
+      - The low byte sits at the same address whatever width you read
+      - It matches network headers
+      - It uses fewer bytes
+    answer: 1
+    explain: Reading a narrower value at the same address gives the low part.
+
+  - id: struct-bug
+    type: spot-the-bug
+    teaches: pitfalls
+    prompt: This C code sends a 32-bit length to a server that expects network byte order. Which line is the bug?
+    language: c
+    lines:
+      - 'uint32_t len = strlen(msg);'
+      - 'send(sock, &len, sizeof len, 0);'
+      - 'send(sock, msg, len, 0);'
+    answer: 1
+    explain: The length should be converted with htonl(len) before sending.

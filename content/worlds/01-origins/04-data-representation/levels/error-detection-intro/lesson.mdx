@@ -1,0 +1,87 @@
+<Step id="hook" section="hook" title="Did that bit flip?">
+
+Cosmic rays, electrical noise and scratched discs flip bits. A bank transfer of 1,000 that arrives as 9,000 is a disaster. Systems cannot prevent every flip — but they can **notice**, by sending a little extra information computed from the data.
+
+</Step>
+
+<Step id="intuition-redundancy" section="intuition" title="Add a check value">
+
+The sender computes a short **check value** from the data and sends both. The receiver recomputes it from what arrived. If the two disagree, something changed. The extra bits are deliberate, useful redundancy — the opposite of compression.
+
+</Step>
+
+<Step id="formal-parity" section="formal" title="Parity">
+
+A **parity bit** makes the total number of 1s even (**even parity**) or odd (**odd parity**).
+
+- Data `1011001` has four 1s → even-parity bit **0** → word `1011 0010`.
+- The receiver counts the 1s: odd count under even parity ⇒ error.
+
+Parity detects **any odd number** of flipped bits, misses any even number, and cannot tell *which* bit flipped.
+
+</Step>
+
+<Step id="formal-checksums" section="formal" title="Checksums and CRCs">
+
+- A **checksum** adds the data up in fixed-size words. The **Internet checksum** (RFC 1071) used by IPv4, TCP and UDP is the one's-complement of the one's-complement sum of 16-bit words; recomputing it over data plus checksum gives 0.
+- A **cyclic redundancy check (CRC)** treats the data as a polynomial and divides by a fixed generator; the remainder is the check value. CRC-32 (Ethernet, ZIP, PNG) catches every burst error up to 32 bits long.
+
+Detection says *something* is wrong; **error-correcting codes** (e.g. Hamming codes, 1950) add enough redundancy to locate and fix the error.
+
+</Step>
+
+<Step id="mechanism-parity" section="mechanism" title="Send, flip, detect">
+
+Flip bits "in transit" and watch the receiver's check. Try to find an error that parity cannot see.
+
+<Simulation id="parity" goal="Find a corruption that parity fails to detect." />
+
+</Step>
+
+<Step id="worked-example" section="worked-example" title="A tiny Internet checksum">
+
+Data (16-bit words): `0x0001`, `0xF203`, `0xF4F5`, `0xF6F7` — the example in RFC 1071.
+
+1. Add: $0x0001 + 0xF203 + 0xF4F5 + 0xF6F7 = 0x2DDF0$.
+2. Fold the carry back in: $0xDDF0 + 0x2 = 0xDDF2$.
+3. Complement: $\sim 0xDDF2 = \mathbf{0x220D}$.
+
+The receiver adds all five words (including `0x220D`), folds, and complements: the result is **0** if nothing changed.
+
+</Step>
+
+<Step id="tradeoffs" section="tradeoffs" title="How much protection?">
+
+| Method | Extra bits | Catches | Typical use |
+|---|---|---|---|
+| Parity | 1 per word | Odd numbers of flips | Serial links, some memory |
+| Internet checksum | 16 | Most random errors; misses reordered words | IP, TCP, UDP headers |
+| CRC-32 | 32 | All bursts ≤ 32 bits, almost all others | Ethernet, ZIP, PNG, disks |
+| Hamming / ECC | Several per word | Corrects 1 flip, detects 2 (SECDED) | Server RAM |
+| Cryptographic hash (SHA-256) | 256 | Deliberate tampering too | Downloads, Git, signatures |
+
+</Step>
+
+<Step id="pitfalls" section="pitfalls" title="Common misconceptions">
+
+<Callout kind="warning">**"Parity catches every error."** Two flips cancel out; parity sees nothing.</Callout>
+
+<Callout kind="warning">**"A checksum proves data is authentic."** Checksums and CRCs catch accidents. An attacker can change data *and* recompute the checksum; authenticity needs cryptographic MACs or signatures.</Callout>
+
+<Callout kind="warning">**"Detecting means fixing."** Detection only signals a problem; the usual fix is to ask for the data again (retransmission).</Callout>
+
+</Step>
+
+<Step id="context" section="context" title="Everywhere, invisibly">
+
+Every Ethernet frame ends in a CRC-32; every TCP segment carries a checksum; QR codes and CDs use Reed–Solomon codes that *correct* damage, which is why a scratched CD still plays. Richard Hamming invented his codes in 1950 after weekend computer jobs kept failing on errors.
+
+</Step>
+
+<Step id="references" section="references" title="Go deeper">
+
+- R. Braden, D. Borman & C. Partridge, *RFC 1071: Computing the Internet Checksum* (1988).
+- Kurose & Ross, *Computer Networking: A Top-Down Approach*, 8th ed., §6.2 "Error-Detection and -Correction Techniques".
+- R. W. Hamming, "Error Detecting and Error Correcting Codes", *Bell System Technical Journal* 29, 1950.
+
+</Step>

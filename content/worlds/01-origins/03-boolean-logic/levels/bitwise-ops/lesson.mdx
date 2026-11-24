@@ -1,0 +1,101 @@
+<Step id="hook" section="hook" title="32 decisions in one instruction">
+
+A single `AND` instruction on a 64-bit processor computes 64 independent logical ANDs at once. Operating systems, network stacks, graphics code and databases use this to pack many flags into one word and test them all in a cycle.
+
+</Step>
+
+<Step id="intuition-columns" section="intuition" title="Logic, bit by bit">
+
+A **bitwise** operator applies a Boolean operator to each bit position independently — bit 0 with bit 0, bit 1 with bit 1, and so on. No carries, no interaction between positions.
+
+```text
+  1100 1010
+& 1010 0110
+= 1000 0010
+```
+
+</Step>
+
+<Step id="formal-ops" section="formal" title="The bitwise operators">
+
+| C / Java / JS / Python | Operation | Per bit |
+|---|---|---|
+| `a & b` | AND | 1 if both are 1 |
+| `a \| b` | OR | 1 if either is 1 |
+| `a ^ b` | XOR | 1 if they differ |
+| `~a` | NOT | flip every bit |
+
+Do not confuse them with the **logical** operators `&&`, `\|\|`, `!`, which treat a whole value as one true/false and short-circuit.
+
+</Step>
+
+<Step id="formal-masks" section="formal" title="Masks: the four idioms">
+
+A **mask** is a constant that selects bit positions. With bit $k$ selected by `m = 1 << k`:
+
+| Goal | Expression | Why |
+|---|---|---|
+| Test | `x & m` (non-zero ⇒ set) | AND keeps only the masked bits |
+| Set | `x \| m` | OR with 1 forces 1 |
+| Clear | `x & ~m` | AND with 0 forces 0 |
+| Toggle | `x ^ m` | XOR with 1 flips |
+
+</Step>
+
+<Step id="mechanism-trace" section="mechanism" title="Permission flags in action">
+
+A file's permissions as flags: `READ = 4` (100), `WRITE = 2` (010), `EXEC = 1` (001).
+
+| Step | Code | perms (binary) |
+|---|---|---|
+| start | `perms = READ \| WRITE` | 110 |
+| test write | `perms & WRITE` → 010 ≠ 0 | writable ✓ |
+| add exec | `perms \|= EXEC` | 111 |
+| remove write | `perms &= ~WRITE` | 101 |
+| toggle read | `perms ^= READ` | 001 |
+
+</Step>
+
+<Step id="worked-example" section="worked-example" title="Classic bit tricks">
+
+- **Is x odd?** `x & 1`.
+- **Is x a power of two?** `x > 0 && (x & (x - 1)) == 0` — subtracting 1 flips the lowest 1 and the zeros below it, so the AND is zero only when there was a single 1.
+- **Lowest set bit**: `x & -x` (in two's complement). For 12 = 1100, gives 0100 = 4.
+- **Swap without a temporary** (curiosity, not good practice): `a ^= b; b ^= a; a ^= b;`
+
+</Step>
+
+<Step id="tradeoffs" section="tradeoffs" title="Packed flags versus separate fields">
+
+| Packed bits | Separate booleans |
+|---|---|
+| 8× to 64× less memory; whole sets tested in one instruction | Clear names, no masks to get wrong |
+| Fits hardware registers and file formats exactly | Easy to extend beyond the word size |
+| Harder to read and debug | Slower when testing many flags together |
+
+Languages offer middle grounds: `enum` flags in C#, `EnumSet` in Java, bit-fields in C.
+
+</Step>
+
+<Step id="pitfalls" section="pitfalls" title="Common misconceptions">
+
+<Callout kind="warning">**Precedence in C.** `x & MASK == 0` parses as `x & (MASK == 0)`. Write `(x & MASK) == 0`.</Callout>
+
+<Callout kind="warning">**`&` versus `&&`.** `2 & 1` is 0 (no common bits), but `2 && 1` is true.</Callout>
+
+<Callout kind="warning">**`~` on small values.** In a 32-bit `int`, `~5` is −6, not 2 — every one of the 32 bits flips.</Callout>
+
+</Step>
+
+<Step id="context" section="context" title="Where bitwise logic runs the world">
+
+IP routing (address `&` subnet mask), Unix permissions, CPU feature flags, chess engines (*bitboards*: one 64-bit word per piece type), Bloom filters, compression and cryptography all depend on bitwise operations.
+
+</Step>
+
+<Step id="references" section="references" title="Go deeper">
+
+- Bryant & O'Hallaron, *CS:APP*, 3rd ed., §2.1.7–2.1.8 (bit-level and logical operations in C).
+- Henry S. Warren, *Hacker's Delight*, 2nd ed., ch. 2 "Basics".
+
+</Step>

@@ -1,0 +1,120 @@
+items:
+  - id: proposition
+    type: mcq
+    teaches: intuition-propositions
+    prompt: Which of these is a proposition (true or false)?
+    options:
+      - '"Close the door."'
+      - '"x is greater than 5."'
+      - '"Is it raining?"'
+      - '"Hello!"'
+    answer: 1
+    explain: Only a statement that is either true or false is a proposition.
+
+  - id: everyday
+    type: match
+    teaches: intuition-everyday
+    prompt: Match each phrase to its operator.
+    pairs:
+      - left: Both conditions must hold
+        right: AND
+      - left: At least one condition holds
+        right: OR
+      - left: Exactly one condition holds
+        right: XOR
+      - left: The condition does not hold
+        right: NOT
+    explain: These four are the everyday logical connectives.
+
+  - id: or-11
+    type: numeric
+    teaches: formal-ops
+    prompt: In Boolean algebra, what is 1 + 1?
+    answer: 1
+    explain: '+ is OR: true OR true is true.'
+
+  - id: precedence
+    type: mcq
+    teaches: formal-ops
+    prompt: How is A + B·C' read?
+    options:
+      - (A + B)·C'
+      - A + (B·(C'))
+      - ((A + B)·C)'
+      - A + (B·C)'
+    answer: 1
+    explain: NOT binds tightest, then AND, then OR.
+
+  - id: nor
+    type: mcq
+    teaches: formal-derived
+    prompt: When is A NOR B true?
+    options:
+      - When both are true
+      - When neither is true
+      - When exactly one is true
+      - Always
+    answer: 1
+    explain: NOR = NOT(A OR B).
+
+  - id: xnor
+    type: mcq
+    teaches: formal-derived
+    prompt: What does XNOR test?
+    options:
+      - Whether both inputs are 1
+      - Whether the inputs are equal
+      - Whether at least one input is 1
+      - Whether the inputs differ
+    answer: 1
+    explain: XNOR is true when A and B have the same value.
+
+  - id: eval
+    type: numeric
+    teaches: mechanism-lab
+    prompt: Evaluate A + B·C' with A = 0, B = 1, C = 1.
+    answer: 0
+    explain: C' = 0, so B·C' = 0, and 0 + 0 = 0.
+
+  - id: alarm
+    type: mcq
+    teaches: worked-example
+    prompt: '"Alarm if armed (R) and a door (D) or window (W) is open." Which expression is right?'
+    options:
+      - R·D + W
+      - R·(D + W)
+      - R + D·W
+      - (R + D)·W
+    answer: 1
+    explain: The OR of D and W must be grouped before AND with R.
+
+  - id: alarm-bug
+    type: numeric
+    teaches: worked-example
+    prompt: For the wrong rule R·D + W, what does it output when R = 0, D = 0, W = 1?
+    answer: 1
+    explain: The alarm sounds even though the system is not armed.
+
+  - id: short-circuit
+    type: mcq
+    teaches: tradeoffs
+    prompt: In most programming languages, what happens in (a && f()) when a is false?
+    options:
+      - f() is called anyway
+      - f() is not called — short-circuit evaluation
+      - It is a compile error
+      - The result is undefined
+    answer: 1
+    explain: Programs short-circuit; hardware gates always compute everything.
+
+  - id: inclusive
+    type: mcq
+    teaches: pitfalls
+    prompt: '"Card OR cash" in logic is true when you have both. Is that right?'
+    options:
+      - Yes — logical OR is inclusive
+      - No — OR excludes the both case
+      - Only in programming
+      - Only for XOR
+    answer: 0
+    explain: The "one but not both" meaning is XOR.

@@ -1,0 +1,110 @@
+items:
+  - id: rows-3
+    type: numeric
+    teaches: intuition-rows
+    prompt: How many rows does the truth table of a 3-input function have?
+    answer: 8
+    explain: 2^3 = 8 input combinations.
+
+  - id: functions-2
+    type: numeric
+    teaches: formal-def
+    prompt: How many different Boolean functions of 2 inputs are there?
+    answer: 16
+    explain: 4 rows, each output 0 or 1 → 2^4 = 16.
+
+  - id: equivalent
+    type: mcq
+    teaches: formal-basic
+    prompt: When are two Boolean expressions equivalent?
+    options:
+      - When they use the same operators
+      - When they have identical truth tables
+      - When they have the same number of variables
+      - When they look alike
+    answer: 1
+    explain: Equivalence means the same output for every input.
+
+  - id: nand-col
+    type: mcq
+    teaches: formal-basic
+    prompt: Which output column belongs to NAND (rows 00, 01, 10, 11)?
+    options:
+      - 0 0 0 1
+      - 1 1 1 0
+      - 0 1 1 0
+      - 1 0 0 0
+    answer: 1
+    explain: NAND is 0 only when both inputs are 1.
+
+  - id: xor-col
+    type: mcq
+    teaches: formal-basic
+    prompt: Which output column belongs to XOR (rows 00, 01, 10, 11)?
+    options:
+      - 0 1 1 0
+      - 0 1 1 1
+      - 1 0 0 1
+      - 0 0 0 1
+    answer: 0
+    explain: XOR is 1 when the inputs differ.
+
+  - id: build-order
+    type: order-steps
+    teaches: mechanism-lab
+    prompt: Order the columns you compute for F = A·B' + C.
+    steps:
+      - B'
+      - A·B'
+      - A·B' + C
+    explain: Innermost sub-expressions first.
+
+  - id: eval-row
+    type: numeric
+    teaches: mechanism-lab
+    prompt: For F = A·B' + C, what is F in the row A = 1, B = 0, C = 0?
+    answer: 1
+    explain: B' = 1, A·B' = 1, 1 + 0 = 1.
+
+  - id: majority-count
+    type: numeric
+    teaches: worked-example
+    prompt: In how many of the 8 rows is the 3-input majority function 1?
+    answer: 4
+    explain: Rows 011, 101, 110 and 111.
+
+  - id: majority-carry
+    type: mcq
+    teaches: worked-example
+    prompt: The 3-input majority function is also which part of a full adder?
+    options:
+      - The sum bit
+      - The carry out
+      - The carry in
+      - None
+    answer: 1
+    explain: The carry out is 1 when at least two of a, b, c_in are 1.
+
+  - id: growth
+    type: mcq
+    teaches: tradeoffs
+    prompt: Why can't a 64-input circuit be verified by listing its truth table?
+    options:
+      - Truth tables only work for 8 inputs
+      - It would have 2^64 ≈ 1.8 × 10^19 rows
+      - 64-input functions do not exist
+      - Truth tables cannot show XOR
+    answer: 1
+    explain: The table doubles with every input.
+
+  - id: same-function
+    type: mcq
+    teaches: pitfalls
+    prompt: Are A + A·B and A the same function?
+    options:
+      - No, one has B in it
+      - Yes — their truth tables are identical
+      - Only when B = 1
+      - Only when A = 0
+    answer: 1
+    explain: If A = 1 both are 1; if A = 0 both are 0.

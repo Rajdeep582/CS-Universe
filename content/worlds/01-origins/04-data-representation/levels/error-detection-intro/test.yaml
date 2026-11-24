@@ -1,0 +1,118 @@
+items:
+  - id: idea
+    type: mcq
+    teaches: intuition-redundancy
+    prompt: How does a receiver detect a corrupted message?
+    options:
+      - By guessing
+      - It recomputes the check value from the data received and compares it with the one sent
+      - By asking the user
+      - By reading the message twice
+    answer: 1
+    explain: A mismatch means something changed.
+
+  - id: even-parity
+    type: numeric
+    teaches: formal-parity
+    prompt: What even-parity bit goes with the data 1101011?
+    answer: 1
+    explain: Five 1s; one more makes the count even.
+
+  - id: odd-parity
+    type: numeric
+    teaches: formal-parity
+    prompt: What odd-parity bit goes with the data 1100000?
+    answer: 1
+    explain: Two 1s; one more makes the count odd.
+
+  - id: parity-limit
+    type: mcq
+    teaches: formal-parity
+    prompt: Which errors does a single parity bit detect?
+    options:
+      - All errors
+      - Any odd number of flipped bits
+      - Any even number of flipped bits
+      - Only errors in the parity bit
+    answer: 1
+    explain: An even number of flips keeps the count's parity.
+
+  - id: crc
+    type: mcq
+    teaches: formal-checksums
+    prompt: What does CRC-32 guarantee to catch?
+    options:
+      - Deliberate tampering
+      - Every burst error up to 32 bits long
+      - Only single-bit errors
+      - Nothing — it only corrects
+    answer: 1
+    explain: That is why Ethernet and ZIP use it.
+
+  - id: correct
+    type: mcq
+    teaches: formal-checksums
+    prompt: What can a Hamming code do that parity cannot?
+    options:
+      - Locate and correct a single flipped bit
+      - Encrypt the data
+      - Compress the data
+      - Detect every possible error
+    answer: 0
+    explain: Error-correcting codes add enough redundancy to find the bit.
+
+  - id: undetected
+    type: numeric
+    teaches: mechanism-parity
+    prompt: What is the smallest number of flipped bits that a single parity bit can miss?
+    answer: 2
+    explain: Two flips cancel.
+
+  - id: checksum-zero
+    type: mcq
+    teaches: worked-example
+    prompt: Recomputing the Internet checksum over the data plus the checksum gives what if nothing changed?
+    options:
+      - '0xFFFF'
+      - '0'
+      - The checksum again
+      - The data length
+    answer: 1
+    explain: The one's-complement sum becomes all ones, and its complement is 0.
+
+  - id: fold
+    type: mcq
+    teaches: worked-example
+    prompt: In the Internet checksum, what happens to a carry out of the top bit?
+    options:
+      - It is discarded
+      - It is added back into the low end (end-around carry)
+      - It becomes the checksum
+      - It flags an error
+    answer: 1
+    explain: That is one's-complement addition.
+
+  - id: which-tool
+    type: match
+    teaches: tradeoffs
+    prompt: Match each need to the usual tool.
+    pairs:
+      - left: Fix single-bit errors in server RAM
+        right: ECC (Hamming SECDED)
+      - left: Detect transmission errors in Ethernet frames
+        right: CRC-32
+      - left: Detect tampering with a download
+        right: Cryptographic hash or signature
+    explain: Different threats need different redundancy.
+
+  - id: authenticity
+    type: mcq
+    teaches: pitfalls
+    prompt: Why doesn't a matching CRC prove a file was not tampered with?
+    options:
+      - CRCs are too short to compute
+      - An attacker can modify the data and recompute the CRC
+      - CRCs only work on text
+      - It does prove it
+    answer: 1
+    explain: Use a cryptographic MAC or signature for authenticity.

@@ -1,0 +1,118 @@
+items:
+  - id: deny-or
+    type: mcq
+    teaches: intuition-flip
+    prompt: '"It is not (raining or windy)" means…'
+    options:
+      - It is not raining or not windy
+      - It is not raining and not windy
+      - It is raining and windy
+      - It is windy but not raining
+    answer: 1
+    explain: To deny an OR you must deny both parts.
+
+  - id: law-or
+    type: mcq
+    teaches: formal-laws
+    prompt: Which equals NOT(A + B)?
+    options:
+      - A' + B'
+      - A'·B'
+      - A·B
+      - (A·B)'
+    answer: 1
+    explain: The OR becomes AND and each input is complemented.
+
+  - id: law-and
+    type: mcq
+    teaches: formal-laws
+    prompt: Which equals NOT(A·B·C)?
+    options:
+      - A'·B'·C'
+      - A' + B' + C'
+      - A + B + C
+      - (A + B + C)'
+    answer: 1
+    explain: De Morgan generalises to any number of inputs.
+
+  - id: nand-is
+    type: mcq
+    teaches: formal-gates
+    prompt: By De Morgan, a NAND gate is equivalent to…
+    options:
+      - An AND with inverted inputs
+      - An OR with inverted inputs
+      - A NOR
+      - An XOR
+    answer: 1
+    explain: (AB)' = A' + B'.
+
+  - id: complement-steps
+    type: order-steps
+    teaches: mechanism-steps
+    prompt: Order the steps for complementing an expression.
+    steps:
+      - Keep the original grouping by adding brackets
+      - Swap every AND with OR and every OR with AND
+      - Complement every literal
+    explain: Brackets first so precedence cannot change the meaning; then swap operators and complement literals.
+
+  - id: complement
+    type: mcq
+    teaches: mechanism-steps
+    prompt: What is the complement of F = A(B + C')?
+    options:
+      - A' + B'C
+      - A'(B' + C)
+      - A' + B' + C
+      - A'B'C'
+    answer: 0
+    explain: F' = A' + (B + C')' = A' + B'C.
+
+  - id: code
+    type: mcq
+    teaches: worked-example
+    prompt: Which condition is equivalent to !(done || error)?
+    options:
+      - '!done || !error'
+      - '!done && !error'
+      - done && error
+      - '!(done && error)'
+    answer: 1
+    explain: De Morgan turns the OR into AND.
+
+  - id: example2
+    type: mcq
+    teaches: worked-example
+    prompt: Simplify NOT((A + B)·C).
+    options:
+      - A'B' + C'
+      - (A' + B')C'
+      - A'B'C'
+      - A' + B' + C
+    answer: 0
+    explain: (A + B)' + C' = A'B' + C'.
+
+  - id: cmos
+    type: mcq
+    teaches: tradeoffs
+    prompt: Why do CMOS designers prefer NAND and NOR gates?
+    options:
+      - They are the only gates that work
+      - They are smaller and faster; AND and OR need an extra inverter
+      - They use no power
+      - They are easier to label
+    answer: 1
+    explain: A CMOS AND is a NAND followed by a NOT.
+
+  - id: wrong-law
+    type: spot-the-bug
+    teaches: pitfalls
+    prompt: Which line applies De Morgan's law incorrectly?
+    language: text
+    lines:
+      - (A + B)' = A'·B'
+      - (A·B)' = A'·B'
+      - (A')' = A
+    answer: 1
+    explain: (A·B)' = A' + B'; the operator must change.

@@ -1,0 +1,98 @@
+items:
+  - id: pixel
+    type: mcq
+    teaches: intuition-grid
+    prompt: What is a pixel in a raster image?
+    options:
+      - One sample of colour in a grid
+      - A line in a vector drawing
+      - A byte of compressed data
+      - A font glyph
+    answer: 0
+    explain: A raster image is a rectangle of colour samples.
+
+  - id: colours
+    type: mcq
+    teaches: formal-rgb
+    prompt: How many colours does 24-bit RGB (8 bits per channel) offer?
+    options:
+      - '256'
+      - '65,536'
+      - About 16.7 million
+      - About 4.3 billion
+    answer: 2
+    explain: 2^24 = 16,777,216.
+
+  - id: hex-white
+    type: mcq
+    teaches: formal-rgb
+    prompt: What colour is #FFFFFF?
+    options:
+      - Black
+      - White
+      - Red
+      - Grey
+    answer: 1
+    explain: All three channels at maximum light.
+
+  - id: size-hd
+    type: numeric
+    teaches: formal-size
+    prompt: How many bytes is an uncompressed 1920 × 1080 image at 3 bytes per pixel?
+    answer: 6220800
+    explain: 1920 × 1080 × 3.
+
+  - id: additive
+    type: mcq
+    teaches: mechanism-mixer
+    prompt: What colour do full red and full green light make?
+    options:
+      - Brown
+      - Yellow
+      - White
+      - Cyan
+    answer: 1
+    explain: '#FFFF00 — additive mixing.'
+
+  - id: grey
+    type: mcq
+    teaches: worked-example
+    prompt: Which hex colour is a shade of grey?
+    options:
+      - '#808080'
+      - '#8000FF'
+      - '#FF8000'
+      - '#00FF80'
+    answer: 0
+    explain: Grey has equal red, green and blue.
+
+  - id: rgba-size
+    type: numeric
+    teaches: worked-example
+    prompt: How many bytes is an uncompressed 800 × 600 RGBA image?
+    answer: 1920000
+    explain: 800 × 600 × 4.
+
+  - id: vector
+    type: mcq
+    teaches: tradeoffs
+    prompt: Which representation scales to any size without becoming blocky?
+    options:
+      - A raster PNG
+      - A vector (SVG) drawing
+      - A JPEG photo
+      - A GIF
+    answer: 1
+    explain: Vectors store shapes, not pixels.
+
+  - id: gamma
+    type: mcq
+    teaches: pitfalls
+    prompt: In sRGB, is the value 128 half as bright as 255?
+    options:
+      - Yes, exactly half
+      - No — sRGB is gamma-encoded; 128 is only about 22 % of the light
+      - No — it is brighter than 255
+      - Only for red
+    answer: 1
+    explain: sRGB values are non-linear in light.

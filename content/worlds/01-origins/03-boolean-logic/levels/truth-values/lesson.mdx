@@ -1,0 +1,101 @@
+<Step id="hook" section="hook" title="The algebra of yes and no">
+
+In 1854 George Boole published *The Laws of Thought*, an algebra in which variables could only be **true** or **false**. It looked like pure philosophy. Eighty-three years later, Claude Shannon showed that Boole's algebra describes relay switching circuits exactly — and every processor since has been built from it.
+
+</Step>
+
+<Step id="intuition-propositions" section="intuition" title="Statements that are true or false">
+
+A **proposition** is a statement that is either true or false: "the door is open", "x > 5", "the user is logged in". Computers write true as **1** and false as **0**. Logical operators combine propositions into new ones, just as + and × combine numbers.
+
+</Step>
+
+<Step id="intuition-everyday" section="intuition" title="Operators you already use">
+
+- "You may enter if you have a ticket **and** you are over 12" — both must hold.
+- "Pay by card **or** cash" — at least one will do.
+- "**Not** raining" — flips the truth value.
+- "Tea **or** coffee, but not both" — exactly one: **exclusive or** (XOR).
+
+</Step>
+
+<Step id="formal-ops" section="formal" title="The basic operators">
+
+| Operator | Notation | True when |
+|---|---|---|
+| NOT | $\overline{A}$, $A'$, $\neg A$, `!A` | A is false |
+| AND | $A \cdot B$, $AB$, $A \land B$, `A & B` | both are true |
+| OR | $A + B$, $A \lor B$, `A \| B` | at least one is true |
+| XOR | $A \oplus B$, `A ^ B` | exactly one is true |
+
+Precedence (strongest first): NOT, AND, XOR, OR. So $A + BC'$ means $A + (B \cdot (C'))$.
+
+</Step>
+
+<Step id="formal-derived" section="formal" title="Negated forms">
+
+Putting NOT after an operator gives three more:
+
+| Operator | Definition | True when |
+|---|---|---|
+| NAND | $\overline{A B}$ | not both are true |
+| NOR | $\overline{A + B}$ | neither is true |
+| XNOR | $\overline{A \oplus B}$ | both are equal |
+
+NAND and NOR will turn out to be **universal**: either one alone can build every other operator.
+
+</Step>
+
+<Step id="mechanism-lab" section="mechanism" title="Evaluating an expression">
+
+To evaluate $A + B \cdot C'$ with $A = 0$, $B = 1$, $C = 0$: do NOT first ($C' = 1$), then AND ($B \cdot C' = 1$), then OR ($0 + 1 = 1$). Type expressions below and watch the whole truth table at once.
+
+<Simulation id="logic-lab" expr="A | B" target="A ^ B" forbid="xor" goal="Write XOR using only AND, OR and NOT (no ^)." />
+
+</Step>
+
+<Step id="worked-example" section="worked-example" title="An alarm rule">
+
+*"Sound the alarm if the system is armed and either a door or a window is open."* With $R$ = armed, $D$ = door open, $W$ = window open:
+
+$$
+\text{Alarm} = R \cdot (D + W)
+$$
+
+The parentheses matter: $R \cdot D + W$ would sound the alarm whenever a window opens, armed or not. Check: $R = 0, D = 0, W = 1$ gives $R(D+W) = 0$ but $RD + W = 1$.
+
+</Step>
+
+<Step id="tradeoffs" section="tradeoffs" title="Logic in programs versus circuits">
+
+| In programs (`&&`, `\|\|`) | In circuits (gates) |
+|---|---|
+| Short-circuit: `a && f()` skips `f()` when `a` is false | Every gate computes all the time, in parallel |
+| Operands may be any type with "truthiness" (JavaScript, Python) | Inputs are strictly 0 or 1 |
+| Order of evaluation can matter (side effects) | Order never matters — only the function |
+
+</Step>
+
+<Step id="pitfalls" section="pitfalls" title="Common misconceptions">
+
+<Callout kind="warning">**"OR means one or the other, not both."** Logical OR is *inclusive*: $1 + 1 = 1$. "One but not both" is XOR.</Callout>
+
+<Callout kind="warning">**"$A + B$ is addition."** In Boolean algebra $+$ is OR: $1 + 1 = 1$, never 2.</Callout>
+
+<Callout kind="warning">**Ignoring precedence.** $AB + C$ is $(AB) + C$, not $A(B + C)$. When in doubt, add parentheses.</Callout>
+
+</Step>
+
+<Step id="context" section="context" title="From Boole to Shannon">
+
+George Boole, *An Investigation of the Laws of Thought* (1854); Claude Shannon's 1937 MIT master's thesis, *A Symbolic Analysis of Relay and Switching Circuits*, mapped Boole's algebra onto circuits. Every `if` in a program and every gate in a chip is Boolean algebra.
+
+</Step>
+
+<Step id="references" section="references" title="Go deeper">
+
+- Harris & Harris, *Digital Design and Computer Architecture*, RISC-V ed., §1.5 and §2.2–2.3.
+- Petzold, *Code*, 2nd ed., ch. 6 "Logic with Switches" and ch. 8.
+- C. E. Shannon, "A Symbolic Analysis of Relay and Switching Circuits", *Trans. AIEE* 57, 1938.
+
+</Step>

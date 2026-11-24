@@ -1,0 +1,105 @@
+items:
+  - id: code-point
+    type: mcq
+    teaches: intuition-code-points
+    prompt: What is a Unicode code point?
+    options:
+      - The number Unicode assigns to a character, written like U+0041
+      - The byte sequence stored in a file
+      - A font file
+      - A keyboard key
+    answer: 0
+    explain: How the number is turned into bytes is the job of an encoding.
+
+  - id: range
+    type: mcq
+    teaches: formal-space
+    prompt: What is the largest Unicode code point?
+    options:
+      - U+FFFF
+      - U+10FFFF
+      - U+FFFFFFFF
+      - U+7F
+    answer: 1
+    explain: 17 planes × 65,536 = 1,114,112 code points, up to U+10FFFF.
+
+  - id: planes
+    type: numeric
+    teaches: formal-space
+    prompt: How many planes does the Unicode code space have?
+    answer: 17
+    explain: Planes 0 to 16.
+
+  - id: surrogates
+    type: mcq
+    teaches: formal-space
+    prompt: What are U+D800 to U+DFFF reserved for?
+    options:
+      - Emoji
+      - UTF-16 surrogate pairs — they are never characters
+      - Control codes
+      - Chinese characters
+    answer: 1
+    explain: UTF-16 uses these values to encode code points above U+FFFF.
+
+  - id: grapheme
+    type: mcq
+    teaches: formal-graphemes
+    prompt: The visible character é can be stored as…
+    options:
+      - Only U+00E9
+      - U+00E9, or e followed by U+0301 (combining acute)
+      - Two bytes only
+      - It cannot be stored in Unicode
+    answer: 1
+    explain: Normalisation (NFC/NFD) converts between the two.
+
+  - id: js-length
+    type: numeric
+    teaches: mechanism-encoder
+    prompt: In JavaScript, what is '😀'.length?
+    answer: 2
+    explain: JavaScript strings count UTF-16 units; U+1F600 needs a surrogate pair.
+
+  - id: plane-calc
+    type: numeric
+    teaches: worked-example
+    prompt: Which plane is U+1D11E (𝄞) in?
+    answer: 1
+    explain: 0x1D11E ÷ 0x10000 = 1 (remainder 0xD11E).
+
+  - id: bmp
+    type: mcq
+    teaches: worked-example
+    prompt: Which character is outside the Basic Multilingual Plane?
+    options:
+      - A (U+0041)
+      - € (U+20AC)
+      - 中 (U+4E2D)
+      - 😀 (U+1F600)
+    answer: 3
+    explain: The BMP ends at U+FFFF.
+
+  - id: spoof
+    type: mcq
+    teaches: tradeoffs
+    prompt: What security risk comes from Unicode's size?
+    options:
+      - Look-alike characters (Latin a vs Cyrillic а) can spoof domain names
+      - Unicode text cannot be encrypted
+      - Unicode files are executable
+      - Passwords cannot contain Unicode
+    answer: 0
+    explain: Homograph attacks; browsers show punycode for suspicious mixes.
+
+  - id: not-16bit
+    type: mcq
+    teaches: pitfalls
+    prompt: How many bits does the largest code point, U+10FFFF, need?
+    options:
+      - '16'
+      - '21'
+      - '32'
+      - '8'
+    answer: 1
+    explain: 0x10FFFF < 2^21; Unicode outgrew 16 bits in 1996.

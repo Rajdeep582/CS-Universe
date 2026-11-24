@@ -1,0 +1,89 @@
+<Step id="hook" section="hook" title="Seeing simplifications">
+
+Algebraic simplification needs insight. In 1953 Maurice Karnaugh found a way to make the insight **visible**: arrange the truth table so that terms which can be combined sit next to each other, then circle them.
+
+</Step>
+
+<Step id="intuition-adjacent" section="intuition" title="Neighbours differ in one variable">
+
+The combining law $AB + AB' = A$ says: two minterms that differ in exactly one variable merge, and that variable disappears. A Karnaugh map (K-map) places the minterms on a grid where **every horizontal or vertical neighbour differs in exactly one variable**. Mergeable terms become touching cells.
+
+</Step>
+
+<Step id="formal-layout" section="formal" title="The layout and Gray code">
+
+Rows and columns are labelled in **Gray code** order — 00, 01, 11, 10 — in which consecutive labels differ in one bit. The map also **wraps around**: the left and right edges are neighbours, and so are the top and bottom.
+
+For four variables, rows are $AB$ and columns $CD$; cell (row 11, column 10) is $ABCD' = m_{14}$.
+
+</Step>
+
+<Step id="formal-rules" section="formal" title="Grouping rules">
+
+1. Circle groups of 1s that are rectangles of **1, 2, 4, 8 or 16** cells (powers of two), wrapping across edges if needed.
+2. Make each group **as large as possible** (larger groups → fewer literals).
+3. Use **as few groups as possible** to cover every 1; groups may overlap.
+4. Cells marked **X (don't care)** may be included if they help, never needed.
+
+A group of $2^k$ cells eliminates $k$ variables: read off only the variables that stay constant across the group.
+
+</Step>
+
+<Step id="mechanism-sim" section="mechanism" title="Grouping on a live map">
+
+Click cells to set 1s (and Xs). The map finds a minimal grouping and the matching sum of products. Enter the target function and look at how the groups wrap.
+
+<Simulation id="karnaugh" vars={4} target="0,2,8,10" goal="Enter Σm(0, 2, 8, 10) — the four corners — and see them form one group." />
+
+</Step>
+
+<Step id="worked-example" section="worked-example" title="A four-variable example">
+
+$F = \sum m(1, 3, 7, 11, 15)$ with don't-cares $d(0, 2, 5)$:
+
+- Column $CD = 11$ holds $m_3, m_7, m_{15}, m_{11}$ — a full column of four → $CD$.
+- $m_1$ remains. Group it with $m_0, m_2, m_3$ (two of them don't-cares) as the top row → $A'B'$.
+
+$$
+F = CD + A'B'
+$$
+
+(Grouping $m_1, m_3, m_5, m_7$ instead gives $CD + A'D$, equally small — minimal answers need not be unique.) Without the don't-cares, $m_1$ could only pair with $m_3$, giving the larger $A'B'D$.
+
+</Step>
+
+<Step id="tradeoffs" section="tradeoffs" title="Where K-maps stop working">
+
+| K-maps | Quine–McCluskey and heuristics |
+|---|---|
+| Fast and visual for 2–4 variables, possible for 5–6 | Tabular, works for any number of variables, easy to program |
+| Error-prone by hand for larger maps | Exact Q–M is exponential in the worst case; tools use heuristics such as Espresso |
+| Produce minimal two-level SOP/POS only | Multi-level optimisation needs other methods |
+
+The simulation itself uses Quine–McCluskey behind the map.
+
+</Step>
+
+<Step id="pitfalls" section="pitfalls" title="Common misconceptions">
+
+<Callout kind="warning">**Binary order on the axes.** 00, 01, 10, 11 breaks adjacency. Use Gray code: 00, 01, 11, 10.</Callout>
+
+<Callout kind="warning">**Groups of three or six.** Groups must have a power-of-two number of cells and be rectangular.</Callout>
+
+<Callout kind="warning">**Forgetting the wrap-around.** The four corners of a 4-variable map are mutually adjacent: $\sum m(0, 2, 8, 10) = B'D'$.</Callout>
+
+</Step>
+
+<Step id="context" section="context" title="History">
+
+Edward Veitch (1952) and Maurice Karnaugh at Bell Labs (1953) introduced the diagram. Quine (1952) and McCluskey (1956) gave the tabular method that computers use.
+
+</Step>
+
+<Step id="references" section="references" title="Go deeper">
+
+- Harris & Harris, *DDCA* RISC-V ed., §2.7 "Karnaugh Maps" (incl. don't-cares).
+- M. Karnaugh, "The Map Method for Synthesis of Combinational Logic Circuits", *Trans. AIEE* 72, 1953.
+- E. J. McCluskey, "Minimization of Boolean Functions", *Bell System Technical Journal* 35, 1956.
+
+</Step>

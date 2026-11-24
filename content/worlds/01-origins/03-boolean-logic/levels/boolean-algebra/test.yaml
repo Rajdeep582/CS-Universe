@@ -1,0 +1,123 @@
+items:
+  - id: idempotent
+    type: mcq
+    teaches: intuition-like-arithmetic
+    prompt: What is A + A in Boolean algebra?
+    options:
+      - 2A
+      - A
+      - '1'
+      - '0'
+    answer: 1
+    explain: Idempotence — OR of a value with itself is the value.
+
+  - id: laws-match
+    type: match
+    teaches: formal-laws
+    prompt: Match each identity to its law.
+    pairs:
+      - left: A + A' = 1
+        right: Complement
+      - left: A + AB = A
+        right: Absorption
+      - left: A · 0 = 0
+        right: Null (annihilation)
+      - left: AB + AB' = A
+        right: Combining
+    explain: These four appear constantly when simplifying.
+
+  - id: or-distrib
+    type: mcq
+    teaches: formal-laws
+    prompt: Which equals A + BC?
+    options:
+      - (A + B)(A + C)
+      - AB + AC
+      - A(B + C)
+      - (A + B)C
+    answer: 0
+    explain: In Boolean algebra OR distributes over AND.
+
+  - id: dual
+    type: mcq
+    teaches: formal-duality
+    prompt: What is the dual of A + 0 = A?
+    options:
+      - A · 1 = A
+      - A · 0 = 0
+      - A + 1 = 1
+      - A' + 1 = A
+    answer: 0
+    explain: Swap + with · and 0 with 1.
+
+  - id: perfect-induction
+    type: mcq
+    teaches: mechanism-proof
+    prompt: What is "perfect induction" in Boolean algebra?
+    options:
+      - Proving a law by checking every combination of input values
+      - Induction on the number of gates
+      - Guessing a law from one example
+      - Using De Morgan's laws twice
+    answer: 0
+    explain: With only 0 and 1 to try, checking every case is a complete proof.
+
+  - id: simplify-1
+    type: mcq
+    teaches: worked-example
+    prompt: Simplify AB + A'B + AB'.
+    options:
+      - A + B
+      - AB
+      - B
+      - '1'
+    answer: 0
+    explain: B(A + A') + AB' = B + AB' = A + B.
+
+  - id: simplify-2
+    type: mcq
+    teaches: worked-example
+    prompt: Simplify A(A + B).
+    options:
+      - A + B
+      - A
+      - AB
+      - B
+    answer: 1
+    explain: Absorption.
+
+  - id: simplify-3
+    type: mcq
+    teaches: worked-example
+    prompt: Simplify (A + B)(A + B').
+    options:
+      - A
+      - B
+      - '1'
+      - A + B
+    answer: 0
+    explain: Combining law (dual of AB + AB' = A).
+
+  - id: methods
+    type: mcq
+    teaches: tradeoffs
+    prompt: What is a weakness of simplifying by hand with algebra?
+    options:
+      - It only works for 2 variables
+      - It needs insight, and you can get stuck in a form that is not minimal
+      - It changes the function
+      - It cannot use De Morgan's laws
+    answer: 1
+    explain: K-maps and Quine–McCluskey are systematic and guarantee a minimal SOP.
+
+  - id: no-cancel
+    type: mcq
+    teaches: pitfalls
+    prompt: If A + B = A + C, must B equal C?
+    options:
+      - Yes, subtract A from both sides
+      - No — with A = 1 both sides are 1 whatever B and C are
+      - Only if A = 1
+      - Yes, by idempotence
+    answer: 1
+    explain: Boolean algebra has no subtraction; cancellation is invalid.

@@ -1,0 +1,82 @@
+<Step id="hook" section="hook" title="Not raining and not windy">
+
+"It is **not** (raining **or** windy)" means the same as "it is **not** raining **and not** windy." Pushing a NOT inside a bracket flips OR into AND — and the other way round. This pair of rules, De Morgan's laws, is the most-used tool in all of digital logic.
+
+</Step>
+
+<Step id="intuition-flip" section="intuition" title="Negation flips the operator">
+
+To deny "A or B", you must deny both: neither A nor B. To deny "A and B", it is enough to deny one: not A, or not B. So a NOT outside the brackets becomes NOTs on each input, and the operator inside swaps.
+
+</Step>
+
+<Step id="formal-laws" section="formal" title="De Morgan's laws">
+
+$$
+\overline{A + B} = \overline{A}\,\overline{B} \qquad\qquad \overline{AB} = \overline{A} + \overline{B}
+$$
+
+They generalise to any number of inputs: $\overline{A + B + C} = \overline{A}\,\overline{B}\,\overline{C}$ and $\overline{ABC} = \overline{A} + \overline{B} + \overline{C}$.
+
+</Step>
+
+<Step id="formal-gates" section="formal" title="In gates: bubble pushing">
+
+De Morgan's laws say a **NAND** gate is the same as an **OR with inverted inputs**, and a **NOR** gate is the same as an **AND with inverted inputs**. Designers redraw circuits by "pushing bubbles" (inversion circles) through gates: pushing a bubble from output to inputs swaps AND ↔ OR and adds bubbles on the inputs.
+
+</Step>
+
+<Step id="mechanism-steps" section="mechanism" title="Complementing a whole expression">
+
+To find $F'$: (1) add brackets so the grouping cannot change, (2) swap every AND with OR and every OR with AND, (3) complement every literal. For $F = A(B + C')$:
+
+$$
+F' = A' + (B + C')' = A' + B'C
+$$
+
+Check it in the lab:
+
+<Simulation id="logic-lab" expr="!(A & (B | !C))" target="!(A & (B | !C))" nnf goal="Write the complement of A·(B + C') without any NOT outside a bracket." />
+
+</Step>
+
+<Step id="worked-example" section="worked-example" title="Rewriting a condition in code">
+
+A loop runs `while (!(done || error))`. By De Morgan it is `while (!done && !error)` — "keep going while not done and no error". Both forms are identical; the second is usually easier to read.
+
+Another: $\overline{(A + B)C} = \overline{A + B} + \overline{C} = \overline{A}\,\overline{B} + \overline{C}$.
+
+</Step>
+
+<Step id="tradeoffs" section="tradeoffs" title="Why designers care">
+
+| Benefit | Example |
+|---|---|
+| Use the cheapest gate type | In CMOS, NAND and NOR are smaller and faster than AND and OR (which need an extra inverter) |
+| Readable code | `!(a \|\| b)` → `!a && !b` |
+| Fewer inverters | Bubble pushing cancels pairs of inversions |
+
+</Step>
+
+<Step id="pitfalls" section="pitfalls" title="Common misconceptions">
+
+<Callout kind="warning">**"$\overline{A + B} = \overline{A} + \overline{B}$."** No — the operator must flip: $\overline{A + B} = \overline{A}\,\overline{B}$.</Callout>
+
+<Callout kind="warning">**"$\overline{AB} = \overline{A}\,\overline{B}$."** No — $\overline{AB} = \overline{A} + \overline{B}$. With $A = 1, B = 0$: left side 1, wrong right side 0.</Callout>
+
+<Callout kind="warning">**Losing the grouping.** $\overline{A + BC}$ is $\overline{A}\,(\overline{B} + \overline{C})$ — brackets are needed because AND binds tighter than OR.</Callout>
+
+</Step>
+
+<Step id="context" section="context" title="Augustus De Morgan">
+
+Augustus De Morgan, a contemporary and friend of Boole, stated these laws for logic in the 1840s. Today they appear in SQL (`NOT (a OR b)`), set theory ($\overline{A \cup B} = \overline{A} \cap \overline{B}$) and every logic-synthesis tool.
+
+</Step>
+
+<Step id="references" section="references" title="Go deeper">
+
+- Harris & Harris, *DDCA* RISC-V ed., §2.3.3 (De Morgan's theorem) and §2.5.2 (bubble pushing).
+- Mano & Ciletti, *Digital Design*, 6th ed., §2.4.
+
+</Step>

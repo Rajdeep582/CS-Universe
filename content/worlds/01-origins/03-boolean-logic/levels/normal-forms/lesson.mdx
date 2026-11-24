@@ -1,0 +1,84 @@
+<Step id="hook" section="hook" title="From a table to a circuit, mechanically">
+
+Someone hands you a truth table and asks for a circuit. You do not need inspiration: there is a recipe that turns *any* truth table into an expression — and that expression maps straight onto two layers of gates.
+
+</Step>
+
+<Step id="intuition-minterm" section="intuition" title="One term per true row">
+
+Look at each row where $F = 1$. Write an AND term that is 1 for exactly that row: use $A$ where the input is 1 and $A'$ where it is 0. OR all those terms together. The result is 1 precisely on the rows you picked — so it *is* the function.
+
+</Step>
+
+<Step id="formal-sop" section="formal" title="Sum of products (SOP)">
+
+- A **minterm** is an AND of all $n$ variables, each plain or complemented; it is 1 in exactly one row. Minterm $m_i$ matches row $i$ (in binary).
+- The **canonical SOP** is the OR of the minterms of the true rows, written $F = \sum m(i, j, \dots)$.
+
+Example: rows 3 (011) and 5 (101) true → $F = A'BC + AB'C = \sum m(3, 5)$.
+
+</Step>
+
+<Step id="formal-pos" section="formal" title="Product of sums (POS)">
+
+Dually, a **maxterm** is an OR of all variables that is 0 in exactly one row: use $A$ where the input is 0 and $A'$ where it is 1. The **canonical POS** ANDs the maxterms of the *false* rows: $F = \prod M(\dots)$.
+
+For row 0 (000) false: maxterm $(A + B + C)$ is 0 only when A, B and C are all 0.
+
+</Step>
+
+<Step id="mechanism-lab" section="mechanism" title="Reading SOP and POS off a table">
+
+The lab prints both canonical forms and a **minimal** SOP for any expression. Notice how long the canonical forms get, and how much shorter the minimal one is.
+
+<Simulation id="logic-lab" expr="A'·B·C + A·B'·C + A·B·C' + A·B·C" target="A·B + A·C + B·C" maxOps={5} goal="Rewrite the majority function with at most 5 operators." />
+
+</Step>
+
+<Step id="worked-example" section="worked-example" title="Two-level circuits">
+
+$F = \sum m(1, 2, 4, 7)$ over $A, B, C$ (this is 3-input XOR):
+
+$$
+F = A'B'C + A'BC' + AB'C' + ABC
+$$
+
+As a circuit: three inverters, four 3-input AND gates and one 4-input OR — a **two-level AND-OR** network. Any function can be built this way with at most two gate delays after the inverters.
+
+The POS of the same function uses its false rows 0, 3, 5, 6: $F = (A+B+C)(A+B'+C')(A'+B+C')(A'+B'+C)$.
+
+</Step>
+
+<Step id="tradeoffs" section="tradeoffs" title="SOP or POS?">
+
+| Choose SOP when | Choose POS when |
+|---|---|
+| Few rows are 1 | Few rows are 0 |
+| Building with AND-OR or NAND-NAND | Building with OR-AND or NOR-NOR |
+
+Either canonical form can be huge — up to $2^n$ terms — which is why the next level shows how to **minimise**.
+
+</Step>
+
+<Step id="pitfalls" section="pitfalls" title="Common misconceptions">
+
+<Callout kind="warning">**Mixing up literal rules.** Minterm: 0 → complemented ($A'$). Maxterm: 0 → plain ($A$). They are opposite.</Callout>
+
+<Callout kind="warning">**"Canonical means minimal."** Canonical forms are unique but usually far from the smallest expression.</Callout>
+
+<Callout kind="warning">**Missing a variable in a minterm.** Every minterm contains every variable exactly once; $AB$ is not a minterm of a 3-variable function.</Callout>
+
+</Step>
+
+<Step id="context" section="context" title="Programmable logic arrays">
+
+Early programmable chips (PLAs, PALs in the 1970s–80s) were literally a programmable AND plane feeding an OR plane — hardware for sum-of-products. SOP is also the starting point for logic-synthesis tools today.
+
+</Step>
+
+<Step id="references" section="references" title="Go deeper">
+
+- Harris & Harris, *DDCA* RISC-V ed., §2.2.2–2.2.3 (sum-of-products and product-of-sums forms).
+- Mano & Ciletti, *Digital Design*, 6th ed., §2.6 (canonical and standard forms).
+
+</Step>

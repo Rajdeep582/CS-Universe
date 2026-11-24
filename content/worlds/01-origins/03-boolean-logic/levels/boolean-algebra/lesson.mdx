@@ -1,0 +1,101 @@
+<Step id="hook" section="hook" title="Fewer gates, same answer">
+
+Every gate costs area, power and delay. Boolean algebra lets you rewrite $AB + AB'$ as just $A$ — the same function from no gates at all. The laws are short; using them well is a skill.
+
+</Step>
+
+<Step id="intuition-like-arithmetic" section="intuition" title="Like ordinary algebra — almost">
+
+Many laws look familiar: AND behaves like multiplication and OR like addition ($A \cdot 1 = A$, $A + 0 = A$, $A(B + C) = AB + AC$). But some are new because values are only 0 or 1: $A + A = A$ and $A \cdot A = A$, and OR distributes over AND, which never happens with numbers.
+
+</Step>
+
+<Step id="formal-laws" section="formal" title="The laws">
+
+| Law | AND form | OR form |
+|---|---|---|
+| Identity | $A \cdot 1 = A$ | $A + 0 = A$ |
+| Null (annihilation) | $A \cdot 0 = 0$ | $A + 1 = 1$ |
+| Idempotence | $A \cdot A = A$ | $A + A = A$ |
+| Complement | $A \cdot A' = 0$ | $A + A' = 1$ |
+| Involution | $(A')' = A$ | |
+| Commutative | $AB = BA$ | $A + B = B + A$ |
+| Associative | $(AB)C = A(BC)$ | $(A+B)+C = A+(B+C)$ |
+| Distributive | $A(B + C) = AB + AC$ | $A + BC = (A+B)(A+C)$ |
+| Absorption | $A(A + B) = A$ | $A + AB = A$ |
+| Combining | $AB + AB' = A$ | $(A+B)(A+B') = A$ |
+
+</Step>
+
+<Step id="formal-duality" section="formal" title="Duality">
+
+Every law has a **dual**: swap AND with OR and 0 with 1. If a law holds, its dual holds too. That is why the table comes in pairs — learn one column and you get the other free.
+
+</Step>
+
+<Step id="mechanism-proof" section="mechanism" title="Proving a law by perfect induction">
+
+Because variables are only 0 or 1, any law can be proved by checking every case — **perfect induction**. For absorption $A + AB = A$:
+
+| A | B | AB | A + AB | A |
+|---|---|---|---|---|
+| 0 | 0 | 0 | 0 | 0 |
+| 0 | 1 | 0 | 0 | 0 |
+| 1 | 0 | 0 | 1 | 1 |
+| 1 | 1 | 1 | 1 | 1 |
+
+The last two columns agree in every row. Try it yourself: simplify the target in the lab and check equivalence.
+
+<Simulation id="logic-lab" expr="A&B | A&!B" target="A" maxOps={0} goal="Simplify A·B + A·B' all the way — no operators left." />
+
+</Step>
+
+<Step id="worked-example" section="worked-example" title="Simplifying step by step">
+
+$$
+\begin{aligned}
+F &= AB + A'B + AB' \\
+  &= B(A + A') + AB' && \text{distributive} \\
+  &= B \cdot 1 + AB' && \text{complement} \\
+  &= B + AB' && \text{identity} \\
+  &= (B + A)(B + B') && \text{distributive (OR over AND)} \\
+  &= A + B && \text{complement, identity}
+\end{aligned}
+$$
+
+Three AND terms and two ORs became a single OR gate.
+
+</Step>
+
+<Step id="tradeoffs" section="tradeoffs" title="Algebra versus systematic methods">
+
+| Algebraic simplification | Systematic methods (K-maps, Quine–McCluskey) |
+|---|---|
+| Works for any number of variables | K-maps are practical up to 4–5 variables |
+| Needs insight: which law next? Easy to get stuck in a non-minimal form | Guaranteed minimal sum of products |
+| Essential for proofs and for understanding | Used by tools; real synthesis uses heuristics such as Espresso |
+
+</Step>
+
+<Step id="pitfalls" section="pitfalls" title="Common misconceptions">
+
+<Callout kind="warning">**Cancelling like numbers.** From $A + B = A + C$ you *cannot* conclude $B = C$ (try $A = 1$). Boolean algebra has no subtraction or division.</Callout>
+
+<Callout kind="warning">**"OR can't distribute over AND."** In Boolean algebra it can: $A + BC = (A + B)(A + C)$.</Callout>
+
+<Callout kind="warning">**Forgetting idempotence.** $A + A = A$, not $2A$.</Callout>
+
+</Step>
+
+<Step id="context" section="context" title="Huntington's axioms">
+
+Edward Huntington (1904) showed that a handful of axioms — identity, complement, commutative and distributive laws — are enough to derive all the others. Modern chip-design tools rely on the same algebra, automated.
+
+</Step>
+
+<Step id="references" section="references" title="Go deeper">
+
+- Harris & Harris, *DDCA* RISC-V ed., §2.3 "Boolean Algebra" (Tables 2.2–2.3).
+- M. Morris Mano & Michael Ciletti, *Digital Design*, 6th ed., ch. 2.
+
+</Step>

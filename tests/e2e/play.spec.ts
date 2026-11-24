@@ -163,3 +163,20 @@ test('page-replacement simulation matches Silberschatz: LRU 12, FIFO 15, OPT 9 f
   await expect(sim).toContainText('of 9 total');
   await shot(page, '05-page-replacement');
 });
+
+test('World 1 simulations: Karnaugh corners, UTF-8 euro, parity blind spot', async ({ page }) => {
+  await page.goto('/gallery');
+  const k = page.getByRole('figure', { name: /Karnaugh map/ });
+  for (const m of [0, 2, 8, 10]) await k.getByRole('button', { name: new RegExp(`^minterm ${m}:`) }).click();
+  await expect(k).toContainText("F = B'D'");
+  const u = page.getByRole('figure', { name: /Text encoder/ });
+  await u.getByLabel('TEXT').fill('€');
+  await expect(u).toContainText('E2 82 AC');
+  await expect(u).toContainText('U+20AC');
+  const p = page.getByRole('figure', { name: /Parity check/ });
+  await p.getByRole('button', { name: /^RECEIVED.*bit 1:/ }).click();
+  await expect(p).toContainText('error DETECTED');
+  await p.getByRole('button', { name: /^RECEIVED.*bit 2:/ }).click();
+  await expect(p).toContainText('UNDETECTED');
+  await shot(page, '05-world1-sims');
+});

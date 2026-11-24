@@ -1,0 +1,93 @@
+<Step id="hook" section="hook" title="Saying it shorter">
+
+"AAAAAAAAAABBB" can be written "10 A, 3 B". Morse code gives E — the most common English letter — a single dot. Both exploit the same fact: real data is **redundant**, and redundancy can be squeezed out.
+
+</Step>
+
+<Step id="intuition-redundancy" section="intuition" title="Patterns and uneven frequencies">
+
+Compression works when data is predictable: long runs of the same value, repeated phrases, or some symbols far more frequent than others. Random data has no such pattern and cannot be compressed (as the entropy level showed).
+
+</Step>
+
+<Step id="formal-kinds" section="formal" title="Lossless and lossy">
+
+| Kind | Guarantee | Examples |
+|---|---|---|
+| **Lossless** | Decompression restores the exact original bits | ZIP/DEFLATE, PNG, FLAC, gzip |
+| **Lossy** | Restores something *close*, discarding detail people barely notice | JPEG, MP3/AAC, H.264/H.265 video |
+
+Text, code and spreadsheets must be compressed losslessly; photos, sound and video usually lossily. The **compression ratio** is original size ÷ compressed size.
+
+</Step>
+
+<Step id="formal-prefix" section="formal" title="Variable-length prefix codes">
+
+A **prefix code** gives each symbol a bit string such that no codeword is the beginning of another. Then a bit stream can be decoded left to right without separators. **Huffman's algorithm** (1952) builds an optimal prefix code from symbol frequencies:
+
+1. Make a leaf for each symbol, weighted by its frequency.
+2. Repeatedly join the two lightest trees under a new node whose weight is their sum.
+3. Label left branches 0 and right branches 1; a symbol's code is its path from the root.
+
+</Step>
+
+<Step id="mechanism-rle" section="mechanism" title="Run-length encoding step by step">
+
+RLE replaces each run of identical symbols with (count, symbol):
+
+| Input | Runs | Encoded |
+|---|---|---|
+| `WWWWWWWWWWWWBWWWWWWWWWWWWBBB` | 12W, 1B, 12W, 3B | `12W1B12W3B` |
+
+28 characters became 10. But `ABCD` becomes `1A1B1C1D` — **twice as long**. RLE only helps data with long runs (simple graphics, fax pages, bitmaps with flat areas).
+
+</Step>
+
+<Step id="worked-example" section="worked-example" title="Building a Huffman code">
+
+A file of 100,000 characters uses six letters with frequencies (in thousands) a:45, b:13, c:12, d:16, e:9, f:5 — the example from Cormen et al.
+
+Joining the lightest pairs: f+e = 14; c+b = 25; 14+d = 30; 25+30 = 55; a+55 = 100. Resulting codes:
+
+| Letter | a | b | c | d | e | f |
+|---|---|---|---|---|---|---|
+| Code | 0 | 101 | 100 | 111 | 1101 | 1100 |
+
+Total: $45 \cdot 1 + (13 + 12 + 16) \cdot 3 + (9 + 5) \cdot 4 = 224$ thousand bits, versus 300 thousand with a fixed 3-bit code — a 25 % saving.
+
+</Step>
+
+<Step id="tradeoffs" section="tradeoffs" title="What compression costs">
+
+| Trade-off | Detail |
+|---|---|
+| Time vs size | Stronger compressors (xz, zstd at high levels) are slower; fast ones (LZ4) compress less |
+| Lossy quality | Higher compression means visible or audible artefacts |
+| Random access | Compressed streams usually must be decoded from the start or from block boundaries |
+| Fragility | A single flipped bit can corrupt everything after it in a variable-length stream |
+
+</Step>
+
+<Step id="pitfalls" section="pitfalls" title="Common misconceptions">
+
+<Callout kind="warning">**"Compressing twice shrinks it more."** Compressed output looks random; a second pass gains nothing and may add bytes.</Callout>
+
+<Callout kind="warning">**"A lossless compressor can shrink every file."** Impossible by counting: there are fewer short files than long ones, so some inputs must grow (pigeonhole principle).</Callout>
+
+<Callout kind="warning">**"Huffman codes must be unique."** Ties can be broken differently; different trees can be equally optimal.</Callout>
+
+</Step>
+
+<Step id="context" section="context" title="In the real world">
+
+DEFLATE (ZIP, gzip, PNG) combines LZ77 — replacing repeated phrases with back-references — with Huffman coding. JPEG transforms 8×8 blocks into frequencies, throws away fine detail, then Huffman-codes what is left. The algorithms world returns to all of these.
+
+</Step>
+
+<Step id="references" section="references" title="Go deeper">
+
+- Cormen, Leiserson, Rivest & Stein, *Introduction to Algorithms*, 4th ed., §15.3 "Huffman codes" (§16.3 in the 3rd ed.).
+- D. A. Huffman, "A Method for the Construction of Minimum-Redundancy Codes", *Proc. IRE* 40, 1952.
+- Khalid Sayood, *Introduction to Data Compression*, 5th ed., ch. 1–3.
+
+</Step>

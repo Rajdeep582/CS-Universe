@@ -1,0 +1,110 @@
+items:
+  - id: complete
+    type: mcq
+    teaches: intuition-universal
+    prompt: What does it mean for a gate type to be universal?
+    options:
+      - It is used in every computer
+      - Every Boolean function can be built from that gate alone
+      - It has the most inputs
+      - It never fails
+    answer: 1
+    explain: Functional completeness.
+
+  - id: nand-not
+    type: mcq
+    teaches: formal-nand
+    prompt: How do you make NOT A from a NAND gate?
+    options:
+      - A ↑ 0
+      - A ↑ A
+      - (A ↑ A) ↑ A
+      - It is impossible
+    answer: 1
+    explain: (A·A)' = A'.
+
+  - id: nand-or
+    type: mcq
+    teaches: formal-nand
+    prompt: Which NAND expression equals A + B?
+    options:
+      - (A ↑ B) ↑ (A ↑ B)
+      - (A ↑ A) ↑ (B ↑ B)
+      - A ↑ B
+      - (A ↑ B) ↑ A
+    answer: 1
+    explain: (A'·B')' = A + B by De Morgan.
+
+  - id: nor-complete
+    type: mcq
+    teaches: formal-nor
+    prompt: Which set is NOT functionally complete?
+    options:
+      - '{NAND}'
+      - '{NOR}'
+      - '{AND, OR}'
+      - '{AND, NOT}'
+    answer: 2
+    explain: AND and OR alone cannot produce NOT.
+
+  - id: nand-nand
+    type: mcq
+    teaches: mechanism-lab
+    prompt: How do you turn a two-level AND-OR circuit into NAND gates only?
+    options:
+      - Replace every gate with a NAND
+      - Replace only the OR gate
+      - Add an inverter after every gate
+      - It cannot be done
+    answer: 0
+    explain: The inversions cancel in pairs (bubble pushing).
+
+  - id: xor-check
+    type: numeric
+    teaches: worked-example
+    prompt: In the 4-NAND XOR circuit with A = 1 and B = 1, what is N = A ↑ B?
+    answer: 0
+    explain: NAND of two 1s is 0.
+
+  - id: xor-gates
+    type: numeric
+    teaches: worked-example
+    prompt: How many 2-input NAND gates does the XOR construction use?
+    answer: 4
+    explain: N, A↑N, B↑N, and the final NAND.
+
+  - id: cmos-why
+    type: mcq
+    teaches: tradeoffs
+    prompt: Why are AND gates more expensive than NAND gates in CMOS?
+    options:
+      - AND gates use more power supply voltage
+      - A CMOS AND is a NAND plus an inverter (6 transistors instead of 4)
+      - AND gates are patented
+      - They are not more expensive
+    answer: 1
+    explain: Single-stage CMOS gates are naturally inverting.
+
+  - id: monotone
+    type: mcq
+    teaches: pitfalls
+    prompt: Why can't AND and OR alone build NOT?
+    options:
+      - They have too few inputs
+      - Circuits of AND and OR are monotone — raising an input can never lower the output
+      - They are too slow
+      - They need a clock
+    answer: 1
+    explain: NOT is not monotone.
+
+  - id: xor-universal
+    type: mcq
+    teaches: pitfalls
+    prompt: Is XOR (with constant inputs allowed) universal?
+    options:
+      - Yes
+      - No — it can make NOT but never AND
+      - Only with 3 inputs
+      - Only in CMOS
+    answer: 1
+    explain: XOR circuits compute only linear (affine) functions.

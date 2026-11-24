@@ -1,0 +1,114 @@
+items:
+  - id: per-bit
+    type: mcq
+    teaches: intuition-columns
+    prompt: What is 1100 & 1010?
+    options:
+      - '1000'
+      - '1110'
+      - '0110'
+      - '10110'
+    answer: 0
+    explain: Only bit 3 is 1 in both.
+
+  - id: xor-val
+    type: mcq
+    teaches: formal-ops
+    prompt: What is 1100 ^ 1010?
+    options:
+      - '1000'
+      - '1110'
+      - '0110'
+      - '0010'
+    answer: 2
+    explain: XOR is 1 where the bits differ.
+
+  - id: logical-vs-bitwise
+    type: numeric
+    teaches: formal-ops
+    prompt: In C, what is the value of 2 & 1?
+    answer: 0
+    explain: 10 and 01 share no 1 bits.
+
+  - id: idioms
+    type: match
+    teaches: formal-masks
+    prompt: Match each goal to its expression (m is the mask).
+    pairs:
+      - left: Set the bits
+        right: x | m
+      - left: Clear the bits
+        right: x & ~m
+      - left: Toggle the bits
+        right: x ^ m
+      - left: Test the bits
+        right: x & m
+    explain: OR sets, AND-NOT clears, XOR flips, AND tests.
+
+  - id: perms
+    type: numeric
+    teaches: mechanism-trace
+    prompt: perms is 7 (111). After perms &= ~2, what is perms?
+    answer: 5
+    explain: Clearing bit 1 gives 101 = 5.
+
+  - id: perms-order
+    type: order-steps
+    teaches: mechanism-trace
+    prompt: Starting from perms = 0, order the operations that end with perms = 5 (READ and EXEC), via 6 and 7.
+    steps:
+      - perms = READ | WRITE
+      - perms |= EXEC
+      - perms &= ~WRITE
+    explain: 6 → 7 → 5.
+
+  - id: pow2
+    type: mcq
+    teaches: worked-example
+    prompt: Why does (x & (x − 1)) == 0 detect powers of two (x > 0)?
+    options:
+      - x − 1 flips the lowest 1 and the 0s below it, so the AND is 0 only if there was a single 1
+      - Because x − 1 is always odd
+      - Because AND with any smaller number is zero
+      - It does not
+    answer: 0
+    explain: For 8 (1000) and 7 (0111) the AND is 0; for 6 (110) and 5 (101) it is 100.
+
+  - id: lowest
+    type: numeric
+    teaches: worked-example
+    prompt: What is 12 & -12 (two's complement)?
+    answer: 4
+    explain: It isolates the lowest set bit of 1100.
+
+  - id: packed
+    type: mcq
+    teaches: tradeoffs
+    prompt: What is an advantage of packing flags into the bits of one integer?
+    options:
+      - It is easier to read
+      - Less memory, and many flags can be tested in one instruction
+      - Unlimited number of flags
+      - No masks are needed
+    answer: 1
+    explain: One word holds many booleans.
+
+  - id: precedence-bug
+    type: spot-the-bug
+    teaches: pitfalls
+    prompt: This C code should run when the READY bit is clear. Which line is the bug?
+    language: c
+    lines:
+      - '#define READY 0x4'
+      - 'if (status & READY == 0) {'
+      - '  wait();'
+      - '}'
+    answer: 1
+    explain: == binds tighter than &; write (status & READY) == 0.
+
+  - id: not-small
+    type: numeric
+    teaches: pitfalls
+    prompt: In a 32-bit two's-complement int, what is ~5?
+    answer: -6
+    explain: ~x = −x − 1.

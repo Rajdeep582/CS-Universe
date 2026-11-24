@@ -1,0 +1,108 @@
+items:
+  - id: steps
+    type: match
+    teaches: intuition-two-steps
+    prompt: Match each step of digitising to what it decides.
+    pairs:
+      - left: Sampling
+        right: How often the signal is measured
+      - left: Quantisation
+        right: How precisely each measurement is stored
+      - left: Sampling rate
+        right: Measured in samples per second (Hz)
+    explain: Rate and bit depth.
+
+  - id: aliasing-cause
+    type: mcq
+    teaches: intuition-two-steps
+    prompt: What happens if you sample too rarely?
+    options:
+      - The file gets larger
+      - High frequencies are lost or turn into false lower tones
+      - The sound gets louder
+      - Quantisation noise disappears
+    answer: 1
+    explain: Undersampling causes aliasing.
+
+  - id: nyquist
+    type: numeric
+    teaches: formal-nyquist
+    prompt: A signal has no content above 10 kHz. What is the Nyquist rate (in kHz) the sampling rate must exceed?
+    answer: 20
+    explain: f_s must be greater than 2 × 10 kHz.
+
+  - id: cd-rate
+    type: mcq
+    teaches: formal-nyquist
+    prompt: Why does CD audio use 44.1 kHz?
+    options:
+      - It is the speed of the disc
+      - It is more than twice the ~20 kHz limit of human hearing
+      - It makes files smaller
+      - It is an arbitrary choice
+    answer: 1
+    explain: 22.05 kHz Nyquist frequency covers hearing, with margin for filtering.
+
+  - id: levels
+    type: numeric
+    teaches: formal-quantisation
+    prompt: How many quantisation levels does 16-bit audio have?
+    answer: 65536
+    explain: 2^16.
+
+  - id: sqnr
+    type: mcq
+    teaches: formal-quantisation
+    prompt: Roughly how much dynamic range does each extra bit of depth add?
+    options:
+      - 1 dB
+      - 3 dB
+      - 6 dB
+      - 20 dB
+    answer: 2
+    explain: SQNR ≈ 6.02 N + 1.76 dB.
+
+  - id: samples-per-cycle
+    type: numeric
+    teaches: mechanism-trace
+    prompt: A 1 kHz tone is sampled at 8 kHz. How many samples are taken per cycle?
+    answer: 8
+    explain: 8000 ÷ 1000.
+
+  - id: clipping
+    type: mcq
+    teaches: mechanism-trace
+    prompt: In the 3-bit trace (levels −4 to 3), why does the peak 1.0 × 4 = 4 become 3?
+    options:
+      - Rounding error
+      - The value is out of range and is clipped to the largest level
+      - Aliasing
+      - The sampling rate is too low
+    answer: 1
+    explain: Two's-complement 3-bit levels stop at +3.
+
+  - id: cd-bitrate
+    type: numeric
+    teaches: worked-example
+    prompt: What is the bit rate of CD audio in bits per second (44,100 × 16 × 2)?
+    answer: 1411200
+    explain: About 1,411 kbit/s.
+
+  - id: studio
+    type: mcq
+    teaches: tradeoffs
+    prompt: Why do studios record at 24-bit?
+    options:
+      - Listeners can hear the difference on phones
+      - It leaves headroom and low noise for mixing and editing before the final master
+      - It is required by law
+      - It halves the file size
+    answer: 1
+    explain: Extra depth protects quality during processing.
+
+  - id: alias-freq
+    type: numeric
+    teaches: pitfalls
+    prompt: A 5 kHz tone is sampled at 8 kHz without filtering. At what frequency (kHz) does its alias appear?
+    answer: 3
+    explain: It folds around the 4 kHz Nyquist frequency to 8 − 5 = 3 kHz.

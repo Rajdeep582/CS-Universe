@@ -6,5 +6,11 @@ export const SIMULATION_IDS = [
   'base-converter',
   'twos-complement',
   'float-explorer',
+  'logic-lab',
+  'karnaugh',
+  'utf8-encoder',
+  'byte-order',
+  'parity',
+  'rgb-mixer',
 ] as const;
 export type SimulationId = (typeof SIMULATION_IDS)[number];

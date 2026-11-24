@@ -1,0 +1,87 @@
+<Step id="hook" section="hook" title="One gate to build them all">
+
+Imagine a factory that can only make one kind of gate. Is that enough to build a whole computer? If the gate is **NAND** — or **NOR** — the answer is yes. The Apollo Guidance Computer that flew to the Moon was built almost entirely from 3-input NOR gates.
+
+</Step>
+
+<Step id="intuition-universal" section="intuition" title="What 'universal' means">
+
+A set of operators is **functionally complete** (universal) if every Boolean function can be written using only them. AND, OR and NOT together are complete — any truth table becomes a sum of products. So if one gate type can imitate NOT, AND and OR, that gate alone is complete.
+
+</Step>
+
+<Step id="formal-nand" section="formal" title="NAND builds NOT, AND, OR">
+
+$$
+\begin{aligned}
+\overline{A} &= \overline{A \cdot A} = A \uparrow A \\
+AB &= \overline{\overline{AB}} = (A \uparrow B) \uparrow (A \uparrow B) \\
+A + B &= \overline{\overline{A}\,\overline{B}} = (A \uparrow A) \uparrow (B \uparrow B)
+\end{aligned}
+$$
+
+The OR line is De Morgan's law in action. $\uparrow$ is NAND.
+
+</Step>
+
+<Step id="formal-nor" section="formal" title="NOR is universal too">
+
+By duality: $\overline{A} = A \downarrow A$, $A + B = (A \downarrow B) \downarrow (A \downarrow B)$, $AB = (A \downarrow A) \downarrow (B \downarrow B)$. AND alone, OR alone, or even AND with OR (no NOT) are **not** complete — none of them can produce NOT.
+
+</Step>
+
+<Step id="mechanism-lab" section="mechanism" title="Building with NAND only">
+
+A two-level **AND-OR** circuit converts directly to **NAND-NAND**: replace every gate with NAND. Bubble pushing shows why — the inversions at the AND outputs and OR inputs cancel. Prove it in the lab.
+
+<Simulation id="logic-lab" expr="A ↑ B" target="A·B + C·D" only="nand" goal="Build A·B + C·D using only NAND (↑)." />
+
+</Step>
+
+<Step id="worked-example" section="worked-example" title="XOR from four NANDs">
+
+Let $N = A \uparrow B$. Then
+
+$$
+A \oplus B = (A \uparrow N) \uparrow (B \uparrow N)
+$$
+
+Check $A = 1, B = 0$: $N = 1$; $A \uparrow N = 0$; $B \uparrow N = 1$; $0 \uparrow 1 = 1$ ✓. Check $A = B = 1$: $N = 0$; both inner NANDs give 1; $1 \uparrow 1 = 0$ ✓. Four gates instead of the five (two ANDs, an OR, two NOTs) of the naive SOP.
+
+</Step>
+
+<Step id="tradeoffs" section="tradeoffs" title="Why real chips love NAND">
+
+| NAND / NOR only | Mixed gate library |
+|---|---|
+| One cell to design, test and optimise | Each function can use its smallest gate |
+| In CMOS, NAND and NOR are the natural inverting gates (4 transistors for 2 inputs) | AND/OR need an extra inverter stage (6 transistors) |
+| Simple manufacturing (historic: Apollo NOR chips) | Fewer gates overall for complex logic |
+
+NAND is usually preferred over NOR in CMOS because its series transistors are the faster n-type ones.
+
+</Step>
+
+<Step id="pitfalls" section="pitfalls" title="Common misconceptions">
+
+<Callout kind="warning">**"AND and OR are enough."** Without NOT you can only build *monotone* functions — those that never go from 1 to 0 when an input goes from 0 to 1. NOT is impossible.</Callout>
+
+<Callout kind="warning">**"NAND-NAND is a different function from AND-OR."** For a two-level SOP it computes exactly the same function.</Callout>
+
+<Callout kind="warning">**"XOR is universal."** XOR with constants can make NOT ($A \oplus 1$) but never AND; XOR alone is not complete.</Callout>
+
+</Step>
+
+<Step id="context" section="context" title="NAND to Tetris">
+
+The course *The Elements of Computing Systems* ("Nand to Tetris") builds a complete computer — ALU, memory, CPU, assembler, compiler and a game — starting from a single NAND gate. You will retrace part of that path in **The Machine** world.
+
+</Step>
+
+<Step id="references" section="references" title="Go deeper">
+
+- Harris & Harris, *DDCA* RISC-V ed., §1.7.5–1.7.7 (CMOS NAND/NOR) and §2.5.2 (bubble pushing, NAND-NAND).
+- Noam Nisan & Shimon Schocken, *The Elements of Computing Systems*, 2nd ed., ch. 1.
+- Eldon C. Hall, *Journey to the Moon: The History of the Apollo Guidance Computer* (1996).
+
+</Step>

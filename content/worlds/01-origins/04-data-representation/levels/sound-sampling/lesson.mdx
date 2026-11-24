@@ -1,0 +1,104 @@
+<Step id="hook" section="hook" title="Turning air into numbers">
+
+Sound is air pressure changing smoothly over time. A computer can only store a list of numbers. To record sound it measures the pressure at regular instants — and if it measures often enough, the original wave can be rebuilt *exactly*.
+
+</Step>
+
+<Step id="intuition-two-steps" section="intuition" title="Two decisions: how often, how precisely">
+
+Digitising a signal takes two steps:
+
+1. **Sampling** — measure the signal at regular time intervals (the **sampling rate**, in samples per second, Hz).
+2. **Quantisation** — round each measurement to one of a fixed set of levels (the **bit depth**).
+
+Too few samples per second loses high frequencies; too few bits per sample adds noise.
+
+</Step>
+
+<Step id="formal-nyquist" section="formal" title="The sampling theorem">
+
+The **Nyquist–Shannon sampling theorem**: a signal containing no frequencies at or above $f_{max}$ can be reconstructed exactly from samples taken at a rate
+
+$$
+f_s > 2 f_{max}.
+$$
+
+$f_s / 2$ is the **Nyquist frequency**. Human hearing reaches about 20 kHz, so CD audio samples at **44.1 kHz**, leaving room for the anti-aliasing filter.
+
+</Step>
+
+<Step id="formal-quantisation" section="formal" title="Quantisation and noise">
+
+With $N$ bits there are $2^N$ levels. Rounding to the nearest level adds **quantisation error** of at most half a step. For a full-scale sine wave the signal-to-quantisation-noise ratio is about
+
+$$
+\text{SQNR} \approx 6.02\,N + 1.76 \text{ dB}
+$$
+
+so 16-bit audio has about 98 dB of dynamic range; each extra bit buys about 6 dB.
+
+</Step>
+
+<Step id="mechanism-trace" section="mechanism" title="Sampling a wave by hand">
+
+Sample $x(t) = \sin(2\pi \cdot 1000\, t)$ (a 1 kHz tone) at 8 kHz — eight samples per cycle — and quantise to 3 bits (levels −4 … 3, scaled by 4):
+
+| Sample $n$ | $t$ (ms) | $\sin$ value | × 4 → nearest level |
+|---|---|---|---|
+| 0 | 0 | 0 | 0 |
+| 1 | 0.125 | 0.707 | 3 (2.83) |
+| 2 | 0.25 | 1.000 | 3 (4 is out of range — clipped) |
+| 3 | 0.375 | 0.707 | 3 |
+| 4 | 0.5 | 0 | 0 |
+| 5 | 0.625 | −0.707 | −3 |
+| 6 | 0.75 | −1.000 | −4 |
+| 7 | 0.875 | −0.707 | −3 |
+
+The stored list is `0 3 3 3 0 −3 −4 −3`. With only 3 bits the shape is crude; with 16 bits the steps are 8,192 times finer.
+
+</Step>
+
+<Step id="worked-example" section="worked-example" title="How much data is a song?">
+
+CD audio: 44,100 samples/s × 16 bits × 2 channels $= 1{,}411{,}200$ bits/s ≈ **1,411 kbit/s**, or about 10.1 MiB per minute uncompressed.
+
+A 4-minute song: $1{,}411{,}200 \times 240 / 8 = 42{,}336{,}000$ bytes ≈ 40 MiB. A 256 kbit/s MP3 or AAC of the same song is about 7.3 MiB — over five times smaller, by discarding what listeners are unlikely to hear.
+
+</Step>
+
+<Step id="tradeoffs" section="tradeoffs" title="Rates and depths in practice">
+
+| Use | Rate | Depth |
+|---|---|---|
+| Telephone | 8 kHz | 8-bit (companded) |
+| CD | 44.1 kHz | 16-bit |
+| Video soundtracks | 48 kHz | 16–24-bit |
+| Studio recording | 48–96 kHz | 24-bit (headroom for editing) |
+
+Higher numbers cost storage and processing; beyond what hearing can detect they add nothing for playback.
+
+</Step>
+
+<Step id="pitfalls" section="pitfalls" title="Common misconceptions">
+
+<Callout kind="warning">**"Samples are joined by straight lines or steps."** Reconstruction uses a low-pass filter that recreates the smooth original — the "staircase" picture is only a teaching aid.</Callout>
+
+<Callout kind="warning">**Aliasing.** Frequencies above $f_s/2$ do not disappear; they fold back as false lower tones. A 5 kHz tone sampled at 8 kHz sounds like 3 kHz. That is why a filter removes them *before* sampling.</Callout>
+
+<Callout kind="warning">**"Exactly 2× is enough."** The theorem needs *more than* twice the highest frequency.</Callout>
+
+</Step>
+
+<Step id="context" section="context" title="Same ideas everywhere">
+
+Sampling and quantisation also describe image sensors (spatial sampling), video frame rates (temporal sampling) and every sensor feeding a microcontroller. Harry Nyquist (1928) and Claude Shannon (1949) laid the theory down.
+
+</Step>
+
+<Step id="references" section="references" title="Go deeper">
+
+- C. E. Shannon, "Communication in the Presence of Noise", *Proc. IRE* 37, 1949.
+- Alan V. Oppenheim & Ronald W. Schafer, *Discrete-Time Signal Processing*, 3rd ed., ch. 4 (sampling) and §4.8 (quantisation).
+- IEC 60908 (the CD-DA "Red Book" standard).
+
+</Step>

@@ -106,3 +106,58 @@ The vertical slice approved in Phase 0 (D5) becomes fully playable: every level 
 ## Next batch
 
 **5.2** — Stage 1-3 Boolean Logic (8 levels) and Stage 1-4 Encoding Text & Media (8 levels), with truth-table/gate, Karnaugh-map, UTF-8 and parity simulations. After 5.2, World 1 is fully playable end to end.
+
+---
+
+# Batch 5.2 report — Stages 1-3 and 1-4 → World 1 complete
+
+## Deliverables
+
+| Area | Files | Notes |
+|---|---|---|
+| Lessons | 16 new: `03-boolean-logic/levels/*` (8), `04-data-representation/levels/*` (8) | **All 34 World 1 levels are now playable**; a content test enforces this |
+| Logic engine | `logic.ts` (+ 13 tests) | Parser (NOT/AND/OR/XOR/NAND/NOR, postfix ', juxtaposition), truth tables, equivalence, canonical SOP/POS, Quine–McCluskey with exact minimum cover, Karnaugh layout, goal helpers (operator count, NOT-on-variables) |
+| Encoding engine | `encoding.ts` (+ 9 tests) | UTF-8 encode / strict decode (overlong, surrogate, truncation errors), UTF-16 surrogates, byte order, parity, RFC 1071 checksum, RLE, Huffman |
+| Simulations | `LogicLabView`, `KarnaughView`, `Utf8View`, `ByteOrderView`, `ParityView`, `RgbView` | Lesson goals: write XOR without ^, simplify to A, complement in NNF, majority in ≤ 5 operators, NAND-only, K-map corners, find an emoji / €, parity blind spot, mix yellow |
+
+## Accuracy review (claim → source)
+
+| Claim | Source |
+|---|---|
+| Boole 1854; Shannon's 1937 thesis (published 1938) maps Boolean algebra to switching circuits | Shannon, *Trans. AIEE* 57 (1938) |
+| Boolean laws, duality, De Morgan, bubble pushing, NAND-NAND | Harris & Harris DDCA RISC-V §2.2–2.5 |
+| 2^(2^n) functions of n inputs | Counting (rows × outputs) |
+| K-map Gray-code layout, wrap-around, don't-cares; example Σm(1,3,7,11,15)+d(0,2,5) has two minimal covers | H&H §2.7; Karnaugh 1953; verified by Quine–McCluskey in tests |
+| CMOS NAND/NOR 4 transistors, AND/OR 6 | H&H §1.7 |
+| Apollo Guidance Computer built from 3-input NOR gates | Hall, *Journey to the Moon* (1996) |
+| XOR-only circuits are affine, AND/OR-only are monotone (not complete) | Post's functional completeness criterion |
+| ASCII 7-bit (1963); case differs by bit 5; digits 48–57 | ANSI X3.4; RFC 20 |
+| Unicode U+0000–U+10FFFF, 17 planes, surrogates D800–DFFF, NFC/NFD, grapheme clusters | Unicode Standard ch. 2–3; UAX #15, #29 |
+| UTF-8 patterns, 4-byte limit (RFC 3629, 2003); Thompson & Pike, Sept 1992 | RFC 3629; Pike's 2003 history note |
+| UTF-16 surrogate pairs and BOM; '😀'.length = 2 in JS | RFC 2781; ECMAScript string semantics (unit-tested) |
+| Endianness definitions; x86 little, network big; Cohen 1980 | CS:APP §2.1.3; IEN 137; RFC 1700 |
+| sRGB gamma: 128 ≈ 22 % linear light | IEC 61966-2-1 transfer function |
+| Nyquist–Shannon; CD 44.1 kHz/16-bit = 1,411.2 kbit/s; SQNR ≈ 6.02N + 1.76 dB | Shannon 1949; Oppenheim & Schafer 3e; IEC 60908 |
+| Huffman example a:45 … f:5 → 224 vs 300 thousand bits | CLRS 4e §15.3 (unit-tested) |
+| Internet checksum example 0001 F203 F4F5 F6F7 → 220D | RFC 1071 §3 (unit-tested) |
+| CRC-32 detects all bursts ≤ 32 bits; Hamming 1950 | Kurose & Ross 8e §6.2; Hamming, *BSTJ* 29 |
+
+## Verification
+
+| Check | Result |
+|---|---|
+| Content build | 34 lessons pass every check |
+| Unit | 168 pass (+22) |
+| E2E | 28 pass (+1: Karnaugh corners → B'D', UTF-8 € → E2 82 AC, parity double flip → undetected) |
+| typecheck · lint · format · build · licenses | Pass (no new packages) |
+
+## Screens
+
+| | |
+|---|---|
+| ![Karnaugh](phase-5-screens/sim-karnaugh.webp) | ![Logic lab](phase-5-screens/sim-logic.webp) |
+| ![UTF-8](phase-5-screens/sim-utf8.webp) | |
+
+## Next batch
+
+**5.3** — Operating Systems units Foundations → Synchronization (22 levels), with CPU-scheduler, race-condition and semaphore simulations.

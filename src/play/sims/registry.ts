@@ -15,6 +15,12 @@ export const SIM_TITLES: Record<SimulationId, string> = {
   'base-converter': 'Base converter — repeated division',
   'twos-complement': "Two's complement — one pattern, many readings",
   'float-explorer': 'IEEE 754 binary32 explorer',
+  'logic-lab': 'Logic lab — expressions and truth tables',
+  karnaugh: 'Karnaugh map',
+  'utf8-encoder': 'Text encoder — code points, UTF-8, UTF-16',
+  'byte-order': 'Byte order — big- and little-endian',
+  parity: 'Parity check — send, flip, detect',
+  'rgb-mixer': 'RGB colour mixer',
 };
 
 const v = <K extends string>(load: () => Promise<Record<K, ComponentType<SimProps>>>, name: K) =>
@@ -27,4 +33,10 @@ export const SIM_VIEWS: Record<SimulationId, LazyExoticComponent<ComponentType<S
   'base-converter': v(() => import('./BaseConverterView'), 'BaseConverterView'),
   'twos-complement': v(() => import('./TwosComplementView'), 'TwosComplementView'),
   'float-explorer': v(() => import('./FloatView'), 'FloatView'),
+  'logic-lab': v(() => import('./LogicLabView'), 'LogicLabView'),
+  karnaugh: v(() => import('./KarnaughView'), 'KarnaughView'),
+  'utf8-encoder': v(() => import('./Utf8View'), 'Utf8View'),
+  'byte-order': v(() => import('./ByteOrderView'), 'ByteOrderView'),
+  parity: v(() => import('./ParityView'), 'ParityView'),
+  'rgb-mixer': v(() => import('./RgbView'), 'RgbView'),
 };

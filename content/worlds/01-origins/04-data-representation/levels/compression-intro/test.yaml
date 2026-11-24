@@ -1,0 +1,128 @@
+items:
+  - id: why
+    type: mcq
+    teaches: intuition-redundancy
+    prompt: What makes data compressible?
+    options:
+      - Being stored in binary
+      - Redundancy — runs, repeated patterns or uneven symbol frequencies
+      - Being large
+      - Having many different symbols
+    answer: 1
+    explain: Predictable data can be described more briefly.
+
+  - id: kinds
+    type: match
+    teaches: formal-kinds
+    prompt: Match each format to its kind of compression.
+    pairs:
+      - left: PNG
+        right: Lossless
+      - left: JPEG
+        right: Lossy
+      - left: Text inside a ZIP file
+        right: Must be lossless
+    explain: Exact data needs lossless compression.
+
+  - id: ratio
+    type: numeric
+    teaches: formal-kinds
+    prompt: A 12 MB file compresses to 3 MB. What is the compression ratio?
+    answer: 4
+    explain: 12 ÷ 3.
+
+  - id: prefix
+    type: mcq
+    teaches: formal-prefix
+    prompt: Which set of codewords is a prefix code?
+    options:
+      - 0, 01, 11
+      - 0, 10, 11
+      - 1, 10, 100
+      - 00, 0, 1
+    answer: 1
+    explain: In the others, a codeword is the start of another (0 → 01, 1 → 10, 0 → 00).
+
+  - id: huffman-steps
+    type: order-steps
+    teaches: formal-prefix
+    prompt: Order the steps of Huffman's algorithm.
+    steps:
+      - Make a leaf for each symbol weighted by its frequency
+      - Repeatedly join the two lightest trees under a new node
+      - Label the branches 0 and 1 and read each symbol's path as its code
+    explain: Greedy merging of the two least frequent trees.
+
+  - id: rle
+    type: mcq
+    teaches: mechanism-rle
+    prompt: What is the RLE of AAABBC?
+    options:
+      - 3A2B1C
+      - A3B2C1
+      - 3A2BC
+      - ABC
+    answer: 0
+    explain: Count, then symbol, for each run.
+
+  - id: rle-grow
+    type: numeric
+    teaches: mechanism-rle
+    prompt: How many characters is the RLE of ABCD (count + symbol per run)?
+    answer: 8
+    explain: 1A1B1C1D — twice as long as the input.
+
+  - id: huff-total
+    type: numeric
+    teaches: worked-example
+    prompt: In the Cormen example, how many thousand bits does the Huffman code use (versus 300 for fixed 3-bit codes)?
+    answer: 224
+    explain: 45·1 + 41·3 + 14·4 = 224.
+
+  - id: huff-code-a
+    type: mcq
+    teaches: worked-example
+    prompt: Why does 'a' get a 1-bit code in that example?
+    options:
+      - It is first in the alphabet
+      - It is by far the most frequent (45 %)
+      - It is a vowel
+      - Huffman always gives one symbol 1 bit
+    answer: 1
+    explain: Frequent symbols end up near the root.
+
+  - id: fragile
+    type: mcq
+    teaches: tradeoffs
+    prompt: Why is a variable-length compressed stream fragile?
+    options:
+      - It cannot be stored on disk
+      - One flipped bit shifts codeword boundaries and can corrupt everything after it
+      - It is always larger
+      - It needs internet access
+    answer: 1
+    explain: Decoding depends on all earlier bits.
+
+  - id: twice
+    type: mcq
+    teaches: pitfalls
+    prompt: Why does zipping a ZIP file again barely help?
+    options:
+      - ZIP files are read-only
+      - Compressed data has little redundancy left, so it looks random
+      - The second pass is lossy
+      - ZIP refuses to do it
+    answer: 1
+    explain: No redundancy, nothing to remove.
+
+  - id: pigeonhole
+    type: mcq
+    teaches: pitfalls
+    prompt: Why can no lossless compressor shrink every possible file?
+    options:
+      - Because of patents
+      - There are fewer shorter files than inputs, so some inputs must map to equal or longer outputs
+      - Because computers have limited memory
+      - It is possible with a good enough algorithm
+    answer: 1
+    explain: Counting (pigeonhole) argument.

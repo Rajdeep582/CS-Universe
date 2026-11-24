@@ -1,0 +1,86 @@
+<Step id="hook" section="hook" title="One table for every writing system">
+
+Before Unicode, a Japanese email opened on a Russian computer could turn to nonsense. Unicode's goal was simple to state and enormous to achieve: **one number for every character, in every language, on every platform**.
+
+</Step>
+
+<Step id="intuition-code-points" section="intuition" title="Characters get code points">
+
+Unicode assigns each character an abstract number called a **code point**, written `U+` followed by hex: `U+0041` is A, `U+00E9` is é, `U+0939` is ह, `U+4E2D` is 中, `U+1F600` is 😀. A code point says *which* character; how it is stored in bytes is a separate choice (UTF-8, UTF-16 — next level).
+
+</Step>
+
+<Step id="formal-space" section="formal" title="The code space">
+
+- Code points run from `U+0000` to `U+10FFFF`: **1,114,112** values.
+- They are divided into **17 planes** of 65,536. Plane 0, the **Basic Multilingual Plane (BMP)**, holds most modern scripts; emoji and many historic scripts live in plane 1 and above.
+- `U+D800`–`U+DFFF` are reserved as **surrogates** for UTF-16 and are never characters.
+- The first 128 code points are ASCII; the first 256 match ISO 8859-1 (Latin-1).
+
+Over 150,000 characters are assigned so far, with each new version adding more.
+
+</Step>
+
+<Step id="formal-graphemes" section="formal" title="Code points are not always 'characters'">
+
+What a reader sees as one character — a **grapheme cluster** — can be several code points:
+
+- **é** can be the single code point `U+00E9` *or* `e` + `U+0301` (combining acute accent). Both should display the same; **normalisation** (NFC composes, NFD decomposes) makes them comparable.
+- A family emoji 👨‍👩‍👧 is several emoji joined by `U+200D` ZERO WIDTH JOINER.
+
+</Step>
+
+<Step id="mechanism-encoder" section="mechanism" title="Looking at code points">
+
+Type text in any script and see each code point. Notice that the emoji is one code point but JavaScript's `.length` counts it as 2.
+
+<Simulation id="utf8-encoder" text="A é 中" target="😀" goal="Add an emoji and find its code point beyond U+FFFF." />
+
+</Step>
+
+<Step id="worked-example" section="worked-example" title="Which plane?">
+
+The plane of a code point is everything above its low 16 bits: plane $= \lfloor cp / 65536 \rfloor$.
+
+| Character | Code point | Plane |
+|---|---|---|
+| A | U+0041 | 0 (BMP) |
+| € | U+20AC | 0 |
+| 😀 | U+1F600 | 0x1F600 / 0x10000 = 1 |
+| 𝄞 (G clef) | U+1D11E | 1 |
+
+</Step>
+
+<Step id="tradeoffs" section="tradeoffs" title="One huge table">
+
+| Benefit | Cost |
+|---|---|
+| Any mix of languages in one document | Text processing is harder: case mapping, sorting and "length" depend on language and on graphemes |
+| No more code-page guessing | Fonts cannot cover everything; missing glyphs show as boxes |
+| Stable: assigned code points never change | Similar-looking characters (Latin a vs Cyrillic а) enable spoofing in web addresses |
+
+</Step>
+
+<Step id="pitfalls" section="pitfalls" title="Common misconceptions">
+
+<Callout kind="warning">**"Unicode is a 16-bit code."** Unicode 1.0 (1991) was 16-bit; since 1996 it has extended to `U+10FFFF`, which needs 21 bits.</Callout>
+
+<Callout kind="warning">**"One code point = one visible character."** Combining marks, ZWJ sequences and flags (two regional-indicator code points) make one visible symbol out of several.</Callout>
+
+<Callout kind="warning">**"Unicode is an encoding."** Unicode defines code points; UTF-8, UTF-16 and UTF-32 are encodings of them.</Callout>
+
+</Step>
+
+<Step id="context" section="context" title="Who decides">
+
+The **Unicode Consortium** publishes the standard, synchronised with ISO/IEC 10646. New scripts and emoji go through a public proposal process; a new version appears about once a year.
+
+</Step>
+
+<Step id="references" section="references" title="Go deeper">
+
+- The Unicode Standard (current version), ch. 2 "General Structure" and ch. 3 "Conformance" (unicode.org).
+- Unicode Standard Annex #29, *Unicode Text Segmentation* (grapheme clusters); Annex #15, *Unicode Normalization Forms*.
+- Petzold, *Code*, 2nd ed., ch. 13.
+
+</Step>

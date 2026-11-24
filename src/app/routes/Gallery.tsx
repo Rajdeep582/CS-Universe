@@ -173,6 +173,12 @@ export function Gallery() {
           <SimulationFrame id="float-explorer" />
           <SimulationFrame id="base-converter" />
           <SimulationFrame id="binary-board" params={{ bits: 16 }} />
+          <SimulationFrame id="logic-lab" />
+          <SimulationFrame id="karnaugh" params={{ vars: 4 }} />
+          <SimulationFrame id="utf8-encoder" />
+          <SimulationFrame id="byte-order" />
+          <SimulationFrame id="parity" />
+          <SimulationFrame id="rgb-mixer" />
         </div>
       </Section>
     </div>
